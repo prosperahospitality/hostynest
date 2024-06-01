@@ -1,0 +1,30 @@
+.stepitem {
+    @apply relative flex flex-row items-center text-center w-60 h-full gap-2 ml-8 pt-6;
+}
+
+.stepitem:not(:first-child):before {
+    @apply content-[''] bg-slate-300 absolute w-[2px] h-full left-[15px] top-4 -translate-y-4;
+}
+
+.step {
+    @apply size-8 flex items-center text-center justify-center z-10 relative border-1 bg-white text-sky-500 ring-white ring-4 rounded-full;
+}
+
+.active .step {
+    @apply ring-sky-500 ring-inset ring-8;
+}
+
+.complete .step {
+    @apply ring-sky-500 ring-inset ring-1 text-black;   
+}
+
+.complete p{
+    @apply text-black font-semibold; 
+}
+
+
+.complete:not(:first-child):before,
+.active:not(:first-child):before
+{
+    @apply bg-sky-500;
+}
