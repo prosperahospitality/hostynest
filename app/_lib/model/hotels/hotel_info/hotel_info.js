@@ -45,7 +45,6 @@ const hotel_infosModel= new mongoose.Schema({
     reception_number: String,
     secondary_email: String,
     lease_expiry_date: String,
-    closing_description: String,
 });
 
 export const Hotel_Infos = mongoose.models.hotel_infos || mongoose.model("hotel_infos",hotel_infosModel)

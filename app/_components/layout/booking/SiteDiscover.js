@@ -102,7 +102,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>Sun-kissed shores, vibrant culture</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Agra&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Agra&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscTaj}
               alt="DiacoverTaj"
@@ -121,7 +121,7 @@ const SiteDiscover = () => {
           </div>
         </div>
         <div class="grid gap-4 grid-cols-12">
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Jaipur&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Jaipur&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscJaipur}
               alt="DiacoverJaipur"
@@ -138,7 +138,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>Pink hues paint royal history</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Kerala&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Kerala&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.Disckerala}
               alt="DiacoverKerala"
@@ -155,7 +155,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>God&apos;s Own Country</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Rishikesh&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Rishikesh&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscRishikesh}
               alt="DiacoverRishikesh"
@@ -174,7 +174,7 @@ const SiteDiscover = () => {
           </div>
         </div>
         <div class="grid gap-4 grid-cols-12">
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Jim Corbett&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Jim Corbett&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscJimcorbett}
               alt="DiacoverJimcorbett"
@@ -191,7 +191,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>Wilderness echoes tales of adventure.</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-8' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Pawana Lake&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-8' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Pawana Lake&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscPawna}
               alt="DiacoverPawana"
@@ -210,7 +210,7 @@ const SiteDiscover = () => {
           </div>
         </div>
         <div class="grid gap-4 grid-cols-12">
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Ladakh&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Ladakh&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscLadhak}
               alt="DiacoverLadhak"
@@ -227,7 +227,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>Mountains whisper timeless tales</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Darjeeling&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Darjeeling&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscDarjeeling}
               alt="DiacoverDarjeeling"
@@ -244,7 +244,7 @@ const SiteDiscover = () => {
               <Chip color="default" variant="flat"><h4 className='text-white font-bold'>Misty hills, tea-scented dreams.</h4></Chip>
             </div>
           </div>
-          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {router.push(`/bookings/hourlybooking/search?location=Ellora&date=${formattedDate}&time=${time24HoursFormat}`)}}>
+          <div className='relative min-h-[200px] col-span-4' onClick={(e) => {window.open(`/bookings/hourlybooking/search?location=Ellora&date=${formattedDate}&time=${time24HoursFormat}`, '_blank')}}>
             <Image
               src={IMAGES.DiscEllora}
               alt="DiacoverEllora"

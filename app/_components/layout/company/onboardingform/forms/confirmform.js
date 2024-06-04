@@ -78,7 +78,7 @@ const initialFxn = async () => {
       final_display_price_for_12H: 0,
       hour24_display_flag: 0,
       final_display_price_for_24H: 0,
-      Location: combinedData.district.toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" "),
+      Location: combinedData.divison.toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" "),
       hotel_category: " ",
       facilities : [" "],
       staff_behaviour : " ",
@@ -95,7 +95,6 @@ const initialFxn = async () => {
       reception_number: " ",
       secondary_email: " ",
       lease_expiry_date: " ",
-      closing_descripiton: " ",
     }
     
     payload_facilities = {

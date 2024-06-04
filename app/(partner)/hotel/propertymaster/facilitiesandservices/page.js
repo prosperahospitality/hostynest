@@ -288,7 +288,7 @@ const FacilitiesAndServicesPage = () => {
         reverseOrder={false} />
             <div className='m-4 p-4 flex justify-between'>
                 <div>
-                <h1 className='text-2xl text-foreground-300 font-semibold'>rvices</h1>
+                <h1 className='text-2xl text-foreground-300 font-semibold'>Facilities & services</h1>
                 <h4 className='text-sm text-foreground-300'>Listing your facilities can really help influence guests to book! Update the ones available at your property or on-site below.</h4>
                 </div>
             <Button variant='shadow' color='primary' onClick={handleSubmit}>Save</Button>

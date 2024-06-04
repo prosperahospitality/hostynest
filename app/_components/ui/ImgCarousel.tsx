@@ -16,7 +16,7 @@ import HotelName, {IMAGES} from '@/public/index'
 import { Card, CardBody, Skeleton } from '@nextui-org/react';
 import { useState, useEffect } from "react";
 
-const ImgCarousel: React.FC<{ hotelName: string }> = ({ hotelName }) => {
+const ImgCarousel: React.FC<{ hotelName: string, hotelID: number }> = ({ hotelName, hotelID }) => {
 
   const [hotelImgs,setHotelImgs] = useState<{ [key: string]: string }>({});
 
@@ -72,7 +72,7 @@ useEffect(() => {
 
   return (
     <div className="w-full h-full" >
-    <HotelName hotel_Name={hotel_name} onHotelName={handleHotelImgs}/>
+    <HotelName hotel_Name={hotel_name} hotel_ID={hotelID} onHotelName={handleHotelImgs}/>
       <Carousel
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}

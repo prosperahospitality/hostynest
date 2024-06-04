@@ -15,6 +15,9 @@ const PhotoManage = () => {
     const hotel_id = searchParams.get('hotel_id');
     const hotel_name = searchParams.get('hotel_name');
 
+    
+
+    const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
     let hotelName = capitalize_each_word(hotel_name) + "-" + hotel_id.toString();
 
     const [uploading, setUploading] = useState(false);
@@ -152,7 +155,7 @@ const PhotoManage = () => {
 
 useEffect(() => {
 
-  console.log("Change in room: ",selectedRoom, selectedRoomId)
+  console.log("Change in room: ",selectedRoom, selectedRoomId, roomName)
 
   
 
@@ -208,6 +211,194 @@ const handleHotelsImgs = (Imgs) => {
 
 if (isLoading) {
   return <div>Loading...</div>;
+}
+
+const handleSelectedCheckboxes = (val) => {
+
+  setSelectedCheckboxes(val)
+
+}
+
+const getTagsImage = async () => {
+
+  const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${roomName}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+    },
+    });
+
+
+    let resultt = await response.json();
+    console.log("Resssssss:::::::::>",resultt)
+    let imgtagg = resultt.imageeeTag;
+    //setImageeeTag(resultt.imageeeTag)
+    return imgtagg;
+}
+
+const handleMultipleDelete = async () => {
+
+  console.log("Selected Delete Multiple: ",selectedCheckboxes, hotelName,
+  roomName)
+
+  const [name,hotelid] = hotelName.split("-");
+
+  const [roomname,roomid] = roomName.split("-");
+
+  const getImagesss = async(hotelName, roomName) => {
+    const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${roomName}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+    },
+    });
+
+
+    let resultt = await response.json();
+    console.log("Responseeeeeee:::::>",resultt)
+
+    if(resultt) {
+      let imgnam = resultt.imgNames;
+
+      const formattedFiles = imgnam?.map((fileName, index) => {
+        const id = parseInt(fileName.match(/\d+/)[0], 10);
+        return { id: id, title: fileName };
+      });
+
+      formattedFiles.sort((a, b) => a.id - b.id);
+  
+
+      //onSingleDelResult(formattedFiles)
+      window.location.reload()
+    }
+
+
+  }
+
+  let firstOperation = selectedCheckboxes.map((item) => {
+    const [imgID,text] = item.split(".")
+    let id = parseInt(imgID)
+    console.log("Image Id::::>",id)
+  
+
+  getTagsImage().then(result => {
+       
+
+    let ressssult = result.sort((a, b) => (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0);
+    console.log("Tmage Tag::::", ressssult)
+
+    if (ressssult) {
+
+        let abc = ressssult.find((item) => item.Hotel_Id === parseInt(hotelid) && 
+        item.selected_room === roomid &&
+        item.img_id === parseInt(id))
+
+        let k = abc && abc.img_checks;
+
+        let i = abc && abc.img_tags;
+
+        let g = abc && abc.include_in_main;
+
+        console.log("Single Delete k", id,item, k, i, abc, g)
+
+
+
+        const singledelete = async () => {
+          let formData = new FormData();
+
+          formData.append('hotel_Name', hotelName);
+          formData.append('room_Name', roomName);
+          formData.append('imgDelId', id);
+          formData.append('imgDelTitle', item);
+          formData.append('operation', "multiple_delete_img");
+          formData.append('selectedCheckboxesfordelete', JSON.stringify(selectedCheckboxes));
+          
+          if(abc) {
+            formData.append('img_checks_del', JSON.stringify(k));
+            formData.append('img_tags_del', JSON.stringify(i));
+            formData.append('img_include_in_main', g);
+          }else {
+            formData.append('sub_operation', "deleteWithoutRoom");
+          }
+          
+
+          const response = await fetch('/api/pms/property_master/room_photomanage', {
+            method: "POST",
+            body: formData,
+          });
+
+          let result = response.json()
+
+          result.then(result => {
+            //alert("File deleted successfully!")
+            console.log("result: ",result)
+
+            if(item === selectedCheckboxes[selectedCheckboxes.length - 1]) {
+              console.log("Rename after Delete");
+
+              const renameDelete = async() => {
+                let formData = new FormData();
+
+                formData.append('hotel_Name', hotelName);
+                formData.append('room_Name', roomName);
+                formData.append('imgDelId', id);
+                formData.append('imgDelTitle', item);
+                formData.append('operation', "renameAfterMultipleDelete");
+                formData.append('selectedCheckboxesfordelete', JSON.stringify(selectedCheckboxes));
+                
+                if(abc) {
+                  formData.append('img_checks_del', JSON.stringify(k));
+                  formData.append('img_tags_del', JSON.stringify(i));
+                  formData.append('img_include_in_main', g);
+                }else {
+                  formData.append('sub_operation', "deleteWithoutRoom");
+                }
+                
+      
+                const response = await fetch('/api/pms/property_master/room_photomanage', {
+                  method: "POST",
+                  body: formData,
+                });
+      
+                let result = response.json()
+
+                result.then(result => {
+                  alert(`${selectedCheckboxes.length} files deleted successfully!`)
+                  console.log("result: ",result)
+
+              
+
+              getImagesss(hotelName, roomName)
+                })
+              }
+
+              renameDelete()
+
+
+            }
+
+            //getImagesss(hotelName, roomName)
+          })
+        }
+
+        singledelete()
+
+
+
+
+
+
+    } else {
+        console.log("No elements in the array.");
+    }
+
+  });
+
+})
+
+  
+
+
 }
    
     return (
@@ -316,14 +507,14 @@ if (isLoading) {
     background: "whitesmoke",
     position: "relative",
     top: "24%",}}>
-      <Button><Trash style={{height:"20px"}}/>Delete</Button>
+      <Button onClick={handleMultipleDelete}><Trash style={{height:"20px"}}/>Delete</Button>
     </div>
 
         <div>
           
 
 
-          <PhotoManageGrid currentRoomImage={currentRoomImage} hotelName={hotelName} roomName={roomName} roomResult={roomResult}/>
+          <PhotoManageGrid currentRoomImage={currentRoomImage} hotelName={hotelName} roomName={roomName} roomResult={roomResult} onSelectedCheckboxes={handleSelectedCheckboxes}/>
           </div></>
     )
 }

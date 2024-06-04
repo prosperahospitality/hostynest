@@ -6,6 +6,8 @@ import { IndianFlag } from "@/app/_components/icon"
 import { Divider } from "@nextui-org/react";
 import { Permanent_Marker } from 'next/font/google'
 import VIDEOS from '@/public/video'
+import { useSearchParams } from 'next/navigation'
+    
 
 const PermanentMarker = Permanent_Marker({
   weight: '400',
@@ -14,6 +16,8 @@ const PermanentMarker = Permanent_Marker({
 })
 
 const SearchHero = () => {
+  const searchParams = useSearchParams();
+  const searchCity = searchParams.get('location');
   return (
     <div className='pt-[50px] h-screen w-screen'>
       <div className="w-[96%] h-[95%] m-auto">
@@ -33,7 +37,7 @@ const SearchHero = () => {
             <video src={VIDEOS.heroVideo} loading="lazy" muted="muted" type="video/mp4" autoplay="autoplay" loop="loop" className='absolute rounded-3xl h-[100%] w-full' style={{ objectFit: 'cover' }} >
             </video>
             <div className='bg-black/20 relative rounded-3xl h-full flex flex-col justify-center items-center'>
-              <div className='text-white text-9xl'><h1 className={PermanentMarker.className}>Goa</h1></div>
+              <div className='text-white text-9xl'><h1 className={PermanentMarker.className}>{searchCity}</h1></div>
               <Divider className="my-4 w-[50%] bg-white" />
               <div className='flex items-center gap-4'>
                 <IndianFlag className="size-10" />

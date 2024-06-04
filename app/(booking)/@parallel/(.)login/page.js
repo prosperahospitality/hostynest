@@ -24,7 +24,6 @@ const GuestLoginModal = () => {
       setResultFlag(0);
     }else{
       console.log("Error:::::::>")
-      //alert("Incorrect username or password")
     }
   }, [resultFlag]);
 

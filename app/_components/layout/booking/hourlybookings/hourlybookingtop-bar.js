@@ -1,173 +1,317 @@
 'use client'
-import React from 'react'
-import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react'
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
-import { IMAGES } from '@/public/index'
+import {IMAGES} from '@/public/index'
 import { ThemeSwitch } from "@/app/_components/ui/ThemeSwitch";
 import { button as buttonStyles } from "@nextui-org/theme";
-import { Link } from "@nextui-org/react";
-import HourlyBooking from '@/app/_components/ui/HourlyBooking'
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Popover, PopoverTrigger, PopoverContent, Tooltip, Badge } from "@nextui-org/react";
+import { ChevronDown, Lock, Activity, Flash, Server, TagUser, Scale, DiscordIcon, TwitterIcon, GithubIcon, MoonFilledIcon, SunFilledIcon, HeartFilledIcon, SearchIcon, FullLogo, NotificationIcon } from "@/app/_components/icon";
+import { siteConfig } from "@/config/site";
 import { User } from "@nextui-org/react";
+import { useSearchParams } from 'next/navigation'
 import { useSession, getSession, signIn, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import { KeyRound, Settings, Power, Mail, MessageCircleMore, MessageCircleQuestion } from 'lucide-react'
+import { RxExternalLink } from "react-icons/rx";
+import { useSelector } from "react-redux";
+import { set } from 'date-fns';
 
+export default function SiteHeader() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [isInvisible, setIsInvisible] = React.useState(false);
 
-const menuItems = [
-    {
-        name: 'Home',
-        href: '#',
-    },
-    {
-        name: 'About',
-        href: '#',
-    },
-    {
-        name: 'Contact',
-        href: '#',
-    },
-]
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const [sessionValue, setSessionValue] = useState({});
 
-export default function HourlyBookingTopBar( {searchCity} ) {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-    const [sessionValue, setSessionValue] = React.useState({});
-
-    React.useEffect(() => {
-    
-        const getSessionInfo = async () => {
-          const session = await getSession();
-          setSessionValue(session);
-        };
-        getSessionInfo();
-      }, [])
+  let currentPageUrl;
+  if(typeof window !== 'undefined')
+  {
+    currentPageUrl = window.location.href;
+  }
   
+  let dat = useSelector((state) => state.log.loginState);
+
+    useEffect(() => {
+    
+      const getSessionInfo = async () => {
+        const session = await getSession();
+        setSessionValue(session);
+      };
+      getSessionInfo();
+    }, [])
+
+    useEffect(() => {
+
+      if(dat === 1 && !currentPageUrl.includes("/login")) {
+        window.location.reload()
+      }
+
+    }, [dat, currentPageUrl])
+
+    useEffect(() => {
+    
+      console.log("Session at top bar home: ",sessionValue);
+      if(sessionValue && sessionValue?.user?.user_role === "admin" || sessionValue?.user?.user_role === "partner") {
+        setSessionValue(null)
+      }
+
+    }, [sessionValue])
+
+  const menuItems = [
+    "Home",
+    "List Hotel",
+    "How it Works ?",
+    "Contact Us",
+    "FAQ's",
+    "About",
+    "Login/Sign Up",
+  ];
+
+  const icons = {
+    chevron: <ChevronDown fill="currentColor" size={16} />,
+    scale: <Scale className="text-warning" fill="currentColor" size={30} />,
+    activity: <Activity className="text-secondary" fill="currentColor" size={30} />,
+    user: <TagUser className="text-danger" fill="currentColor" size={30} />,
+  };
+
+  const notification = (
+    <PopoverContent>
+      <div className="px-1 py-2">
+        <div className="text-small font-bold">Popover Content</div>
+        <div className="text-tiny">This is the popover content</div>
+      </div>
+    </PopoverContent>
+  );
+
+  const profile = (
+    <PopoverContent>
+      <div>
+      <div className="px-1 py-2 flex gap-10">
+        {sessionValue && sessionValue?.user?.user_role === "guest" 
+          ? <User   
+              name={sessionValue?.user?.firstname + ' ' + sessionValue?.user?.lastname}
+              description="Agent 007"
+              avatarProps={{
+                src: "https://www.svgrepo.com/show/509009/avatar-thinking-3.svg"
+              }}
+              className='text-black'
+            />
+          : ""
+        }
       
-      React.useEffect(() => {
-      
-        console.log("Session: ",sessionValue);
-      }, [sessionValue])
+        <Link
+                            href='/hotel/dashboard'
+                            className={`${buttonStyles({ color: "default", size: "sm", radius: "full", variant: "light" })} text-primary`}
+                        >
+                          <Tooltip content="Change Password" color='danger'>
+                          <KeyRound  className='mt-2'/>
+                          </Tooltip>
+        </Link>
+      </div>
+      <Link
+                            href='/userprofile'
+                            className={`${buttonStyles({ color: "default", size: "md", radius: "full", variant: "light" })} text-primary ml-3`}
+                        >
+                            <Settings />Settings
+        </Link>
+      </div>
+          <label className="mr-28 mt-2 text-xs font-semibold uppercase text-primary">Need Help ?</label>
+      <div className="flex flex-col items-start mr-6">
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen)
-    }
+          <Link
+                            href='#'
+                            className={`${buttonStyles({ color: "default", size: "md", radius: "full", variant: "light" })} text-primary`}
+                        >
+                            <Mail />Report an Issue
+        </Link>
 
-    return (
-        <div className="relative w-full">
-            <div className="mx-auto flex  items-center justify-between px-4 py-2 sm:px-6 lg:px-8 gap-2">
-                <div className="inline-flex items-center ">
-                    <Image src={IMAGES.Fulllogo}
-                        alt="Logo"
-                        width={200}
-                        height={200}
-                    />
-                </div>
+        <Link
+                            href='#'
+                            className={`${buttonStyles({ color: "default", size: "md", radius: "full", variant: "light" })} text-primary`}
+                        >
+                            <MessageCircleMore />Chat Support<RxExternalLink className='ml-6' size={16}/>
+        </Link>
 
-                <div className="">
-                    <HourlyBooking searchCity = {searchCity}/>
-                </div>
+        <Link
+                            href='#'
+                            className={`${buttonStyles({ color: "default", size: "md", radius: "full", variant: "light" })} text-primary`}
+                        >
+                            <MessageCircleQuestion />Explore FAQs<RxExternalLink className='ml-6' size={16}/>
+        </Link>
+
+        <Button variant='shadow' color="danger" size='sm' className='left-16 mt-3' startContent={<Power />} onClick={(e) => signOut()} >Logout</Button>
+        </div>
+    </PopoverContent>
+  );
 
 
-                <div className="flex">
 
-                    {/* <ThemeSwitch /> */}
+  return (
+    <Navbar onMenuOpenChange={setIsMenuOpen} className="absolute h-12 w-screen z-50 backdrop-blur-0 supports-[backdrop-filter]:bg-background/0" shouldHideOnScroll>
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+        <NavbarBrand>
+          {/* <Image src={IMAGES.Fulllogo}
+            alt="Logo"
+            width={200}
+            height={200} /> */}
+            <FullLogo height={40} width={200}/>
+        </NavbarBrand>
+      </NavbarContent>
 
-                    <div className="ml-6">
-                    {sessionValue
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem >
+          <Link className={`link ${pathname === '/' ? 'text-black font-bold' : ''}`} href='/'>
+            Home
+          </Link>
+        </NavbarItem>
+        <NavbarItem >
+          <Link className={`link ${pathname === '/partners' ? 'text-black font-bold' : ''}`} href='/partners'>
+            List Hotel
+          </Link>
+        </NavbarItem>
+
+        <Dropdown>
+          <NavbarItem>
+            <DropdownTrigger>
+              <Button
+                disableRipple
+                endContent={icons.chevron}
+                radius="sm"
+                variant="light"
+              >
+                Help & Support
+              </Button>
+            </DropdownTrigger>
+          </NavbarItem>
+          <DropdownMenu
+            aria-label="ACME features"
+            className="w-[340px]"
+            itemClasses={{
+              base: "gap-4",
+            }}
+          >
+            <DropdownItem
+              key="autoscaling"
+              description="ACME scales apps to meet user demand, automagically, based on load."
+              startContent={icons.scale}
+              href='/helpsupport/howitworks'
+            >
+              How it Works ?
+            </DropdownItem>
+            <DropdownItem
+              key="usage_metrics"
+              description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where."
+              startContent={icons.activity}
+              href='/helpsupport/contactus'
+              >
+              Contact Us
+            </DropdownItem>
+            <DropdownItem
+              key="production_ready"
+              description="ACME runs on ACME, join us and others serving requests at web scale."
+              startContent={icons.user}
+              href='/helpsupport/faqs'
+            >
+              FAQ&apos;s
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+
+        <NavbarItem>
+          <Link className={`link ${pathname === '/aboutus' ? 'text-black font-bold' : ''}`} href='/aboutus'>
+            About Us
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+
+      <NavbarContent justify="end">
+        <NavbarItem className="flex">
+
+          {/* <ThemeSwitch /> */}
+
+
+          <div className="ml-6 flex justify-between items-center">
+
+            {sessionValue && sessionValue?.user?.user_role === "guest"
               ? sessionValue?.user?.firstname === undefined && sessionValue?.user?.lastname === undefined 
                 ? <Link
-                    // isExternal
-                    onClick = {(e) => signIn()}
+                    href="/login"
+                    // onClick = {(e) => signIn()}
                     className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
                   >
                     Login/Sign Up
                   </Link> 
-                : <><User
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                : <>
+                   
+                    {/* notification area */}
+                      <Popover key="bottom" placement="bottom" color="default" backdrop='transparent'>
+                      <PopoverTrigger>
+                      <Button color="primary" variant="link" className="capitalize">
+                      <Badge color="danger" content="9" isInvisible={isInvisible} shape="circle" showOutline={false} className='mt-1'>
+                      <NotificationIcon className="text-primary mt-1" size={24} />
+                      </Badge>
+                      </Button>
+                      </PopoverTrigger>
+                      {notification}
+                    </Popover>
+                    
+                    {/* Profile area */}
+                    <Popover key="bottom" placement="bottom" color="default" backdrop='transparent'>
+                      <PopoverTrigger>
+                      <Button color="primary" variant="link" className="capitalize">
+                    <User   
                       name={sessionValue?.user?.firstname + ' ' + sessionValue?.user?.lastname}
-                      style = {{position: "relative",
-                        top: "4px"}}
-                      pointer 
+                      description="Agent 007"
+                      avatarProps={{
+                        src: "https://www.svgrepo.com/show/509003/avatar-thinking-6.svg"
+                      }}
+                      className='text-black'
                     />
-                    <Link
-                    //   isExternal
-                      onClick={(e) => signOut()}
-                      className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-                    >
-                      Log out
-                    </Link>
+                    </Button>
+                      </PopoverTrigger>
+                        {profile}
+                    </Popover>
                   </>
-              : <Link
-                //   isExternal
-                  onClick = {(e) => signIn()}
-                  className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-                >
+              : <><Link
+                    href="/login"
+                    // onClick = {(e) => signIn()}
+                    className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+                  >
                   Login/Sign Up
                 </Link>
+                </>
             }
-                    </div>
-                </div>
-                <div className="lg:hidden">
-                    <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />
-                </div>
+          </div>
 
+        </NavbarItem>
+      </NavbarContent>
 
-                {isMenuOpen && (
-                    <div className="absolute inset-x-0 top-0 z-50 origin-top-right transform p-2 transition lg:hidden">
-                        <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                            <div className="px-5 pb-6 pt-5">
-                                <div className="flex items-center justify-between">
-                                    <div className="inline-flex items-center space-x-2">
-                                        <Image src={IMAGES.Fulllogo}
-                                            alt="Logo"
-                                            width={200}
-                                            height={200}
-                                        />
-                                    </div>
-                                    <div className="-mr-2">
-                                        <button
-                                            type="button"
-                                            onClick={toggleMenu}
-                                            className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                                        >
-                                            <span className="sr-only">Close menu</span>
-                                            <X className="h-6 w-6" aria-hidden="true" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="mt-6">
-                                    <nav className="grid gap-y-4">
-                                        {menuItems.map((item) => (
-                                            <a
-                                                key={item.name}
-                                                href={item.href}
-                                                className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
-                                            >
-                                                <span className="ml-3 text-base font-medium text-gray-900">
-                                                    {item.name}
-                                                </span>
-                                                <span>
-                                                    <ChevronRight className="ml-3 h-4 w-4" />
-                                                </span>
-                                            </a>
-                                        ))}
-                                    </nav>
-                                </div>
-                                <div className="mt-2 space-y-2">
-                                    {/* <ThemeSwitch /> */}
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              color={
+                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
+              }
+              className="w-full"
+              href="#"
+              size="lg"
+            >
+              {item}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
 
-                                    <div className="ml-6">
-                                        <Link
-                                            // isExternal
-                                            href="/login"
-                                            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-                                        >
-                                            Login/Sing Up
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div >
-    )
+    </Navbar>
+  );
 }

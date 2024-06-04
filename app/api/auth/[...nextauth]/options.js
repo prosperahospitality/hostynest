@@ -3,7 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from 'bcryptjs';
 import Swal from 'sweetalert2'
 import { cookies } from "next/headers";
-import { encrypt } from "./lib";
+
+const BASE_URL = process.env.BASE_URL;
+
+console.log("Base Url: ",BASE_URL)
 
 export const options = {
   session : {
@@ -40,7 +43,7 @@ export const options = {
             const delete_flag = credentials.delete_flag;
             const user_role = credentials.user_role;
 
-            let results = await fetch("http://192.168.29.228:3000/api/userApi",{
+            let results = await fetch(BASE_URL + "api/userApi",{
 
               method:"POST",
   
@@ -71,15 +74,7 @@ export const options = {
                 if(match) {
                   console.log("Good Pass: ",user);
                   if(Object.keys(user).length > 0) {
-                    //user = { ...user, password: credentials.password };
-                    user = {
-                      "user_id": user["user_id"],
-                      "firstname": user["firstname"],
-                      "lastname": user["lastname"],
-                      "favourites": user["favourites"],
-                      "user_role": user["user_role"]
-                    }
-
+                    user = { ...user, password: credentials.password };
                     return user
                   }else {
                     return null;
@@ -92,7 +87,7 @@ export const options = {
             try{
               console.log("Else If::::::");
 
-            const res = await fetch("http://192.168.29.228:3000/api/userApi/findUser", {
+            const res = await fetch(BASE_URL + "api/userApi/findUser", {
               method: 'POST',
               body: JSON.stringify({"mobile_number" : credentials.mobilenumber}),
               headers: { "Content-Type": "application/json" }
@@ -115,15 +110,7 @@ export const options = {
                 if(match) {
                   console.log("Good Pass: ",user);
                   if(Object.keys(user).length > 0) {
-                    //user = { ...user, password: credentials.password };
-
-                    user = {
-                      "user_id": user["user_id"],
-                      "firstname": user["firstname"],
-                      "lastname": user["lastname"],
-                      "favourites": user["favourites"],
-                      "user_role": user["user_role"]
-                    }
+                    user = { ...user, password: credentials.password };
                     return user
                   }else {
                     return null;
@@ -152,28 +139,21 @@ export const options = {
             
           }else if(credentials.mob_num !== " " && credentials.mob_num !== undefined) {
 
-            const res = await fetch("http://192.168.29.228:3000/api/userApi/findUser", {
+            const res = await fetch(BASE_URL + "api/userApi/findUser", {
               method: 'POST',
               body: JSON.stringify({"mobile_number" : credentials.mob_num}),
               headers: { "Content-Type": "application/json" }
             })
             const use = await res.json()
             let user = use.result;
-            //user = { ...user, password: credentials.password };
-            user = {
-              "user_id": user["user_id"],
-              "firstname": user["firstname"],
-              "lastname": user["lastname"],
-              "favourites": user["favourites"],
-              "user_role": user["user_role"]
-            }
+            user = { ...user, password: credentials.password };
             return user
 
           }else if(credentials.userID !== " " && credentials.password !== " " && credentials.user_role !== " ") {
             
             if(credentials.user_role === "admin") {
 
-              const res = await fetch("http://192.168.29.228:3000/api/userApi/findUser", {
+              const res = await fetch(BASE_URL + "api/userApi/findUser", {
                 method: 'POST',
                 body: JSON.stringify({"userID" : credentials.userID, "user_role" : "admin"}),
                 headers: { "Content-Type": "application/json" }
@@ -196,14 +176,7 @@ export const options = {
                   if(match) {
                     console.log("Good Pass: ",user);
                     if(Object.keys(user).length > 0) {
-                      //user = { ...user, password: credentials.password };
-                      user = {
-                        "user_id": user["user_id"],
-                        "firstname": user["firstname"],
-                        "lastname": user["lastname"],
-                        "favourites": user["favourites"],
-                        "user_role": user["user_role"]
-                      }
+                      user = { ...user, password: credentials.password };
                       return user
                     }else {
                       return null;
@@ -219,7 +192,7 @@ export const options = {
 
             if(credentials.user_role === "partner" && credentials.propCode) {
 
-              const res = await fetch("http://192.168.29.228:3000/api/userApi/findUser", {
+              const res = await fetch(BASE_URL + "api/userApi/findUser", {
                 method: 'POST',
                 body: JSON.stringify({"userID" : credentials.userID, "user_role" : "partner"}),
                 headers: { "Content-Type": "application/json" }
@@ -233,7 +206,7 @@ export const options = {
                 if(user){
 
 
-                  const res = await fetch("http://192.168.29.228:3000/api/userApi", {
+                  const res = await fetch(BASE_URL + "api/userApi", {
                     method: 'POST',
                     body: JSON.stringify({"userID" : credentials.userID, "user_role" : "partner", operation : "updatePropCode", propCode : credentials.propCode}),
                     headers: { "Content-Type": "application/json" }
@@ -253,14 +226,7 @@ export const options = {
                   if(match) {
                     console.log("Good Pass: ",user);
                     if(Object.keys(user).length > 0) {
-                      //user = { ...user, password: credentials.password };
-                      user = {
-                        "user_id": user["user_id"],
-                        "firstname": user["firstname"],
-                        "lastname": user["lastname"],
-                        "favourites": user["favourites"],
-                        "user_role": user["user_role"]
-                      }
+                      user = { ...user, password: credentials.password };
                       return user
                     }else {
                       return null;

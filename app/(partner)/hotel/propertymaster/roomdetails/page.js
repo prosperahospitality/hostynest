@@ -102,7 +102,7 @@ const RoomDetailsPage = () => {
               },
           });
           const result = await response.json();
-          console.log("Data:", result.dataAll, result.data, result.floor, result.roomtype);
+          console.log("Data:", result.dataAll);
           setAllResult(result.dataAll);
           setResult(result.data);
           setFloor(result.floor);

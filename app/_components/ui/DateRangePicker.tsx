@@ -1,5 +1,5 @@
-'use client'
-import React, { useState, useEffect, useCallback, useRef } from "react";
+"use client"
+import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { addDays, format } from "date-fns"
 import { DateRange, SelectRangeEventHandler } from "react-day-picker"
@@ -13,38 +13,11 @@ import {
   PopoverTrigger,
 } from "@/app/_components/ui/Popover"
 
-export default function Daterangepicker({
-  className,
-  // initialDate,
-  // onDateValue,
-}: {
-  className?: string;
-  // initialDate: DateRange;
-  // onDateValue: (dateRange: DateRange) => void;
-}) {
-  // const [date, setDate] = React.useState<DateRange | undefined>(() => {
-  //   if (initialDate) {
-  //     return {
-  //       from: new Date(),
-  //       to: addDays(new Date(), 6),
-  //     };
-  //   } else {
-  //     return {
-  //       from: new Date(),
-  //       to: addDays(new Date(), 0),
-  //     };
-  //   }
-  // });
-
-  const [date, setDate] = React.useState<DateRange | undefined>(() => {
-
-      return {
-        from: new Date(),
-        to: addDays(new Date(), 0),
-      
-    }
+export default function Daterangepicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 0),
   });
-
 
   const [popoverOpen, setPopoverOpen] = React.useState(false);
 

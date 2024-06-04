@@ -54,9 +54,9 @@ export async function POST(request){
     loc = await Search_Cities.find({"city" : searchCity});
 
     if(loc.length != 0) {
-      data = await Hotel_Infos.find({"Location" : loc[0].location, "status" : "open"});
+      data = await Hotel_Infos.find({"Location" : loc[0].location});
     }else{
-      data = await Hotel_Infos.find({"Location" : searchCity, "status" : "open"});
+      data = await Hotel_Infos.find({"Location" : searchCity});
     }
     
     data = data.map((dat) => {

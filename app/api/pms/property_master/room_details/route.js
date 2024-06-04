@@ -24,7 +24,7 @@ export async function GET(request){
     dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
     floor = await Property_Floor.find().select("property_floor -_id");
     roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name -_id");
-    console.log("rEs::::>",hotel_info);
+    console.log("rEs::::>",data);
   } catch (error) {
     data={result:"error"}
     success=false;

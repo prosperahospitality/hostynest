@@ -8,6 +8,10 @@ import bcrypt from 'bcryptjs';
 import { signIn } from "next-auth/react";
 import Swal from 'sweetalert2'
 
+const BASE_URL = process.env.BASE_URL;
+
+console.log("Base Url: ",BASE_URL)
+
 export default function PasswordModal({session}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [size, setSize] = React.useState('')
@@ -167,7 +171,7 @@ export default function PasswordModal({session}) {
                 const hashPassword = await bcrypt.hash(newPassword, 10);
                 console.log("Hashed Password:::::>", hashPassword);
       
-                let results = await fetch("http://192.168.29.228:3000/api/userApi",{
+                let results = await fetch(BASE_URL + "api/userApi",{
       
                 method:"POST",
       

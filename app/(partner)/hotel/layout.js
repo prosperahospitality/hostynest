@@ -15,7 +15,6 @@ const inter = Inter({ subsets: ['latin'] })
 // }
 
 export default function pmsPageLayout({ children }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [isOpen, setIsOpen] = useState(true); // State to manage sidebar open/close
 
   const toggleSidebar = () => {

@@ -150,7 +150,7 @@ const generateUniqueID = () => {
         id: generateUniqueID(),
         user_id: user_Id,
         booking_id: item.booking_id,
-        username: session?.user?.firstname + " " + session?.user?.lastname,
+        username: session?.user?.firstname + " "+ session?.user?.lastname,
         Hotel_Id: item.Hotel_Id,
         Hotel_name: item.Hotel_name,
         booking_date: item.booking_date,

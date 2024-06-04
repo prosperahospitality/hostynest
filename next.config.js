@@ -7,12 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
     eslint: {
       ignoreDuringBuilds: true,
   },
-  // webpack5: true,
-  // webpack: (config) => {
-  //   config.resolve.fallback = { fs: false };
-
-  //   return config;
-  // },
   // typescript: {
   //   ignoreBuildErrors: true,
   // },

@@ -28,8 +28,8 @@ const PopularqnsData = [
     content: "If you re headed to Delhi, Noida, Ghaziabad, Gurgaon, Mumbai, Chennai, Kolkata, Bangalore, Mysore, Hyderabad, Jaipur, Lucknow, Pune, Haridwar, Neemrana, or Chandigarh for a short stay, we've got you covered with our services."
   },
   {
-    title: 'Can below 18 Age couples can book a room?',
-    content: 'No. As per govt policy only adults i.e. 18+ age can book couple friendly room with us as a couple.'
+    title: 'Can below 18 Couples book a room?',
+    content: 'No. As per govt policy only adults i.e. 18+ can book couple friendly room with us as a couple.'
   },
   {
     title: "Are Local ID’s accepted on HostyNest?",
@@ -55,7 +55,6 @@ const Section3 = () => {
         <div className='w-full mx-auto mt-10 grid grid-cols-2 gap-5'>
 
         {PopularqnsData.map((PopularqnData) => 
-          // eslint-disable-next-line react/jsx-key
           <Accordion>
             <AccordionItem title={PopularqnData.title}>
               {PopularqnData.content}

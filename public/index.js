@@ -3,7 +3,7 @@ import * as React from "react"
 
 
 
-const HotelName = ({ hotel_Name, onHotelName }) => {
+const HotelName = ({ hotel_Name, onHotelName, hotel_ID }) => {
   var h_name = '';
 
   h_name = capitalize_each_word(hotel_Name);
@@ -34,11 +34,11 @@ const HotelName = ({ hotel_Name, onHotelName }) => {
   }
 
   var Imgs = {
-    [h_name + '1']:'/img/' + h_name + '/1.jpg',
-    [h_name + '2']:'/img/' + h_name + '/2.jpg',
-    [h_name + '3']:'/img/' + h_name + '/3.jpg',
-    [h_name + '4']:'/img/' + h_name + '/4.jpg',
-    [h_name + '5']:'/img/' + h_name + '/5.jpg',
+    [h_name + '1']:'/img/' + h_name + "-" + hotel_ID + '/Property Main-PM00001/1.jpg',
+    [h_name + '2']:'/img/' + h_name + "-" + hotel_ID + '/Property Main-PM00001/2.jpg',
+    [h_name + '3']:'/img/' + h_name + "-" + hotel_ID + '/Property Main-PM00001/3.jpg',
+    [h_name + '4']:'/img/' + h_name + "-" + hotel_ID + '/Property Main-PM00001/4.jpg',
+    [h_name + '5']:'/img/' + h_name + "-" + hotel_ID + '/Property Main-PM00001/5.jpg',
   }
   
    React.useEffect(() => {

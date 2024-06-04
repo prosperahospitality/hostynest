@@ -73,7 +73,7 @@ if(operation === "pms_roomtype") {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(result && result?.length / rowsPerPage);
+  const pages = Math.ceil(result.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -265,8 +265,7 @@ if(operation === "pms_roomtype") {
             : <><Button
                 className="text-white"
                 variant='shadow'
-                //onClick={(e) => {operation === "propManagement" ? " " : handleOpen("editmany")}}
-                onClick={(e) => {handleOpen("editmany")}}
+                onClick={(e) => {operation === "propManagement" ? " " : handleOpen("editmany")}}
                 startContent={<EditIcon className="size-4" />}
                 size="sm"
                 color="success"

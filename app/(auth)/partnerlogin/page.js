@@ -6,6 +6,10 @@ import { Comfortaa } from 'next/font/google'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 
+const BASE_URL = process.env.BASE_URL;
+
+console.log("Base Url: ",BASE_URL)
+
 const comfortaa400 = Comfortaa({
   weight: '400',
   subsets: ['latin'],
@@ -60,7 +64,7 @@ export default function PartnerloginPage() {
 
     if(result.ok === true) {
 
-      const res = await fetch("http://192.168.29.228:3000/api/hotels/hotel_info/hotel_by_id", {
+      const res = await fetch(BASE_URL + "api/hotels/hotel_info/hotel_by_id", {
         method: 'POST',
         body: JSON.stringify({hotelId : propCode}),
         headers: { "Content-Type": "application/json" }

@@ -1,5 +1,5 @@
 'use client'
-import React, {useState,useEffect,  useCallback, useRef} from "react";
+import React from "react";
 import DataTable from "@/app/_components/ui/DataTable";
 import {
   Table,
@@ -30,9 +30,6 @@ import {
 } from "@nextui-org/react";
 import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@/app/_components/icon";
 import { Eye } from 'lucide-react';
-import { useSelector } from "react-redux";
-import Swal from 'sweetalert2'
-import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 
 const columns = [
@@ -48,8 +45,8 @@ const columns = [
 ];
 
 const statusOptions = [
-  {name: "open", uid: "open"},
-  {name: "close", uid: "close"},
+  {name: "Open", uid: "open"},
+  {name: "Close", uid: "close"},
 ];
 
 const statusColorMap = {
@@ -60,25 +57,8 @@ const statusColorMap = {
 
 export default function PropertyManagment () {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [result, setResult] = useState([]);
-  const [actionType, setActionType] = useState();
-
-  const [hotelName, setHotelName] = useState();
-  const [hotelierName, setHotelierName] = useState();
-  const [contactNumber, setContactNumber] = useState();
-  const [address, setAddress] = useState();
-  const [location, setLocation] = useState();
-  const [state, setState] = useState();
-  const [status, setStatus] = useState();
-  const [closingDesc, setClosingDesc] = useState(" ");
-
-  const [currRowId, setCurrRowId] = useState();
-
-  const checksRef = useRef();
-  checksRef.current = useSelector((state) => state.checks.selectedChecks);
-
-  const router = useRouter();
-
+  const [result, setResult] = React.useState([]);
+const router = useRouter();
   React.useEffect(() => {
     initialFxn()
   }, [])
@@ -116,92 +96,10 @@ export default function PropertyManagment () {
 
 const handleOpen = (type) => {
   console.log("Inside Hanlde Open")
-  setActionType(type); 
-  //onOpen();
-
-  if(result && result.length === 0) {
-    checksRef.current = [];
-    if(type === "editmany" && (checksRef.current).length === 0){
-      toast.error("No rows selected!")
-    }else{
-      onOpen();
-    }
-    
-  }else{
-    if(type === "editmany" && (checksRef.current).length === 0){
-      toast.error("No rows selected!")
-    }else{
-      onOpen();
-    }
-  }
+  // setActionType(type); 
+  onOpen();
 };
 
-
-const handleSubmit = async () => {
-
-  if(actionType === "edit"){
-
-       console.log("EDit",currRowId)
-      try {
-          const response = await fetch("/api/hotels/hotel_info", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify({id: currRowId, action: actionType, Hotel_name : hotelName.trim(),
-                  Contact_Name : hotelierName.trim(),
-                  Phone_Number : contactNumber.trim(),
-                  Address : address.trim(),
-                  Location : location.trim(),
-                  State : state.trim(),
-                  status: status.trim(),
-                  closing_description: closingDesc.trim()}),
-                  
-          });
-          const result = await response.json();
-          console.log("Data:", result);
-          setResult(result.data);
-          onClose()
-          toast.success("Data edited!")
-      } catch (error) {
-          console.error("Error fetching data:", error);
-      }
-  }else if(actionType === "editmany"){
-          console.log("Edit Many: ",checksRef.current);
-
-          try {
-            const response = await fetch("/api/hotels/hotel_info", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ids: checksRef.current, action: actionType, 
-                    status: status, closing_description: closingDesc.trim()}),
-            });
-            const result = await response.json();
-            console.log("Data:", result);
-            setResult(result.res);
-            onClose()
-            // toast.success("Data edited!")
-            toast.success("Row updated!")
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-      }
-};
-
-useEffect(() => {
-  console.log("Status::::::>",status);
-  if(status) {
-    setStatus(status.toLowerCase())
-  }
-
-}, [status])
-
-const rowEdit = async (key) => {
-  //console.log("Data of Row: ",key,name,type,bedtype,extbedtype,roomview,rateplan)
-  setCurrRowId(key)
-}
 
 let actionsContent = (item, onEditClick, onDeleteClick) => (
   <>
@@ -231,21 +129,14 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
           isIconOnly
           onPress={() => {
             onEditClick(item); // Pass item data to the callback function
-            setHotelName(item.Hotel_name);            
-            setHotelierName(item.Contact_Name);
-            setContactNumber(item.Phone_Number);
-            setAddress(item.Address);
-            setLocation(item.Location);
-            setState(item.State);
-            setStatus(item?.status.toLowerCase());
+            // setStatus(item.status);
             handleOpen("edit");
           }}
           color="default"
           variant="light"
           size="sm"
           onClick={(e) => {
-            console.log("Clicked", item.Hotel_Id)
-            rowEdit(item.Hotel_Id);
+            console.log("Clicked")
           }}
         >
           <EditIcon className="size-4" />
@@ -273,140 +164,55 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
 
   return(
 
-    <><Toaster
-    position="top-right"
-    reverseOrder={false} />
+    <>
     <Modal isOpen={isOpen} size="4xl" onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
 
-            <ModalHeader className="gap-1">Edit Hotel Details</ModalHeader>
+            <ModalHeader className="gap-1">Add Property Category</ModalHeader>
             <ModalBody>
               <div className="p-4 grid grid-cols-2 gap-2">
-              {actionType === "editmany" 
-                ? '' 
-                : 
-                <>
-                  <Input
-                      isRequired
-                      type="text"
-                      label="Hotel Name"
-                      labelPlacement="outside"
-                      placeholder="Enter Hotel Name"
-                      variant="bordered"
-                      size="md"
-                      className="max-w-xs" 
-                      value={actionType === "edit" ? hotelName : hotelName}
-                      onChange={(e) => setHotelName(e.target.value)}
-                    />
-                  <Input
-                        isRequired
-                        type="text"
-                        label="Hotel Hotelier Name"
-                        labelPlacement="outside"
-                        placeholder="Enter Hotelier Name"
-                        variant="bordered"
-                        size="md"
-                        className="max-w-xs" 
-                        value={actionType === "edit" ? hotelierName : hotelierName}
-                        onChange={(e) => setHotelierName(e.target.value)}
-                    />
-                    <Input
-                        isRequired
-                        type="text"
-                        label="Mobile Number"
-                        labelPlacement="outside"
-                        placeholder="Enter Mobile Number"
-                        variant="bordered"
-                        size="md"
-                        className="max-w-xs"
-                        value={actionType === "edit" ? contactNumber : contactNumber}
-                        onChange={(e) => setContactNumber(e.target.value)} 
-                    />
-                    <Textarea
-                        isRequired
-                        type="text"
-                        label="Address"
-                        labelPlacement="outside"
-                        placeholder="Enter Address"
-                        variant="bordered"
-                        disableAnimation
-                        disableAutosize
-                        classNames={{
-                          base: "max-w-xs",
-                          input: "resize-y min-h-[40px]",
-                        }} 
-                        value={actionType === "edit" ? address : address}
-                        onChange={(e) => setAddress(e.target.value)} 
-                      />
-                      <Input
-                        isRequired
-                        type="text"
-                        label="Location"
-                        labelPlacement="outside"
-                        placeholder="Enter Location"
-                        variant="bordered"
-                        size="md"
-                        className="max-w-xs" 
-                        value={actionType === "edit" ? location : location}
-                        onChange={(e) => setLocation(e.target.value)} 
-                      />
-                      <Input
-                        isRequired
-                        type="text"
-                        label="State"
-                        labelPlacement="outside"
-                        placeholder="Enter State"
-                        variant="bordered"
-                        size="md"
-                        className="max-w-xs" 
-                        value={actionType === "edit" ? state : state}
-                        onChange={(e) => setState(e.target.value)} 
-                        /></> }
-                        
-                <div className="ml-2">
-                  <Autocomplete
-                    isRequired
-                    labelPlacement="outside"
-                    placeholder="Select...."
-                    label="Hotel Status"
-                    variant="bordered"
-                    size="md"
-                    className="max-w-xs"
-                    defaultSelectedKey={actionType === "edit" ? status : '' }
-                    value={status} 
-                    allowsCustomValue={true}
-                    onInputChange={(value) => setStatus(value.toLowerCase())}
-                  >
-                    <AutocompleteItem value="open" key="open">Open</AutocompleteItem>
-                    <AutocompleteItem value="close" key="close">Close</AutocompleteItem>
-                  </Autocomplete>
-
-                 
-                </div>
-                {status === "close" 
-                  ? <Textarea
+                <Input
                   isRequired
                   type="text"
-                  label="Closing Reason"
+                  label="Property Category"
                   labelPlacement="outside"
-                  placeholder="Enter Closing Description"
+                  placeholder="Enter your Custom Name"
+                  variant="bordered"
+                  size="md"
+                  className="max-w-xs" />
+                <Textarea
+                  isRequired
+                  type="text"
+                  label="Property Description"
+                  labelPlacement="outside"
+                  placeholder="Property Description"
                   variant="bordered"
                   disableAnimation
                   disableAutosize
                   classNames={{
                     base: "max-w-xs",
                     input: "resize-y min-h-[40px]",
-                  }} 
-                  value={actionType === "edit" ? closingDesc : closingDesc}
-                  onChange={(e) => setClosingDesc(e.target.value)} 
-              />
-                    : " "}
+                  }} />
+                <div className="ml-2">
+                  <Autocomplete
+                    isRequired
+                    labelPlacement="outside"
+                    placeholder="Select...."
+                    label="Bed Type Status"
+                    variant="bordered"
+                    size="md"
+                    className="max-w-xs"
+                  >
+                    <AutocompleteItem value="Active" key="Active">Active</AutocompleteItem>
+                    <AutocompleteItem value="Inactive" key="Inactive">Inactive</AutocompleteItem>
+                  </Autocomplete>
+                </div>
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onPress={handleSubmit}>
+              <Button color="primary" onPress={onClose}>
                 Submit
               </Button>
               <Button color="danger" variant="light" onPress={onClose}>
@@ -419,7 +225,7 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
     </Modal>
     <div className="m-4">
     <DataTable data={result} columns={columns}
-      statusOptions={statusOptions} statusColorMap={statusColorMap} columnSort="Hotel_Id" columnName={"Hotel_name"} actionsContent={actionsContent} operation = "propManagement" handleOpen = {handleOpen}/>
+      statusOptions={statusOptions} statusColorMap={statusColorMap} columnSort="Hotel_Id" columnName={"Hotel_name"} actionsContent={actionsContent} operation = "propManagement"/>
       </div>
       </>
   )

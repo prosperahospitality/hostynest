@@ -31,9 +31,6 @@ export default function AdminloginPage() {
 
   useEffect(() => {
     console.log("Session at admin page: ",session)
-    if(session && session?.user?.user_role === "guest" || session?.user?.user_role === "partner") {
-      setSession(null)
-    }
   }, [session])
 
   const roles = [

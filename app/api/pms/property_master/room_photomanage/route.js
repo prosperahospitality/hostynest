@@ -223,6 +223,11 @@ export async function POST(req,res) {
       let ss = formData.get("img_checks_del")
       let dd = formData.get("img_tags_del")
       let img_include_in_main = formData.get("img_include_in_main")
+
+      let selectedCheckboxesfordeleteee = formData.get("selectedCheckboxesfordelete")
+
+      let selectedCheckboxesfordelete = JSON.parse(selectedCheckboxesfordeleteee)
+
       let img_checks_del;
       let img_tags_del;
 
@@ -1045,6 +1050,1012 @@ room_Name)
 
     return NextResponse.json({ Message: "Success", res: imgNamessss, status: 200 });
 
+    }else if(operation === "multiple_delete_img") {
+
+      console.log("Delete Multiple Image", imgDelId, imgDelTitle, img_checks_del, img_tags_del, operation, hotel_Name, room_Name);
+    
+        let selectedImageID = imgDelId;
+        const [roomtext, roomid] = room_Name.split("-");
+        const [hoteltextt, hotelidd] = hotel_Name.split("-");
+        let imgNamessss;
+
+        const renameFile = (oldPath, newPath) => {
+          return new Promise((resolve, reject) => {
+              fs.rename(oldPath, newPath, (err) => {
+                  if (err) {
+                      reject(err);
+                  } else {
+                      console.log('Rename complete!');
+                      resolve();
+                  }
+              });
+          });
+      };
+  
+      const deleteFile = (filePath) => {
+          return new Promise((resolve, reject) => {
+              fs.unlink(filePath, (err) => {
+                  if (err) {
+                      reject(err);
+                  } else {
+                      console.log('File deleted successfully');
+                      resolve();
+                  }
+              });
+          });
+      };
+
+      if(sub_operation === "deleteWithoutRoom") {
+        console.log("Trueeeeee", imgDelTitle, selectedCheckboxesfordelete[selectedCheckboxesfordelete.length - 1])
+
+        
+        
+        const jkhasd = async() => {
+          let filePathh = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, imgDelTitle);
+          await deleteFile(filePathh);
+
+          if(imgDelTitle.includes("-")) {
+            const [id, text] = imgDelTitle.split("-")
+            const [sec, ext] = text.split(".")
+            let extension = "." + ext;
+
+            const separateParts = (input) => {
+
+              const index = input.search(/\D/);
+
+              const numberPart = index === -1 ? input : input.slice(0, index);
+              const alphanumericPart = input.slice(index);
+              
+              return { numberPart, alphanumericPart };
+            };
+          
+      
+            const { numberPart, alphanumericPart } = separateParts(sec);
+
+            console.log("Found: ",id, alphanumericPart, extension)
+
+            await Pms_Propertymaster_Roomphotomanage.updateOne({Hotel_Id: parseInt(hotelidd), selected_room: alphanumericPart.toString(),img_id: parseInt(numberPart)}, {include_in_main: false});
+            
+          }
+
+
+  
+          // let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name);
+          // let imgNames = fs.readdirSync(imgDirectory);
+          // const filteredImgNames = imgNames.filter(file => file.includes('-' + selectedImageID.toString()));
+          // let imgNumbers = imgNames.map(name => parseInt(name));
+          // imgNumbers.sort((a, b) => a - b);
+  
+          // console.log("Img num last:::>", imgNumbers, imgNames, filteredImgNames);
+  
+          // let index = parseInt(imgDelTitle);
+          // filteredImgNames.forEach((item) => {
+          //     const [id, text] = item.split("-");
+          //     if (text === pqr) {
+          //         index = imgNames.indexOf(item);
+          //     }
+          // });
+  
+          // const filesAfterTarget = imgNames.slice(index - 1);
+          // console.log("DAtassss:::last", filesAfterTarget);
+          
+  
+          // await Promise.all(
+          //     filesAfterTarget.map(async (fileName, index) => {
+          //         const [prefix, suffix] = fileName.split('.');
+          //         const fileNumber = parseInt(prefix);
+  
+          //         if (!isNaN(fileNumber)) {
+          //             const newFileName = `${fileNumber - 1}.${suffix}`;
+          //             let fileId = parseInt(fileName);
+          //             const imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, fileName);
+          //             let imgDirectoryNew = '';
+  
+          //             if (fileName.includes("-")) {
+          //                 const [prefix, suffixx] = fileName.split('-');
+          //                 console.log(prefix, suffixx);
+          //                 const newFileNamee = `${fileNumber - 1}${"-"}${suffixx}`;
+          //                 imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileNamee);
+          //             } else {
+          //                 imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileName);
+
+          //                 const pqrttt = async() => {
+                            
+
+          //                   console.log("file.title1sdfsd: ",fileId, fileName)
+        
+          //                   let  [hoteltext, hotelid] = hotel_Name.split("-");
+          //                   let  [roomtext, roomid] = room_Name.split("-");
+
+          //                   const extensionIndex = fileName.lastIndexOf(".");
+          //                   const fileExtensions = fileName.substring(extensionIndex);
+        
+          //                   let data = await Pms_Propertymaster_Roomphotomanage.findOne({
+          //                     Hotel_Id: hotelid,
+          //                     selected_room: { $regex: new RegExp(roomid, 'i'), },
+          //                     img_id: parseInt(fileId),
+          //         });
+                  
+          //         console.log("without room: ",data)
+                  
+        
+          //                 if(data) {
+          //                   let renamePromisesss = '';
+          //                   if(data.img_id === parseInt(fileId)) {
+        
+          //                     await Pms_Propertymaster_Roomphotomanage.updateOne({
+          //                       id: data.id,
+          //                       Hotel_Id: hotelid,
+          //                       selected_room: roomid.toString(),
+          //                       img_id: parseInt(fileId),
+          //                     },{img_id: parseInt((fileId - 1)), img_title: (fileId - 1).toString() + fileExtensions})
+          //                   }
+                            
+          
+          //                   console.log("Data Actisdfsdfve::::::::>", data, fileId)
+        
+          //                   data.img_checks.map((item) => {
+        
+          //                     const ltt = async () => {
+          
+          //                       let resss = await Pms_Propertymaster_Roomdetails.findOne({id: item})
+          
+          //                       console.log("Datasss78dsfsdf9:::::::>", resss)
+          
+          //                       let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+                  
+          //                       let imgNames = await fs.readdirSync(imgDirectory);
+          
+          //                       console.log("imgNamesimsdfsdfgNames: ",imgNames)
+                                
+          //                       renamePromisesss = imgNames.map((itemm) => {
+          //                         console.log("Itemmsdfmmm: ",itemm, `${fileId}${roomid}`)
+          //                         if(itemm.includes(`${fileId}${roomid}`)) {
+          //                           console.log("imgNamsdfestttt: ", itemm)
+          
+          //                           function renameFile(oldPath, newPath) {
+          //                             return new Promise((resolve, reject) => {
+          //                               fs.rename(oldPath, newPath, (err) => {
+          //                                 if (err) {
+          //                                   reject(err);
+          //                                 } else {
+          //                                   console.log('Rensdfame complete!');
+          //                                   resolve();
+          //                                 }
+          //                               });
+          //                             });
+          //                           }
+          
+          //                           const regex = /-(\d+)(?=[a-zA-Z])/;
+          //                           //const modifiedStr = itemm.replace(regex, `-${file.id + "_" + (parseInt(file.id) + 1)}`);
+        
+          //                           const modifiedStr = itemm.replace(regex, `-${fileId + "_" + (parseInt(fileId) - 1) + "_" + fileId}`);
+          
+          //                           let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, itemm);
+          //                           let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStr);
+          
+          //                           console.log("imgDirectsdforyOld: ", imgDirectoryOld,
+          //                           imgDirectoryNew)
+          
+          //                           renameFile(imgDirectoryOld, imgDirectoryNew)
+          //                             .then(() => {
+          //                                 console.log(`Renasdfmed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+
+          //                                 const xyz = async () => {
+  
+          //                                   console.log("XYZ Called::::::::>")
+  
+          //                                   function transformFilename(filename) {
+                                              
+          //                                     let parts = filename.split('_')
+        
+          //                                     if(parts.length === 2) {
+          //                                       console.log("Partsll: ",parts)
+        
+          //                                       let thirdPart = parts[1];
+          
+          //                                       console.log("thirdPartll: ",thirdPart)
+          
+          //                                       let part2 = parts[0].split("-")
+        
+                                                
+          //                                       let finalres =  part2[0] + "-" + parts[1]; 
+          
+          //                                       console.log("finalresll: ",finalres)
+          
+          //                                     return finalres;
+        
+          //                                     }else {
+          //                                       console.log("Parts: ",parts)
+        
+          //                                       let fileid = filename.split("-")
+        
+          //                                       let thirdPart = parts[2];
+          
+          //                                       console.log("thirdPart: ",thirdPart)
+          
+          //                                       let result = thirdPart.replace(/^\d+/, '');
+          
+          //                                       console.log("result: ",result)
+                                                
+          //                                       let finalres = fileid[0] + "-" +parts[1] + result; 
+          
+          //                                       console.log("finalres: ",finalres)
+          
+          //                                     return finalres;
+          //                                     }
+        
+                                             
+          //                                 }
+        
+          //                                   let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+              
+          //                                   let imgNames = await fs.readdirSync(imgDirectory);
+                        
+          //                                   console.log("imgNames654: ", imgNames, activeId ,overId)
+        
+          //                                   imgNames.map((item) => {
+          //                                     if(item.includes("_")) {
+        
+          //                                       console.log("Final item: ",item)
+                                                
+          //                                       const regex = /-(\d+)_/;
+          //                                       let modifiedStrrr = transformFilename(item);
+          
+        
+          //                                       // const regex = /-(\d+)_/;
+          //                                       // let modifiedStrrr = modifiedStr.replace(regex, '-');
+                        
+          //                                     let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, item);
+          //                                     let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStrrr);
+          
+          
+                        
+          //                                     console.log("imgDirectoryOld35: ", imgDirectoryOld,
+          //                                     imgDirectoryNew)
+                        
+          //                                     renameFile(imgDirectoryOld, imgDirectoryNew)
+          //                                       .then(() => {
+          //                                           console.log(`Renamed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+          //                                       })
+          //                                       .catch(error => {
+          //                                           console.error(`Error renaming ${imgDirectoryOld}:`, error);
+          //                                       });
+          //                                     }
+          //                                   })
+        
+                                            
+                                          
+                                         
+        
+                             
+                                              
+          //                             }
+          //                             xyz()
+                          
+                          
+          //                  })
+          //                             .catch(error => {
+          //                                 console.error(`Errorsdf renaming ${imgDirectoryOld}:`, error);
+          //                             });
+          
+          
+          //                         }
+          //                       })
+        
+          
+                                
+          //                     }
+          
+          //                     ltt()
+                             
+          //                   })
+          //                 }
+        
+        
+        
+            
+        
+          //                 }
+        
+          //                 pqrttt()
+
+
+          //             }
+  
+          //             console.log("fileItems4: ", imgDirectoryOld, imgDirectoryNew);
+          //             await renameFile(imgDirectoryOld, imgDirectoryNew);
+          //             console.log(`Renamed ${fileName} to ${newFileName} Successfully!`);
+          //         } else {
+          //             console.error(`Invalid file name: ${fileName}`);
+          //         }
+          //     })
+          // );
+
+        }
+        jkhasd()
+      }else {
+        const deleteAndRenameImages = async () => {
+
+          await Promise.all(
+
+              img_checks_del.map(async (ite) => {
+                  console.log("Ite::::::>", ite, selectedImageID);
+
+                  let resss;
+
+                  if(ite === "PM00001") {
+                    
+                  }else{
+
+                    resss = await Pms_Propertymaster_Roomdetails.findOne({ id: ite });
+                    
+                  }
+
+                  console.log("Datasss:::::::>", resss);
+
+                  let imgDirectory;
+  
+                  if(ite === "PM00001") {
+                    imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, "Property Main" + "-" + ite);
+                  }else {
+                    imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + ite);
+                  }
+                  
+                  let imgNames = fs.readdirSync(imgDirectory);
+                  const filteredImgNames = imgNames.filter(file => file.includes('-' + selectedImageID.toString()));
+                  let imgNumbers = imgNames.map(name => parseInt(name));
+                  imgNumbers.sort((a, b) => a - b);
+  
+                  console.log("Img num:::>", imgNumbers, imgNames, filteredImgNames);
+  
+                  const [imagetext, fileExtensionss] = imgDelTitle.split(".");
+                  let filePath = '';
+                  let pqr = selectedImageID.toString() + roomid.toString() + "." + fileExtensionss;
+                  console.log("pqr: ", pqr);
+  
+                  let index = "";
+                  filteredImgNames.forEach((item) => {
+                      const [id, text] = item.split("-");
+                      if (text === pqr) {
+
+                        if(ite === "PM00001") {
+                          filePath = path.join(process.cwd(), 'public', 'img', hotel_Name, "Property Main" + "-" + ite, item);
+                        }else {
+                          filePath = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + ite, item);
+                        }
+                          
+                          index = imgNames.indexOf(item);
+                      }
+                  });
+
+                  console.log("FilePathhh:::>>>",filePath)
+
+                  if(filePath === "") {
+
+                  }else {
+                    await deleteFile(filePath);
+                  
+  
+
+                  const filesAfterTarget = imgNames.slice(index + 1);
+                  console.log("DAtassss:::", filesAfterTarget, img_checks_del);
+  
+                  await Promise.all(
+                      filesAfterTarget.map(async (fileName, index) => {
+                          const [prefix, suffix] = fileName.split('.');
+                          const fileNumber = parseInt(prefix);
+  
+                          if (!isNaN(fileNumber)) {
+                              const newFileName = `${fileNumber - 1}.${suffix}`;
+
+                              let imgDirectoryOld;
+
+                              if(ite === "PM00001") {
+                                imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, "Property Main" + "-" + ite, fileName);
+                              }else {
+                                imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + ite, fileName);
+                              }
+                              
+                              let imgDirectoryNew = '';
+  
+                              if (fileName.includes("-")) {
+                                  const [prefix, suffixx] = fileName.split('-');
+                                  console.log(prefix, suffixx);
+                                  const newFileNamee = `${fileNumber - 1}${"-"}${suffixx}`;
+
+                                  if(ite === "PM00001") {
+                                    imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, "Property Main" + "-" + ite, newFileNamee);
+                                  }else{
+                                    imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + ite, newFileNamee);
+                                  }
+                                  
+                              } else {
+
+                                if(ite === "PM00001") {
+                                  imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, "Property Main" + "-" + ite, newFileName);
+                                }else {
+                                  imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + ite, newFileName);
+                                }
+                                  
+                              }
+  
+                              console.log("fileItems4: ", imgDirectoryOld, imgDirectoryNew);
+                              await renameFile(imgDirectoryOld, imgDirectoryNew);
+                              console.log(`Renamed ${fileName} to ${newFileName} Successfully!`);
+                          } else {
+                              console.error(`Invalid file name: ${fileName}`);
+                          }
+                      })
+                  );
+
+                }
+              })
+          );
+  
+          let filePathh = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, imgDelTitle);
+          console.log("FilePAthhh: ",filePathh)
+          await deleteFile(filePathh);
+
+          if(imgDelTitle.includes("-")) {
+            const [id, text] = imgDelTitle.split("-")
+            const [sec, ext] = text.split(".")
+            let extension = "." + ext;
+
+            const separateParts = (input) => {
+
+              const index = input.search(/\D/);
+
+              const numberPart = index === -1 ? input : input.slice(0, index);
+              const alphanumericPart = input.slice(index);
+              
+              return { numberPart, alphanumericPart };
+            };
+          
+      
+            const { numberPart, alphanumericPart } = separateParts(sec);
+
+            console.log("Found: ",id, alphanumericPart, extension)
+
+            await Pms_Propertymaster_Roomphotomanage.updateOne({Hotel_Id: parseInt(hotelidd), selected_room: alphanumericPart.toString(),img_id: parseInt(numberPart)}, {include_in_main: false});
+            
+          }
+  
+          // let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name);
+          // let imgNames = fs.readdirSync(imgDirectory);
+          // const filteredImgNames = imgNames.filter(file => file.includes('-' + selectedImageID.toString()));
+          // let imgNumbers = imgNames.map(name => parseInt(name));
+          // imgNumbers.sort((a, b) => a - b);
+  
+          // console.log("Img num last:::>", imgNumbers, imgNames, filteredImgNames);
+  
+          // let index = parseInt(imgDelTitle);
+          // filteredImgNames.forEach((item) => {
+          //     const [id, text] = item.split("-");
+          //     if (text === pqr) {
+          //         index = imgNames.indexOf(item);
+          //     }
+          // });
+  
+          // const filesAfterTarget = imgNames.slice(index - 1);
+          // console.log("DAtassss:::last", filesAfterTarget);
+  
+          // await Promise.all(
+          //     filesAfterTarget.map(async (fileName, index) => {
+          //         const [prefix, suffix] = fileName.split('.');
+          //         const fileNumber = parseInt(prefix);
+  
+          //         if (!isNaN(fileNumber)) {
+          //             const newFileName = `${fileNumber - 1}.${suffix}`;
+          //             let fileId = parseInt(fileName);
+          //             const imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, fileName);
+          //             let imgDirectoryNew = '';
+  
+          //             if (fileName.includes("-")) {
+          //                 const [prefix, suffixx] = fileName.split('-');
+          //                 console.log(prefix, suffixx);
+          //                 const newFileNamee = `${fileNumber - 1}${"-"}${suffixx}`;
+          //                 imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileNamee);
+          //             } else {
+          //                 imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileName);
+
+          //                 const pqrttt = async() => {
+
+          //                   console.log("file.title1sdfsd: ",fileId, fileName)
+        
+          //                   let  [hoteltext, hotelid] = hotel_Name.split("-");
+          //                   let  [roomtext, roomid] = room_Name.split("-");
+
+          //                   const extensionIndex = fileName.lastIndexOf(".");
+          //                   const fileExtensions = fileName.substring(extensionIndex);
+        
+          //                   let data = await Pms_Propertymaster_Roomphotomanage.findOne({
+          //                     Hotel_Id: hotelid,
+          //                     selected_room: { $regex: new RegExp(roomid, 'i'), },
+          //                     img_id: parseInt(fileId),
+          //         });
+        
+          //                 if(data) {
+          //                   if(data.img_id === parseInt(fileId)) {
+        
+          //                     await Pms_Propertymaster_Roomphotomanage.updateOne({
+          //                       id: data.id,
+          //                       Hotel_Id: hotelid,
+          //                       selected_room: roomid.toString(),
+          //                       img_id: parseInt(fileId),
+          //                     },{img_id: parseInt((fileId - 1)), img_title: (fileId - 1).toString() + fileExtensions})
+          //                   }
+                            
+          
+          //                   console.log("Data Actisdfsdfve::::::::>", data, fileId)
+        
+          //                   data.img_checks.map((item) => {
+        
+          //                     const ltt = async () => {
+          
+          //                       let resss = await Pms_Propertymaster_Roomdetails.findOne({id: item})
+          
+          //                       console.log("Datasss78dsfsdf9:::::::>", resss)
+          
+          //                       let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+                  
+          //                       let imgNames = await fs.readdirSync(imgDirectory);
+          
+          //                       console.log("imgNamesimsdfsdfgNames: ",imgNames)
+          
+          //                       renamePromisesss = imgNames.map((itemm) => {
+          //                         console.log("Itemmsdfmmm: ",itemm, `${fileId}${roomid}`)
+          //                         if(itemm.includes(`${fileId}${roomid}`)) {
+          //                           console.log("imgNamsdfestttt: ", itemm)
+          
+          //                           function renameFile(oldPath, newPath) {
+          //                             return new Promise((resolve, reject) => {
+          //                               fs.rename(oldPath, newPath, (err) => {
+          //                                 if (err) {
+          //                                   reject(err);
+          //                                 } else {
+          //                                   console.log('Rensdfame complete!');
+          //                                   resolve();
+          //                                 }
+          //                               });
+          //                             });
+          //                           }
+          
+          //                           const regex = /-(\d+)(?=[a-zA-Z])/;
+          //                           //const modifiedStr = itemm.replace(regex, `-${file.id + "_" + (parseInt(file.id) + 1)}`);
+        
+          //                           const modifiedStr = itemm.replace(regex, `-${fileId + "_" + (parseInt(fileId) - 1) + "_" + fileId}`);
+          
+          //                           let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, itemm);
+          //                           let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStr);
+          
+          //                           console.log("imgDirectsdforyOld: ", imgDirectoryOld,
+          //                           imgDirectoryNew)
+          
+          //                           renameFile(imgDirectoryOld, imgDirectoryNew)
+          //                             .then(() => {
+          //                                 console.log(`Renasdfmed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+
+          //                                 const xyz = async () => {
+  
+          //                                   console.log("XYZ Called::::::::>")
+  
+          //                                   function transformFilename(filename) {
+                                              
+          //                                     let parts = filename.split('_')
+        
+          //                                     if(parts.length === 2) {
+          //                                       console.log("Partsll: ",parts)
+        
+          //                                       let thirdPart = parts[1];
+          
+          //                                       console.log("thirdPartll: ",thirdPart)
+          
+          //                                       let part2 = parts[0].split("-")
+        
+                                                
+          //                                       let finalres =  part2[0] + "-" + parts[1]; 
+          
+          //                                       console.log("finalresll: ",finalres)
+          
+          //                                     return finalres;
+        
+          //                                     }else {
+          //                                       console.log("Parts: ",parts)
+        
+          //                                       let fileid = filename.split("-")
+        
+          //                                       let thirdPart = parts[2];
+          
+          //                                       console.log("thirdPart: ",thirdPart)
+          
+          //                                       let result = thirdPart.replace(/^\d+/, '');
+          
+          //                                       console.log("result: ",result)
+                                                
+          //                                       let finalres = fileid[0] + "-" +parts[1] + result; 
+          
+          //                                       console.log("finalres: ",finalres)
+          
+          //                                     return finalres;
+          //                                     }
+        
+                                             
+          //                                 }
+        
+          //                                   let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+              
+          //                                   let imgNames = await fs.readdirSync(imgDirectory);
+                        
+          //                                   console.log("imgNames654: ", imgNames, activeId ,overId)
+        
+          //                                   imgNames.map((item) => {
+          //                                     if(item.includes("_")) {
+        
+          //                                       console.log("Final item: ",item)
+                                                
+          //                                       const regex = /-(\d+)_/;
+          //                                       let modifiedStrrr = transformFilename(item);
+          
+        
+          //                                       // const regex = /-(\d+)_/;
+          //                                       // let modifiedStrrr = modifiedStr.replace(regex, '-');
+                        
+          //                                     let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, item);
+          //                                     let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStrrr);
+          
+          
+                        
+          //                                     console.log("imgDirectoryOld35: ", imgDirectoryOld,
+          //                                     imgDirectoryNew)
+                        
+          //                                     renameFile(imgDirectoryOld, imgDirectoryNew)
+          //                                       .then(() => {
+          //                                           console.log(`Renamed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+          //                                       })
+          //                                       .catch(error => {
+          //                                           console.error(`Error renaming ${imgDirectoryOld}:`, error);
+          //                                       });
+          //                                     }
+          //                                   })
+        
+                                            
+                                          
+                                         
+        
+                             
+                                              
+          //                             }
+          //                             xyz()
+                          
+                          
+          //                  })
+          //                             .catch(error => {
+          //                                 console.error(`Errorsdf renaming ${imgDirectoryOld}:`, error);
+          //                             });
+          
+          
+          //                         }
+          //                       })
+        
+          
+                                
+          //                     }
+          
+          //                     ltt()
+                             
+          //                   })
+          //                 }
+        
+        
+        
+            
+        
+          //                 }
+        
+          //                 pqrttt()
+          //             }
+  
+          //             console.log("fileItems4: ", imgDirectoryOld, imgDirectoryNew);
+          //             await renameFile(imgDirectoryOld, imgDirectoryNew);
+          //             console.log(`Renamed ${fileName} to ${newFileName} Successfully!`);
+          //         } else {
+          //             console.error(`Invalid file name: ${fileName}`);
+          //         }
+          //     })
+          // );
+  
+          const deletefromdb = async () => {
+              let result = await Pms_Propertymaster_Roomphotomanage.deleteOne({ Hotel_Id: parseInt(hotelidd), selected_room: roomid.toString(), img_id: parseInt(imgDelId) });
+              let imgDirectoryy = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name);
+              imgNamessss = fs.readdirSync(imgDirectoryy);
+              console.log("Result: ", result, imgNamessss);
+          };
+  
+          await deletefromdb();
+      };
+  
+      deleteAndRenameImages().then(() => {
+          console.log("Result2: ", imgNamessss);
+  
+      }).catch(error => {
+          console.error("Error in deleteAndRenameImages: ", error);
+  
+      });
+      }
+
+      return NextResponse.json({ Message: "Success", status: 200 });
+
+    }else if( operation === "renameAfterMultipleDelete") {
+
+      console.log("renameAfterMultipleDelete", selectedCheckboxesfordelete)
+
+      function renameFile(oldPath, newPath) {
+        return new Promise((resolve, reject) => {
+          fs.rename(oldPath, newPath, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              console.log('Rensdfame complete!');
+              resolve();
+            }
+          });
+        });
+      }
+
+          let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name);
+          let imgNames = fs.readdirSync(imgDirectory);
+          const filteredImgNames = imgNames.filter(file => file.includes('-' + selectedCheckboxesfordelete[0].toString()));
+          let imgNumbers = imgNames.map(name => parseInt(name));
+          imgNumbers.sort((a, b) => a - b);
+  
+          console.log("Img num last:::>", imgNumbers, imgNames, filteredImgNames);
+  
+          let index = 0;
+          filteredImgNames.forEach((item) => {
+              const [id, text] = item.split("-");
+              if (text === pqr) {
+                  index = imgNames.indexOf(item);
+              }
+          });
+  
+          const filesAfterTarget = imgNames;
+          console.log("DAtassss:::last", filesAfterTarget);
+
+            await Promise.all(
+              filesAfterTarget.map(async (fileName, index) => {
+                  const [prefix, suffix] = fileName.split('.');
+                  const fileNumber = parseInt(prefix);
+  
+                  if (!isNaN(fileNumber)) {
+                      const newFileName = `${index + 1}.${suffix}`;
+                      let fileId = parseInt(fileName);
+                      const imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, fileName);
+                      let imgDirectoryNew = '';
+  
+                      if (fileName.includes("-")) {
+                          const [prefix, suffixx] = fileName.split('-');
+                          console.log(prefix, suffixx);
+                          const newFileNamee = `${index + 1}${"-"}${suffixx}`;
+                          imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileNamee);
+                      } else {
+                          imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, room_Name, newFileName);
+
+                          const pqrttt = async() => {
+                            
+
+                            console.log("file.title1sdfsd: ",fileId, fileName)
+        
+                            let  [hoteltext, hotelid] = hotel_Name.split("-");
+                            let  [roomtext, roomid] = room_Name.split("-");
+
+                            const extensionIndex = fileName.lastIndexOf(".");
+                            const fileExtensions = fileName.substring(extensionIndex);
+        
+                            let data = await Pms_Propertymaster_Roomphotomanage.findOne({
+                              Hotel_Id: hotelid,
+                              selected_room: { $regex: new RegExp(roomid, 'i'), },
+                              img_id: parseInt(fileId),
+                  });
+                  
+                  console.log("without room: ",data)
+                  
+        
+                          if(data) {
+                            let renamePromisesss = '';
+                            if(data.img_id === parseInt(fileId)) {
+        
+                              await Pms_Propertymaster_Roomphotomanage.updateOne({
+                                id: data.id,
+                                Hotel_Id: hotelid,
+                                selected_room: roomid.toString(),
+                                img_id: parseInt(fileId),
+                              },{img_id: parseInt((fileId - 1)), img_title: (fileId - 1).toString() + fileExtensions})
+                            }
+                            
+          
+                            console.log("Data Actisdfsdfve::::::::>", data, fileId)
+        
+                            data.img_checks.map((item) => {
+        
+                              const ltt = async () => {
+          
+                                let resss = await Pms_Propertymaster_Roomdetails.findOne({id: item})
+          
+                                console.log("Datasss78dsfsdf9:::::::>", resss)
+          
+                                let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+                  
+                                let imgNames = await fs.readdirSync(imgDirectory);
+          
+                                console.log("imgNamesimsdfsdfgNames: ",imgNames)
+                                
+                                renamePromisesss = imgNames.map((itemm) => {
+                                  console.log("Itemmsdfmmm: ",itemm, `${fileId}${roomid}`)
+                                  if(itemm.includes(`${fileId}${roomid}`)) {
+                                    console.log("imgNamsdfestttt: ", itemm)
+          
+                                    function renameFile(oldPath, newPath) {
+                                      return new Promise((resolve, reject) => {
+                                        fs.rename(oldPath, newPath, (err) => {
+                                          if (err) {
+                                            reject(err);
+                                          } else {
+                                            console.log('Rensdfame complete!');
+                                            resolve();
+                                          }
+                                        });
+                                      });
+                                    }
+          
+                                    const regex = /-(\d+)(?=[a-zA-Z])/;
+                                    //const modifiedStr = itemm.replace(regex, `-${file.id + "_" + (parseInt(file.id) + 1)}`);
+        
+                                    const modifiedStr = itemm.replace(regex, `-${fileId + "_" + (parseInt(fileId) - 1) + "_" + fileId}`);
+          
+                                    let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, itemm);
+                                    let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStr);
+          
+                                    console.log("imgDirectsdforyOld: ", imgDirectoryOld,
+                                    imgDirectoryNew)
+          
+                                    renameFile(imgDirectoryOld, imgDirectoryNew)
+                                      .then(() => {
+                                          console.log(`Renasdfmed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+
+                                          const xyz = async () => {
+  
+                                            console.log("XYZ Called::::::::>")
+  
+                                            function transformFilename(filename) {
+                                              
+                                              let parts = filename.split('_')
+        
+                                              if(parts.length === 2) {
+                                                console.log("Partsll: ",parts)
+        
+                                                let thirdPart = parts[1];
+          
+                                                console.log("thirdPartll: ",thirdPart)
+          
+                                                let part2 = parts[0].split("-")
+        
+                                                
+                                                let finalres =  part2[0] + "-" + parts[1]; 
+          
+                                                console.log("finalresll: ",finalres)
+          
+                                              return finalres;
+        
+                                              }else {
+                                                console.log("Parts: ",parts)
+        
+                                                let fileid = filename.split("-")
+        
+                                                let thirdPart = parts[2];
+          
+                                                console.log("thirdPart: ",thirdPart)
+          
+                                                let result = thirdPart.replace(/^\d+/, '');
+          
+                                                console.log("result: ",result)
+                                                
+                                                let finalres = fileid[0] + "-" +parts[1] + result; 
+          
+                                                console.log("finalres: ",finalres)
+          
+                                              return finalres;
+                                              }
+        
+                                             
+                                          }
+        
+                                            let imgDirectory = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id);
+              
+                                            let imgNames = await fs.readdirSync(imgDirectory);
+                        
+                                            console.log("imgNames654: ", imgNames, activeId ,overId)
+        
+                                            imgNames.map((item) => {
+                                              if(item.includes("_")) {
+        
+                                                console.log("Final item: ",item)
+                                                
+                                                const regex = /-(\d+)_/;
+                                                let modifiedStrrr = transformFilename(item);
+          
+        
+                                                // const regex = /-(\d+)_/;
+                                                // let modifiedStrrr = modifiedStr.replace(regex, '-');
+                        
+                                              let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, item);
+                                              let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStrrr);
+          
+          
+                        
+                                              console.log("imgDirectoryOld35: ", imgDirectoryOld,
+                                              imgDirectoryNew)
+                        
+                                              renameFile(imgDirectoryOld, imgDirectoryNew)
+                                                .then(() => {
+                                                    console.log(`Renamed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+                                                })
+                                                .catch(error => {
+                                                    console.error(`Error renaming ${imgDirectoryOld}:`, error);
+                                                });
+                                              }
+                                            })
+        
+                                            
+                                          
+                                         
+        
+                             
+                                              
+                                      }
+                                      xyz()
+                          
+                          
+                           })
+                                      .catch(error => {
+                                          console.error(`Errorsdf renaming ${imgDirectoryOld}:`, error);
+                                      });
+          
+          
+                                  }
+                                })
+        
+          
+                                
+                              }
+          
+                              ltt()
+                             
+                            })
+                          }
+        
+        
+        
+            
+        
+                          }
+        
+                          pqrttt()
+
+
+                      }
+  
+                      console.log("fileItems4: ", imgDirectoryOld, imgDirectoryNew);
+                      await renameFile(imgDirectoryOld, imgDirectoryNew);
+                      console.log(`Renamed ${fileName} to ${newFileName} Successfully!`);
+                  } else {
+                      console.error(`Invalid file name: ${fileName}`);
+                  }
+              })
+          );
+
+      return NextResponse.json({ Message: "Success", status: 200 });
+
     }else if(action === "deleteFile") {
 
         filteredChecks?.map(async(ite) => {
@@ -1697,8 +2708,10 @@ room_Name)
                                     console.log("Right place")
                                   }else if((data11 !== null && data22 !== null) || (data11imgchecklength > 0 && data22imgchecklength > 0)) {
                                     console.log("Right place New")
+                                  }else if((data11 === null && data22 !== null) && (data11imgchecklength === null && data22imgchecklength > 0)) {
+                                    console.log("Right place 0002")
                                   }else{
-                                    console.log("False ILL")
+                                    console.log("False ILL", modifiedStr)
 
 
 
@@ -2711,7 +3724,7 @@ room_Name)
           
                                 }
                                 
-                                if(!itemm.includes(`${overId}${roomid}`) && !itemm.includes(`${activeId}${roomid}`)) {
+                                if((!itemm.includes(`${overId}${roomid}`) && !itemm.includes(`${activeId}${roomid}`)) || itemm.includes(`${overId}${roomid}`)) {
                                   const xyz = async () => {
           
                                     function transformFilename(filename) {
@@ -2965,8 +3978,26 @@ room_Name)
 
                         console.log("data546: ",data, data22)
 
-                        if(data22) {
-                          data22.img_checks.map((item) => {
+                        let dataaaa1 = await Pms_Propertymaster_Roomphotomanage.find({
+                          Hotel_Id: parseInt(hotelid),
+                          selected_room: { $regex: new RegExp(roomid, 'i'), },
+                        });
+      
+                        console.log("dataaaa154:",dataaaa1)
+      
+      
+                        const imgChecksArrays = dataaaa1.map(item => item.img_checks);
+      
+      
+                        const mergedImgChecks = [].concat(...imgChecksArrays);
+      
+      
+                        const uniqueImgChecks = [...new Set(mergedImgChecks)];
+      
+                        console.log("uniqueImgChecks: ", uniqueImgChecks);
+
+                        if(uniqueImgChecks) {
+                          uniqueImgChecks.map((item) => {
                             const ffxn = async() => {
                               let resss = await Pms_Propertymaster_Roomdetails.findOne({id: item})
 
@@ -3022,33 +4053,38 @@ room_Name)
                               console.log("imgNamesimgNamesdfhdfghwertwer: ", imgNames, activeId ,overId)
     
                               imgNames.map((item) => {
-                                if(item.includes("_")) {
+                                if(item === "PM00001") {
+
+                                }else {
+                                  if(item.includes("_")) {
     
-                                  console.log("Final item: ",item)
-                                  
-                                  const regex = /-(\d+)_/;
-                                  let modifiedStrrr = transformFilename(item);
-    
-    
-                                  // const regex = /-(\d+)_/;
-                                  // let modifiedStrrr = modifiedStr.replace(regex, '-');
-          
-                                let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, item);
-                                let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStrrr);
-    
-    
-          
-                                console.log("imgDirectoryOldsameer: ", imgDirectoryOld,
-                                imgDirectoryNew)
-          
-                                renameFile(imgDirectoryOld, imgDirectoryNew)
-                                  .then(() => {
-                                      console.log(`Renamed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
-                                  })
-                                  .catch(error => {
-                                      console.error(`Error renaming ${imgDirectoryOld}:`, error);
-                                  });
+                                    console.log("Final item: ",item)
+                                    
+                                    const regex = /-(\d+)_/;
+                                    let modifiedStrrr = transformFilename(item);
+      
+      
+                                    // const regex = /-(\d+)_/;
+                                    // let modifiedStrrr = modifiedStr.replace(regex, '-');
+            
+                                  let imgDirectoryOld = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, item);
+                                  let imgDirectoryNew = path.join(process.cwd(), 'public', 'img', hotel_Name, resss.room_name + "-" + resss.id, modifiedStrrr);
+      
+      
+            
+                                  console.log("imgDirectoryOldsameer: ", imgDirectoryOld,
+                                  imgDirectoryNew)
+            
+                                  renameFile(imgDirectoryOld, imgDirectoryNew)
+                                    .then(() => {
+                                        console.log(`Renamed ${imgDirectoryOld} to ${imgDirectoryNew} Successfully!`);
+                                    })
+                                    .catch(error => {
+                                        console.error(`Error renaming ${imgDirectoryOld}:`, error);
+                                    });
+                                  }
                                 }
+                                
                               })
 
                               
@@ -5293,7 +6329,7 @@ console.log("Main Data new: ",data11,data22,data11imgchecklength,data22imgcheckl
           
                                 }
 
-                                if(!itemm.includes(`${overId}${roomid}`) && !itemm.includes(`${activeId}${roomid}`)) {
+                                if((!itemm.includes(`${overId}${roomid}`) && !itemm.includes(`${activeId}${roomid}`) || itemm.includes(`${overId}${roomid}`))) {
                                   const xyz = async () => {
           
                                     function transformFilename(filename) {
@@ -5547,8 +6583,26 @@ console.log("Main Data new: ",data11,data22,data11imgchecklength,data22imgcheckl
 
                         console.log("data546: ",data, data22)
 
-                        if(data22) {
-                          data22.img_checks.map((item) => {
+                        let dataaaa1 = await Pms_Propertymaster_Roomphotomanage.find({
+                          Hotel_Id: parseInt(hotelid),
+                          selected_room: { $regex: new RegExp(roomid, 'i'), },
+                        });
+      
+                        console.log("dataaaa154:",dataaaa1)
+      
+      
+                        const imgChecksArrays = dataaaa1.map(item => item.img_checks);
+      
+      
+                        const mergedImgChecks = [].concat(...imgChecksArrays);
+      
+      
+                        const uniqueImgChecks = [...new Set(mergedImgChecks)];
+      
+                        console.log("uniqueImgChecks: ", uniqueImgChecks);
+
+                        if(uniqueImgChecks) {
+                          uniqueImgChecks.map((item) => {
                             const ffxn = async() => {
                               let resss = await Pms_Propertymaster_Roomdetails.findOne({id: item})
 
