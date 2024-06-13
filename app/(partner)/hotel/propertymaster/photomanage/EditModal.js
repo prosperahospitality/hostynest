@@ -414,11 +414,11 @@ const EditModal = ({ currentRoomImage, hotelName, roomName, modalOpen, selectedI
 
     
       useEffect(() => {
-       // console.log("Suggestions:::>",suggestions)
+       console.log("Suggestions:::>",suggestions)
       }, [suggestions]);
 
       useEffect(() => {
-       // console.log("Predictions:::>",predictions)
+        console.log("Predictions:::>",predictions)
 
         if(predictions) {
             let t = [];
@@ -488,7 +488,7 @@ const EditModal = ({ currentRoomImage, hotelName, roomName, modalOpen, selectedI
                 item.img_id === selectedImageID)
     
                 let k = abc && abc.img_tags;
-                //console.log("ABCdddddddd::::>",abc, k)
+                console.log("ABCdddddddd::::>",abc, t)
     
                 if (Array.isArray(k) && Array.isArray(t)) {
                     const filteredArray2 = t.filter(item2 => {
@@ -1114,7 +1114,7 @@ const EditModal = ({ currentRoomImage, hotelName, roomName, modalOpen, selectedI
                             <div style={{ position: "relative", top: "40px"}}>
                                 <p>Select tags for this photo</p>
                                 <div style={{ position: "relative", top: "10px"}}>
-                                    {/* {console.log("Latest selectSuggestions: ", selectSuggestions)} */}
+                                    {console.log("Latest selectSuggestions: ", selectSuggestions)}
 
                                     {selectSuggestions?.map((item) => {
                                          return (

@@ -10,6 +10,7 @@ import { handleQuickSoldFormattedDate } from "@/app/redux/slices/rateandinventor
 
 import { handleFormattedDateUpdateProp } from "@/app/redux/slices/rateandinventorySlice";
 import { handleUpdatePropArray } from "@/app/redux/slices/rateandinventorySlice";
+import { useSession, getSession, signIn, signOut } from 'next-auth/react'
 
 
 const arrs = [1, 2, 3, 4, 5, 6, 7]
@@ -64,6 +65,22 @@ const RIMainCont = () => {
     let valueBaseRate= useSelector((state) => state.rateandinventory.valueBaseRate);
     let valueChildRate= useSelector((state) => state.rateandinventory.valueChildRate);
     let valueExtraPersonRate= useSelector((state) => state.rateandinventory.valueExtraPersonRate);
+
+    const [session, setSession] = React.useState({});
+
+    React.useEffect(() => {
+    
+        const getSessionInfo = async () => {
+          const session = await getSession();
+          setSession(session);
+        };
+        getSessionInfo();
+    }, [])
+
+    React.useEffect(() => {
+    
+console.log("Sessionnnnn: ",session)
+    }, [session])
 
     useEffect(() => {
 
@@ -195,49 +212,92 @@ const RIMainCont = () => {
             let activeResults = result.dataActive;
             let filteredResults = activeResults.find((item) => item.Hotel_Id === parseInt(hotel_id) && item.room_name === selectedRoom);
            
-
+            console.log("Rooms Selection::::::>", selectedDateRange,selectedRoom)
             await Promise.all(selectedDateRange?.map(async (item) => {
                 lstID = lstID + 1;
                
-                let payload;
-                payload = {
-                    id: `MRI${String(lstID).padStart(5, '0')}`,
-                    Hotel_Id: hotel_id,
-                    Hotel_name: hotel_name,
-                    user_id: "",
-                    user_name: "",
-                    booking_date: item.toString(),
-                    room_type: selectedRoom,
-                    price_per_guest_flag: false,
-                    room_occupancy: filteredResults?.base_adult,
-                    rate_3hr: 0,
-                    rate_6hr: 0,
-                    rate_12hr: 0,
-                    rate_24hr: filteredResults?.room_rate,
-                    total_rooms_count: 0,
-                    booked_rooms_count: 0,
-                    first_checkin_last_checkout_3hr: "12 AM - 11 PM",
-                    first_checkin_last_checkout_6hr: "12 AM - 11 PM",
-                    first_checkin_last_checkout_12hr: "12 AM - 11 PM",
-                    first_checkin_last_checkout_24hr: "12 AM - 11 PM",
-                    first_checkin_last_checkout_status_3hr: "Active",
-                    first_checkin_last_checkout_status_6hr: "Active",
-                    first_checkin_last_checkout_status_12hr: "Active",
-                    first_checkin_last_checkout_status_24hr: "Active",
-                    status:"bookable",
-                    creation_date: getCurrentDateTime(),
-                    last_update_on: getCurrentDateTime(),
+                if(selectedRoom !== " " || selectedRoom !== undefined) {
+                    let payload;
+                    payload = {
+                        id: `MRI${String(lstID).padStart(5, '0')}`,
+                        Hotel_Id: hotel_id,
+                        Hotel_name: hotel_name,
+                        user_id: "01",
+                        user_name: "test",
+                        booking_date: item.toString(),
+                        room_type: selectedRoom,
+                        price_per_guest_flag: false,
+                        room_occupancy: filteredResults?.base_adult,
+                        rate_3hr: 0,
+                        rate_6hr: 0,
+                        rate_12hr: 0,
+                        rate_24hr: filteredResults?.room_rate,
+                        total_rooms_count: 0,
+                        booked_rooms_count: 0,
+                        first_checkin_last_checkout_3hr: "12 AM - 11 PM",
+                        first_checkin_last_checkout_6hr: "12 AM - 11 PM",
+                        first_checkin_last_checkout_12hr: "12 AM - 11 PM",
+                        first_checkin_last_checkout_24hr: "12 AM - 11 PM",
+                        first_checkin_last_checkout_status_3hr: "Active",
+                        first_checkin_last_checkout_status_6hr: "Active",
+                        first_checkin_last_checkout_status_12hr: "Active",
+                        first_checkin_last_checkout_status_24hr: "Active",
+                        status:"bookable",
+                        creation_date: getCurrentDateTime(),
+                        last_update_on: getCurrentDateTime(),
+                    }
+        
+                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    });
+                    const result = await response.json();
                 }
+
+
+            //     let payload;
+            //     payload = {
+            //         id: `MRI${String(lstID).padStart(5, '0')}`,
+            //         Hotel_Id: hotel_id,
+            //         Hotel_name: hotel_name,
+            //         user_id: session ? session?.user?.user_id : "",
+            //         user_name: "",
+            //         booking_date: item.toString(),
+            //         room_type: selectedRoom,
+            //         price_per_guest_flag: false,
+            //         room_occupancy: filteredResults?.base_adult,
+            //         rate_3hr: 0,
+            //         rate_6hr: 0,
+            //         rate_12hr: 0,
+            //         rate_24hr: filteredResults?.room_rate,
+            //         total_rooms_count: 0,
+            //         booked_rooms_count: 0,
+            //         first_checkin_last_checkout_3hr: "12 AM - 11 PM",
+            //         first_checkin_last_checkout_6hr: "12 AM - 11 PM",
+            //         first_checkin_last_checkout_12hr: "12 AM - 11 PM",
+            //         first_checkin_last_checkout_24hr: "12 AM - 11 PM",
+            //         first_checkin_last_checkout_status_3hr: "Active",
+            //         first_checkin_last_checkout_status_6hr: "Active",
+            //         first_checkin_last_checkout_status_12hr: "Active",
+            //         first_checkin_last_checkout_status_24hr: "Active",
+            //         status:"bookable",
+            //         creation_date: getCurrentDateTime(),
+            //         last_update_on: getCurrentDateTime(),
+            //     }
     
-                const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                });
-                const result = await response.json();
-            }));
+            //     const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+            //         method: "POST",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //         },
+            //         body: JSON.stringify(payload),
+            //     });
+            //     const result = await response.json();
+               
+             }));
 
             if(quickSoldSelectedRadio === "soldout") {
                 editableSelectedRoom?.map(async (item) => {

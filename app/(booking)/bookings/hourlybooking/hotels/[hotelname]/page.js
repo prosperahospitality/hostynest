@@ -1,7 +1,7 @@
 'use client'
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Breadcrumbs, BreadcrumbItem, Button, Skeleton, Card, CardFooter, Progress, Divider, CardBody, RadioGroup, Radio, cn, Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
-import { Crown, Dot, Star, MapPin, Heart, Share2, Hotel, CreditCard, Wifi, AirVent, Tv, Milk, ParkingSquare, MessageCircleHeart, Wallet, BatteryCharging, Refrigerator, WashingMachine, Cctv, Check } from 'lucide-react';
+import { Crown, Dot, Star, MapPin, Heart, Share2, Hotel, CreditCard, Search, Wifi, AirVent, Tv, Milk, ParkingSquare, MessageCircleHeart, Wallet, BatteryCharging, Refrigerator, WashingMachine, Cctv, Check } from 'lucide-react';
 import { Badge } from "@/app/_components/ui/Badge";
 import {
     Carousel,
@@ -20,6 +20,12 @@ import { SessionProvider, useSession, getSession, signIn } from 'next-auth/react
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'
 import DateTimeCombo from '@/app/_components/ui/DateTimeCombo'
+import ImageModal from "@/app/(booking)/bookings/hourlybooking/hotels/[hotelname]/ImageModal";
+import RoomModal from "@/app/(booking)/bookings/hourlybooking/hotels/[hotelname]/RoomModal";
+import Daterangepickerreact from '@/app/_components/ui/DateRangePickerReact'
+import { CiLocationArrow1, CiCalendar, CiTimer } from "react-icons/ci";
+import { PiUsersLight } from "react-icons/pi";
+import "./styleee.css"
 
 
 const CustomRadio = (props) => {
@@ -67,7 +73,22 @@ function HotelPagee() {
     const [timeChangeFlag, setTimeChangeFlag] = useState(false);
     const [lastID, setLastID] = useState(0);
     const [ resultAll, setResultAll ] = useState([]);
+    const [initialDate, setInitialDate] = useState(6);
     let handleBookings;
+
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [showRoomModal, setShowRoomModal] = useState(false);
+    const [roomResult, setRoomResult] = useState();
+
+    const [clickedRoomName, setClickedRoomName] = useState();
+    const [clickedRoomId, setClickedRoomId] = useState();
+    const [selectedDateRange, setSelectedDateRange] = useState();
+
+    const [clickedRoom, setClickedRoom] = useState();
+
+    const handleDateSelect = (val) => {
+        setSelectedDateRange(val)
+    }
 
 
     const handleDateChange = (date) => {
@@ -187,6 +208,40 @@ function HotelPagee() {
 
         if (hotelsData) {
             console.log("Data::::::::>", hotelsData.rating);
+
+            const initialFxn = async () => {
+                try {
+                    const response = await fetch(`/api/pms/property_master/room_details?hotelId=${(hotelsData.Hotel_Id).toString()}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    const result = await response.json();
+          
+                    console.log("Property Rooms: ",result.dataActive)
+                    
+                    //setRoomResult(result.dataActive)
+          
+                    if (result && result.dataActive.length > 0) {
+                      const newElement = {
+                        id: "PM00001",
+                        room_name: "Property Main"
+                      };
+                      result.dataActive.unshift(newElement);
+
+                      setRoomResult(result.dataActive)
+                    }
+          
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                } finally {
+                  //setIsLoading(false); 
+                }
+            }
+          
+                initialFxn()
+
         } else {
             console.log("Data is not available yet");
         }
@@ -572,6 +627,31 @@ function HotelPagee() {
     
     }
 
+    const handleShowImageModal = () => {
+        console.log("show image modal")
+        setShowImageModal(true)
+    }
+
+    const handleShowImageModalClose = (val) => {
+        if(val === true) {
+            setShowImageModal(false)
+        }
+    }
+
+    const handleRoomLinkClick = (e, roomname, roomid, room) => {
+        console.log("Clickedasdfasd", roomname, roomid)
+        setClickedRoomName(roomname)
+        setClickedRoomId(roomid)
+        setClickedRoom(room)
+        setShowRoomModal(true)
+    }
+
+    const handleShowRoomModalClose = (val) => {
+        if(val === true) {
+            setShowRoomModal(false)
+        }
+    }
+
     return (
         <div className="w-screen h-full">
             <div className="py-16 w-[96%] mx-auto">
@@ -653,7 +733,7 @@ function HotelPagee() {
                         </Button>
                     </div>
                 </div>
-                <HotelName hotel_Name={hotelsData?.Hotel_name} onHotelName={handleHotelsImgs} />
+                <HotelName hotel_Name={hotelsData?.Hotel_name} hotel_ID={hotelsData?.Hotel_Id} onHotelName={handleHotelsImgs} />
                 <div className="mt-5 flex mx-auto w-full h-full">
                     <div className="w-[60%] h-[50vh] relative">
                         <Image
@@ -710,14 +790,17 @@ function HotelPagee() {
                                 }}
                                 className="rounded-xl"
                             />
-                            <div className="bg-black/80 absolute w-full h-full rounded-xl flex justify-center items-center">
-                                <Button className="text-sm text-white bg-primary" variant="shadow" color="" radius="full" size="md">
+                            <div className="bg-black/50 absolute w-full h-full rounded-xl flex justify-center items-center">
+                                <Button className="text-sm text-white bg-primary" variant="shadow" color="" radius="full" size="md" onClick={handleShowImageModal}>
                                     Show All Images
                                 </Button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <ImageModal showImageModal={showImageModal} onShowImageModalClose={handleShowImageModalClose} hotelName={hotelsData?.Hotel_name} hotelID={hotelsData?.Hotel_Id} roomResult={roomResult}/>
+
                 <div className="mt-5 flex mx-auto w-full h-full">
                     <div className="w-[68%] h-full">
                         <div className="w-full">
@@ -783,7 +866,114 @@ function HotelPagee() {
                                     }
                                 </div>
                             </div>
-                            <div className="mt-1">
+
+                            <div className="mt-4">
+                            <h2 className="text-black text-xl">Availability</h2>
+
+                            <div className='sticky'>
+        <div className="w-full gap-2 pl-4 pr-4 flex items-center z-50 sticky top-0 m-auto h-24 transition-all duration-200 delay-200 ease-in-out text-black ">
+
+          <div>
+            <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><CiCalendar className="size-8" />Check In-Check Out</p>
+                <Daterangepickerreact 
+                    className='bg-background rounded-lg border-2 border-gray-300 h-9 w-66 overflow-hidden'
+                    initialDate={initialDate} 
+                    onDateValue= {handleDateSelect}
+                />
+          </div>
+
+          <Divider orientation="vertical" className="h-16" />
+
+          <div>
+            <p className="flex ml-8 static items-center text-lg font-bold text-gray-600"><PiUsersLight className="mr-2 size-8" />Travelers</p>
+            <RoomsAndGuests />
+          </div>
+          <div className='pt-2 gap-2'>
+            <Button isIconOnly color="secondary" variant="shadow" size="lg" onClick={(e) => searchAction(e)}>
+              <Search className="size-8" />
+            </Button>
+          </div>
+        </div>
+
+      </div>
+
+
+
+                            <table className="mt-8">
+    <thead>
+        <tr>
+            <th>Room Type</th>
+            <th>Number of guests</th>
+            <th>Price for 3 nights</th>
+            <th>Your Choices</th>
+            <th>Select Rooms</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {roomResult && roomResult.map((item, index) => (
+            <React.Fragment key={index}>
+                <tr>
+                    <td rowSpan="3"><a onClick={(e) => handleRoomLinkClick(e, item.room_name, item.id, item)}><u class="roomlink"><p class="roomlink">{item.room_name}</p></u></a></td>
+                    <td>Row 1, Column 2</td>
+                    <td>Row 1, Column 3</td>
+                    <td>Row 1, Column 4</td>
+                    <td>Row 1, Column 5</td>
+                    {index === 0 && (<td rowSpan="0">
+                            <div>
+                                <Button>I&apos;ll reserve</Button>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li className="inline">
+                                        <span className="dot"></span>
+                                        <span>Confirmation is immediate</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>No credit card needed</div>
+                        </td> )}
+                </tr>
+                <tr>
+                    <td>Row 2, Column 2</td>
+                    <td>Row 2, Column 3</td>
+                    <td>Row 2, Column 4</td>
+                    <td>Row 2, Column 5</td>
+                </tr>
+                <tr>
+                    <td>Row 3, Column 2</td>
+                    <td>Row 3, Column 3</td>
+                    <td>Row 3, Column 4</td>
+                    <td>Row 3, Column 5</td>
+                </tr>
+                {/* {index === 0 && (
+                    <tr>
+                        <td rowSpan="0">
+                            <div>
+                                <Button>I&apos;ll reserve</Button>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li className="inline">
+                                        <span className="dot"></span>
+                                        <span>Confirmation is immediate</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>No credit card needed</div>
+                        </td>
+                    </tr>
+                )} */}
+            </React.Fragment>
+        ))}
+    </tbody>
+</table>
+
+                            </div>
+
+<RoomModal showRoomModal={showRoomModal} onShowRoomModalClose={handleShowRoomModalClose} hotelName={hotelsData?.Hotel_name} hotelID={hotelsData?.Hotel_Id} roomResult={roomResult} clickedRoomName={clickedRoomName} clickedRoomId={clickedRoomId} clickedRoom={clickedRoom}/>
+
+                            <div className="mt-4">
                                 <div className="mt-1 h-screen w-full relative">
                                     <iframe width="100%" height="100%" loading="lazy" allowfullscreen="" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCaOQ6zhmT5Q_VAstgjZny78CARZBIbyTI&amp;q=19.084668900,73.027833600&amp;zoom=16 border:0px;">
                                     </iframe>

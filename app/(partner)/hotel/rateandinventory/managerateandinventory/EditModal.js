@@ -155,6 +155,10 @@ const EditModal = ({rowDataID, onEditResult, selectedDateRange, isSoldOut}) => {
             setHour12Slider(comb.toString())
         }
 
+
+        // if(selectedRadio === "bookable") {
+
+        // }
         
     }
 

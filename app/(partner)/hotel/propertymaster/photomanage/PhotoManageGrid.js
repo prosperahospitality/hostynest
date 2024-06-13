@@ -604,7 +604,7 @@ const SortableItem = ({ id, title, hotelName, roomName,selectedCheckBoxes, fileE
         fill
         sizes="(min-width: 808px) 50vw, 100vw"
         style={{
-          objectFit: "cover", // cover, contain, none
+          objectFit: "cover",
         }}
       />
         : <img
@@ -615,7 +615,7 @@ const SortableItem = ({ id, title, hotelName, roomName,selectedCheckBoxes, fileE
         fill
         sizes="(min-width: 808px) 50vw, 100vw"
         style={{
-          objectFit: "cover", // cover, contain, none
+          objectFit: "cover",
         }}
       />}
       

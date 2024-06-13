@@ -156,9 +156,9 @@ export default function BookingTab ({onResult, user_Id, onItemSelected, deleteFl
                                             <h4 className="text-sm text-gray-400">{item.booking_time}</h4>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                        {item.status === "inprocess" 
+                                        {item.status === "inprocess" && item.refund_flag === 0
                                                 ? <Chip color="primary" variant="flat" className="bg-primary-50" startContent={<VscHistory size={20} />}>in Process</Chip>
-                                                : item.status === "cancelled" 
+                                                : item.status === "cancelled" || item.refund_flag === 1
                                                     ? <Chip color="danger" variant="flat" className="bg-danger-50" startContent={<IoIosCloseCircleOutline size={21} />} >Cancelled</Chip>
                                                     : item.status === "booked" 
                                                         ? <Chip color="success" variant="flat" className="bg-success-50" startContent={<CiCircleCheck size={21} />} >Booked</Chip>

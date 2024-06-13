@@ -22,6 +22,9 @@ const pms_propertymaster_roomdetailsModel= new mongoose.Schema({
     max_child: String,
     max_infant: String,
     max_guest: String,
+    bed_type: Array,
+    number_of_beds: Array,
+    bed_size: Array,
     creation_date: String,
     last_update_on: String,    
 });

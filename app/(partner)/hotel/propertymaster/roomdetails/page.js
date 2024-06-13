@@ -13,6 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import DataTable from "@/app/_components/ui/DataTable";
 import { useSelector } from "react-redux";
+import { Trash2 } from 'lucide-react';
 
 const columns = [
   {name: "ID", uid: "id", sortable: true},
@@ -80,18 +81,28 @@ const RoomDetailsPage = () => {
     const [ currRowId, setCurrRowId ] = useState('');
     const [actionType, setActionType] = useState(null);
     const [lastID, setLastID] = useState(0);
+    const [bedType, setBedType] = useState([]);
+
+    const [num, setNum] = useState(['1','2','3','4','5','6','7','8','9','10','11','12']);
+    const [bedSize, setBedSize] = useState(['90-130 cm wide','131-150 cm wide','151-180 cm wide','181-210 cm wide','Variable size']);
+
+    const [selectedBedtype, setSelectedBedtype] = useState([]); 
+    const [selectedNum, setSelectedNum] = useState([]); 
+    const [selectedBedSize, setSelectedBedSize] = useState([]);
+    
+    const [addBed, setAddBed] = useState([]);
+    
+
 
     const checksRef = useRef();
     checksRef.current = useSelector((state) => state.checks.selectedChecks);
 
-    useEffect(() => {
-      initialFxn()
-  }, [])
+
 
   
   useEffect(() => {
-    console.log("IDDD01 ",lastID)
-}, [lastID])
+    console.log("selectedNum ",selectedNum)
+}, [selectedNum])
 
   const initialFxn = async () => {
       try {
@@ -106,15 +117,19 @@ const RoomDetailsPage = () => {
           setAllResult(result.dataAll);
           setResult(result.data);
           setFloor(result.floor);
+          console.log("Room Det:::::::>",result.roomtype)
           setRoomtype(result.roomtype);
+          setBedType(result.bedtype);
       } catch (error) {
           console.error("Error fetching data:", error);
       }
   }
 
-  useEffect(() => {
-    console.log("Result: ",result)
-}, [result])
+
+
+useEffect(() => {
+  initialFxn()
+}, [])
 
     function getCurrentDateTime() {
       const today = new Date();
@@ -139,6 +154,8 @@ const RoomDetailsPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleSubmit = useCallback(async () => {
+
+      console.log("Data imp: ",selectedBedtype, selectedNum, selectedBedSize)
 
       if(actionType === "add") {
           console.log("Add")
@@ -165,6 +182,9 @@ const RoomDetailsPage = () => {
               max_child: maxChild.trim(),
               max_infant: maxInfant.trim(),
               max_guest: maxGuest.trim(),
+              bed_type: selectedBedtype,
+              number_of_beds: selectedNum,
+              bed_size: selectedBedSize,
               creation_date: getCurrentDateTime,
               last_update_on: getCurrentDateTime,  
           };
@@ -218,7 +238,10 @@ const RoomDetailsPage = () => {
                     max_adult: maxAdult.trim(),
                     max_child: maxChild.trim(),
                     max_infant: maxInfant.trim(),
-                    max_guest: maxGuest.trim()
+                    max_guest: maxGuest.trim(),
+                    bed_type: selectedBedtype,
+                    number_of_beds: selectedNum,
+                    bed_size: selectedBedSize,
                   }),
               });
               const result = await response.json();
@@ -397,9 +420,7 @@ const handleDelete = async (id, deleteAction,checks) => {
   };
 
 
-useEffect(() => {
-    console.log("Action Type::::::>",actionType);
-}, [actionType])
+
 let actionsContent = (item, onEditClick, onDeleteClick) => (
     <>
       <Tooltip color="default" content="Edit Bed Type">
@@ -435,6 +456,195 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                 setMaxChild(item.max_child);
                 setMaxInfant(item.max_infant);
                 setMaxGuest(item.max_guest);
+                setSelectedBedtype(item.bed_type);
+                setSelectedNum(item.number_of_beds);
+                setSelectedBedSize(item.bed_size);
+                let a = item.bed_type;
+                let aa = item.bed_type;
+                let b = item.number_of_beds;
+                let bb = item.number_of_beds;
+                let c = item.bed_size;
+                let cc = item.bed_size;
+                let abcde = [];
+
+                if(a.find((item) => item.key === 0)) {
+
+                  let abcd = a.filter((item) =>  item.key !== 0)
+                  a = abcd;
+        
+                }else {
+        
+                }
+
+                a.map((item, index) => {
+                  let len = item.key;
+
+                  
+
+                  if(b.find((item) => item.key === 0)) {
+
+                    let abcd = b.filter((item) =>  item.key !== 0)
+                    b = abcd;
+          
+                  }else {
+          
+                  }
+
+                  if(c.find((item) => item.key === 0)) {
+
+                    let abcd = c.filter((item) =>  item.key !== 0)
+                    c = abcd;
+          
+                  }else {
+          
+                  }
+
+                  abcde.push({
+                    key: item.key,
+                    value: (
+<div className="grid grid-cols-12 mt-2" style={{    padding: "0 0 12px 0"}} id={len}>
+                                                    
+                                                    <div className="col-span-6">
+                                                      <Autocomplete
+                                                        isRequired
+                                                        key={a[len - 1] ? a[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className=""
+                                                        style={{width:"100%"}}  
+                                                        defaultSelectedKey={a[len - 1] ? a[len - 1].value : " "}
+                                                        value={a[len - 1] ? a[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+                                  
+                                  
+                                                          let findres = aa.find((item) => 
+                                                            item.key === len
+                                                          );
+                                  
+                                                          if(findres) {
+                                                            aa.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedtype(aa)
+                                                          }else {
+                                                            aa.push({key: len, value:value});
+                                                            setSelectedBedtype(aa)
+                                                          }
+                                  
+                                                        }}
+                                                      >
+                                                          {Array.isArray(bedType) && bedType.map((item) => (
+                                                        <AutocompleteItem key={item.property_bedtype} value={item.property_bedtype}>
+                                                            {item.property_bedtype}
+                                                        </AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin:"10px 0px 0 30px", width: "20px"}}><p>x</p></div>
+                                                    <div className="col-span-2" style={{padding: "0"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key={b[len - 1] ? b[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className="max-w-xs"  
+                                                        defaultSelectedKey={b[len - 1] ? b[len - 1].value : " "}
+                                                        value={b[len - 1] ? b[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+                                  
+                                                          let findres = bb.find((item) => 
+                                                            item.key === len
+                                                          );
+                                  
+                                                          if(findres) {
+                                                            bb.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedNum(bb)
+                                                          }else {
+                                                            bb.push({key: len, value:value});
+                                                            setSelectedNum(bb)
+                                                          }
+                                  
+                                                          console.log("findres: ",findres)
+                                  
+                                  
+                                                          // selectedNum.push({key:len,value:value}); 
+                                                          // setSelectedNum(selectedNum)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(num) && num.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-2" style={{padding: "0 0 0 12px"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key={c[len - 1] ? c[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        label=""
+                                                        variant="bordered"
+                                                        className="" 
+                                                        style={{}}
+                                                        defaultSelectedKey={c[len - 1] ? c[len - 1].value : " "}
+                                                        value={c[len - 1] ? c[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+                                  
+                                                          let findres = cc.find((item) => 
+                                                            item.key === len
+                                                          );
+                                  
+                                                          if(findres) {
+                                                            cc.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedSize(cc)
+                                                          }else {
+                                                            cc.push({key: len, value:value});
+                                                            setSelectedBedSize(cc)
+                                                          }
+                                  
+                                                          console.log("findres: ",findres)
+                                  
+                                                          // selectedBedSize.push({key:len,value:value}); 
+                                                          // setSelectedBedSize(selectedBedSize)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(bedSize) && bedSize.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin: "5px 0px 0px 0px"}}>
+                                                      <Button style={{    height: "30px",
+                                                        width: "107px",
+                                                        background: "transparent"}} onClick={(e) => handleRemoveBed(e,len)}><Trash2 /> Remove</Button></div>
+                                                  </div>
+                    )
+                  })
+
+                })
+
+                console.log("Edit clidedk: ",a,b,c,abcde)
+                setAddBed(abcde)
 
             }}
           >
@@ -482,7 +692,491 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
     setMaxChild('');
     setMaxInfant('');
     setMaxGuest('');
+    setSelectedBedtype([]);
+    setSelectedNum([]);
+    setSelectedBedSize([]);
+    setAddBed([])
 };
+
+let addres = [];
+
+useEffect(() => {
+  console.log("Add Bed::::::>",addBed);
+}, [addBed])
+
+const handleRemoveBed = (e, ind) => {
+
+  console.log("Add bed 050: ", ind);
+  
+
+  let a = '';
+  let b = '';
+  let c = '';
+
+  setSelectedBedtype((prevSelectedBedtype) => {
+
+    const updatedSelectedBedtype = prevSelectedBedtype.filter((item, index) => item.key !== ind);
+
+    let findress = updatedSelectedBedtype.find((item) => item.key === 0);
+
+    if(findress) {
+      let abc = updatedSelectedBedtype.map((item, index) => {
+        return ({
+          ...item,
+          key: index,
+        })
+      })
+      a = abc;
+      return abc;
+    }else {
+      let abc = updatedSelectedBedtype.map((item, index) => {
+        return ({
+          ...item,
+          key: index + 1,
+        })
+      })
+      a = abc;
+      return abc;
+    }
+  });
+
+
+
+  setSelectedNum((prevSelectedNum) => {
+
+    const updatedSelectedNum = prevSelectedNum.filter((item, index) => item.key !== ind);
+
+    let findress = updatedSelectedNum.find((item) => item.key === 0);
+
+    if(findress) {
+      let abc = updatedSelectedNum.map((item, index) => {
+        return ({
+          ...item,
+          key: index,
+        })
+      })
+      b = abc;
+      return abc;
+    }else {
+      let abc = updatedSelectedNum.map((item, index) => {
+        return ({
+          ...item,
+          key: index + 1,
+        })
+      })
+      b = abc;
+      return abc;
+    }
+
+  });
+
+
+
+    setSelectedBedSize((prevSelectedBedSize) => {
+
+      const updatedSelectedBedSize = prevSelectedBedSize.filter((item, index) => item.key !== ind);
+
+      let findress = updatedSelectedBedSize.find((item) => item.key === 0);
+  
+      if(findress) {
+        let abc = updatedSelectedBedSize.map((item, index) => {
+          return ({
+            ...item,
+            key: index,
+          })
+        })
+        c = abc;
+        return abc;
+      }else {
+        let abc = updatedSelectedBedSize.map((item, index) => {
+          return ({
+            ...item,
+            key: index + 1,
+          })
+        })
+        c = abc;
+        return abc;
+      }
+  });
+
+
+  setAddBed((prevAddBed) => {
+    console.log("data9 prevAddBed",prevAddBed, ind)
+
+
+    
+    const updatedAddBed = prevAddBed
+
+      .filter((item, index) => item.key !== ind)
+      .map((item, index) => {
+
+        let len = index + 1;
+
+        if(a.find((item) => item.key === 0)) {
+
+          let abcd = a.filter((item) =>  item.key !== 0)
+          a = abcd;
+
+        }else {
+
+        }
+
+        if(b.find((item) => item.key === 0)) {
+
+          let abcd = b.filter((item) =>  item.key !== 0)
+          b = abcd;
+
+        }else {
+
+        }
+
+        if(c.find((item) => item.key === 0)) {
+
+          let abcd = c.filter((item) =>  item.key !== 0)
+          c = abcd;
+
+        }else {
+
+        }
+
+
+        
+
+        return ({
+        ...item,
+        key: index + 1,
+        value: (
+          <div className="grid grid-cols-12 mt-2" style={{    padding: "0 0 12px 0"}} id={len}>
+                                                    
+                                                    <div className="col-span-6">
+                                                      <Autocomplete
+                                                        isRequired
+                                                        key={a[len - 1] ? a[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className=""
+                                                        style={{width:"100%"}}  
+                                                        defaultSelectedKey={a[len - 1] ? a[len - 1].value : " "}
+                                                        value={a[len - 1] ? a[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+
+                                                          let findres = selectedBedtype.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedBedtype.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedtype(selectedBedtype)
+                                                          }else {
+                                                            selectedBedtype.push({key: len, value:value});
+                                                            setSelectedBedtype(selectedBedtype)
+                                                          }
+    
+                                                        }}
+                                                      >
+                                                          {Array.isArray(bedType) && bedType.map((item) => (
+                                                        <AutocompleteItem key={item.property_bedtype} value={item.property_bedtype}>
+                                                            {item.property_bedtype}
+                                                        </AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                 
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin:"10px 0px 0 30px", width: "20px"}}><p>x</p></div>
+                                                    <div className="col-span-2" style={{padding: "0"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key={b[len - 1] ? b[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className="max-w-xs"  
+                                                        defaultSelectedKey={b[len - 1] ? b[len - 1].value : " "}
+                                                        value={b[len - 1] ? b[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+                                                          let findres = selectedNum.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedNum.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedNum(selectedNum)
+                                                          }else {
+                                                            selectedNum.push({key: len, value:value});
+                                                            setSelectedNum(selectedNum)
+                                                          }
+    
+                                                          console.log("findres: ",findres)
+
+
+                                                          // selectedNum.push({key:len,value:value}); 
+                                                          // setSelectedNum(selectedNum)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(num) && num.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-2" style={{padding: "0 0 0 12px"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key={c[len - 1] ? c[len - 1].value : " "}
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        label=""
+                                                        variant="bordered"
+                                                        className="" 
+                                                        style={{}}
+                                                        defaultSelectedKey={c[len - 1] ? c[len - 1].value : " "}
+                                                        value={c[len - 1] ? c[len - 1].value : " "}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+                                                          let findres = selectedBedSize.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedBedSize.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedSize(selectedBedSize)
+                                                          }else {
+                                                            selectedBedSize.push({key: len, value:value});
+                                                            setSelectedBedSize(selectedBedSize)
+                                                          }
+    
+                                                          console.log("findres: ",findres)
+
+                                                          // selectedBedSize.push({key:len,value:value}); 
+                                                          // setSelectedBedSize(selectedBedSize)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(bedSize) && bedSize.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin: "5px 0px 0px 0px"}}>
+                                                      <Button style={{    height: "30px",
+                                                        width: "107px",
+                                                        background: "transparent"}} onClick={(e) => handleRemoveBed(e,len)}><Trash2 /> Remove</Button></div>
+                                                  </div>
+        )
+      })
+
+  })
+  console.log("data9 updatedAddBed", updatedAddBed, ind)
+  return updatedAddBed
+})
+
+};
+
+
+
+
+const handleAddBed = () => {
+
+  console.log("DataKKKKKKKKKKKK:>",addBed[addBed.length - 1], selectedBedtype, selectedBedSize,selectedNum)
+
+  if(addBed) {
+
+    let xyz;
+    let len;
+
+    if(addBed.length > 0) {
+
+      xyz = addBed[addBed.length - 1];
+      len = xyz.key + 1;
+    }else {
+      len = addBed.length + 1;
+    }
+
+    console.log("DataKKKKKKKKKKKK78:>",xyz)
+
+
+
+      // let len = addBed.length + 1;
+
+      setAddBed([...addBed, {key: len, value: (
+        <div className="grid grid-cols-12 mt-2" style={{    padding: "0 0 12px 0"}} id={len}>
+                                                    
+                                                    <div className="col-span-6">
+                                                      <Autocomplete
+                                                        isRequired
+                                                        key=""
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className=""
+                                                        style={{width:"100%"}}  
+                                                        defaultSelectedKey={actionType === "edit" ? selectedBedtype[len] : ''}
+                                                        value={selectedBedtype[len]}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+
+                                                          let findres = selectedBedtype.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedBedtype.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedtype(selectedBedtype)
+                                                          }else {
+                                                            selectedBedtype.push({key: len, value:value});
+                                                            setSelectedBedtype(selectedBedtype)
+                                                          }
+    
+                                                          console.log("findres: ",findres)
+
+
+                                                          // let val = {key:len, value:value}; 
+                                                          // selectedBedtype.push(val); 
+                                                          // setSelectedBedtype(selectedBedtype)
+                                                        }}
+                                                      >
+                                                          {Array.isArray(bedType) && bedType.map((item) => (
+                                                        <AutocompleteItem key={item.property_bedtype} value={item.property_bedtype}>
+                                                            {item.property_bedtype}
+                                                        </AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                    
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin:"10px 0px 0 30px", width: "20px"}}><p>x</p></div>
+                                                    <div className="col-span-2" style={{padding: "0"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key=""
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        
+                                                        variant="bordered"
+                                                        size="md"
+                                                        className="max-w-xs"  
+                                                        defaultSelectedKey={actionType === "edit" ? selectedNum[len] : ''}
+                                                        value={selectedNum[len]}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+                                                          let findres = selectedNum.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedNum.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedNum(selectedNum)
+                                                          }else {
+                                                            selectedNum.push({key: len, value:value});
+                                                            setSelectedNum(selectedNum)
+                                                          }
+    
+                                                          console.log("findres: ",findres)
+
+
+                                                          // selectedNum.push({key:len,value:value}); 
+                                                          // setSelectedNum(selectedNum)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(num) && num.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-2" style={{padding: "0 0 0 12px"}}>
+                                                    <Autocomplete
+                                                        isRequired
+                                                        key=""
+                                                        labelPlacement="outside"
+                                                        placeholder="Select...."
+                                                        label=""
+                                                        variant="bordered"
+                                                        className="" 
+                                                        style={{}}
+                                                        defaultSelectedKey={actionType === "edit" ? selectedBedSize[len] : ''}
+                                                        value={selectedBedSize[len]}
+                                                        allowsCustomValue={true}
+                                                        onInputChange={(value) => {
+
+                                                          let findres = selectedBedSize.find((item) => 
+                                                            item.key === len
+                                                          );
+    
+                                                          if(findres) {
+                                                            selectedBedSize.map((item) => {
+                                                              if(item.key === len) {
+                                                                item.value = value
+                                                              }
+                                                            });
+                                                            setSelectedBedSize(selectedBedSize)
+                                                          }else {
+                                                            selectedBedSize.push({key: len, value:value});
+                                                            setSelectedBedSize(selectedBedSize)
+                                                          }
+    
+                                                          console.log("findres: ",findres)
+
+                                                          // selectedBedSize.push({key:len,value:value}); 
+                                                          // setSelectedBedSize(selectedBedSize)
+                                                        }}
+                                                      >
+                                                        {Array.isArray(bedSize) && bedSize.map((item) => (
+                                                          <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                        ))}
+                                                      </Autocomplete>
+                                                    </div>
+                                                    <div className="col-span-1" style={{margin: "5px 0px 0px 0px"}}>
+                                                      <Button style={{    height: "30px",
+                                                        width: "107px",
+                                                        background: "transparent"}} onClick={(e) => handleRemoveBed(e,len)}><Trash2 /> Remove</Button></div>
+                                                  </div>
+                                                    )}])
+
+    
+
+
+
+  }
+  
+}
+
+
+
+useEffect(() => {
+  console.log("Result0000000000: ",selectedBedtype,
+    selectedNum, selectedBedSize)
+}, [selectedBedtype, selectedNum, selectedBedSize])
 
   return (
   
@@ -494,13 +1188,13 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
         <h1 className='text-3xl text-foreground-500 font-semibold'>Room Details</h1>
         {/* <Button variant='shadow' color='primary' size='sm' startContent={<GoPlus />} onPress={onOpen} >Create New Room</Button> */}
         
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl" className='h-[90%] overflow-y-scroll'>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" className='h-[90%] overflow-y-scroll'>
         <ModalContent >
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Rooms Details</ModalHeader>
               <ModalBody>
-              <div className="p-4 grid grid-cols-2 gap-2">
+              <div className="p-4 grid grid-cols-3 gap-4">
               {actionType === "editmany" ? '' :
                       <>
                                     <Autocomplete
@@ -567,7 +1261,7 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                     >
                                        {Array.isArray(roomtype) && roomtype.map((item) => (
                                                     <AutocompleteItem key={item.property_name} value={item.property_name}>
-                                                        {item.property_name}
+                                                        {item.property_name + " - " + item.property_roomview}
                                                     </AutocompleteItem>
                                        ))}
                                         {/* <AutocompleteItem value="Active"  key="Classic">Classic</AutocompleteItem>
@@ -644,7 +1338,7 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                             placeholder="Extra Adult Price"
                                             variant="bordered"
                                             size="md"
-                                            className="w-60"
+                                            className="max-w-xs"
                                             value={extraAdultPrice}
                                             onChange={(e) => setExtraAdultPrice(e.target.value)}
                                         />
@@ -657,7 +1351,7 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                             placeholder="Extra Child Price"
                                             variant="bordered"
                                             size="md"
-                                            className="w-60"
+                                            className="max-w-xs"
                                             value={extraChildPrice}
                                             onChange={(e) => setExtraChildPrice(e.target.value)}
                                         />
@@ -671,7 +1365,7 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                             placeholder="Room Size"
                                             variant="bordered"
                                             size="md"
-                                            className="w-28"
+                                            className="max-w-xs"
                                             value={roomSize}
                                             onChange={(e) => setRoomSize(e.target.value)}
                                         />
@@ -696,6 +1390,8 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
 </>}
                                     </div>
 
+
+
                                     <div  className="p-4 grid grid-cols-2 gap-2">
                                         
                                     
@@ -719,11 +1415,178 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                     </Autocomplete>
 
                                     </div>
-                                    <div className='mt-2'>
+
+                                    {actionType === "editmany" ? '' :
+                      <>
+                                    <div className='mt-2 ml-4'>
+                                          <h1 className='text-lg text-foreground-500'>Bed Options</h1>
+                                          <p style={{fontSize: "14px"}}>All fields required</p>
+                                          <div className="mt-2" style={{backgroundColor:"whitesmoke", padding: "0 0 20px 0"}}>
+                                            <div style={{    padding: "0 20px 0px 20px"}}>
+                                              <p style={{fontSize: "15px",
+                                                color: "blueviolet",
+                                                fontWeight: "600",padding: "10px 0 0 0"}}>Standard Arrangement</p>
+
+<div className="grid grid-cols-12 mt-2" style={{    padding: "0 0 12px 0"}}>
+                                                
+                                                <div className="col-span-6">
+                                                  <Autocomplete
+                                                    isRequired
+                                                    key={actionType === "edit" && selectedBedtype[0] ? selectedBedtype[0].value : ''}
+                                                    labelPlacement="outside"
+                                                    placeholder="Select...."
+                                                    
+                                                    variant="bordered"
+                                                    size="md"
+                                                    className=""
+                                                    style={{width:"100%"}}  
+                                                    defaultSelectedKey={actionType === "edit" && selectedBedtype[0] ? selectedBedtype[0].value : ''}
+                                                    value={selectedBedtype && selectedBedtype[0] ? selectedBedtype[0].value : ''}
+                                                    allowsCustomValue={true}
+                                                    onInputChange={(value) => {
+
+                                                      let findres = selectedBedtype.find((item) => 
+                                                        item.key === 0
+                                                      );
+
+                                                      if(findres) {
+                                                        selectedBedtype.map((item) => {
+                                                          if(item.key === 0) {
+                                                            item.value = value
+                                                          }
+                                                        });
+                                                        setSelectedBedtype(selectedBedtype)
+                                                      }else {
+                                                        selectedBedtype.push({key: 0, value:value});
+                                                        setSelectedBedtype(selectedBedtype)
+                                                      }
+
+                                                      console.log("findres: ",findres)
+                                                       
+                                                      
+                                                    }}
+                                                  >
+                                                      {Array.isArray(bedType) && bedType.map((item) => (
+                                                    <AutocompleteItem key={item.property_bedtype} value={item.property_bedtype}>
+                                                        {item.property_bedtype}
+                                                    </AutocompleteItem>
+                                                    ))}
+                                                  </Autocomplete>
+                                                </div>
+                                                <div className="col-span-1" style={{margin:"10px 0px 0 30px", width: "20px"}}><p>x</p></div>
+                                                <div className="col-span-2" style={{padding: "0"}}>
+                                                <Autocomplete
+                                                    isRequired
+                                                    key={actionType === "edit" && selectedNum[0] ? selectedNum[0].value : ''}
+                                                    labelPlacement="outside"
+                                                    placeholder="Select...."
+                                                    
+                                                    variant="bordered"
+                                                    size="md"
+                                                    className="max-w-xs"  
+                                                    defaultSelectedKey={actionType === "edit" && selectedNum[0] ? selectedNum[0].value : ''}
+                                                    value={actionType === "edit" && selectedNum[0] ? selectedNum[0].value : ''}
+                                                    allowsCustomValue={true}
+                                                    onInputChange={(value) => {
+
+                                                      let findres = selectedNum.find((item) => 
+                                                        item.key === 0
+                                                      );
+
+                                                      if(findres) {
+                                                        selectedNum.map((item) => {
+                                                          if(item.key === 0) {
+                                                            item.value = value
+                                                          }
+                                                        });
+                                                        setSelectedNum(selectedNum)
+                                                      }else {
+                                                        selectedNum.push({key: 0, value:value});
+                                                        setSelectedNum(selectedNum)
+                                                      }
+
+                                                      console.log("findres: ",findres)
+
+                                                      // selectedNum.push({key: 0, value:value}); 
+                                                      // setSelectedNum(selectedNum)
+                                                    }}
+                                                  >
+                                                    {Array.isArray(num) && num.map((item) => (
+                                                      <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                    ))}
+                                                  </Autocomplete>
+                                                </div>
+                                                <div className="col-span-2" style={{padding: "0 0 0 12px"}}>
+                                                <Autocomplete
+                                                    isRequired
+                                                    key={actionType === "edit" && selectedBedSize[0] ? selectedBedSize[0].value : ''}
+                                                    labelPlacement="outside"
+                                                    placeholder="Select...."
+                                                    label=""
+                                                    variant="bordered"
+                                                    className="" 
+                                                    style={{}}
+                                                    defaultSelectedKey={actionType === "edit" && selectedBedSize[0] ? selectedBedSize[0].value : ''}
+                                                    value={actionType === "edit" && selectedBedSize[0] ? selectedBedSize[0].value : ''}
+                                                    allowsCustomValue={true}
+                                                    onInputChange={(value) => {
+
+                                                      let findres = selectedBedSize.find((item) => 
+                                                        item.key === 0
+                                                      );
+
+                                                      if(findres) {
+                                                        selectedBedSize.map((item) => {
+                                                          if(item.key === 0) {
+                                                            item.value = value
+                                                          }
+                                                        });
+                                                        setSelectedBedSize(selectedBedSize)
+                                                      }else {
+                                                        selectedBedSize.push({key: 0, value:value});
+                                                        setSelectedBedSize(selectedBedSize)
+                                                      }
+
+                                                      console.log("findres: ",findres)
+
+                                                      // selectedBedSize.push({key: 0, value:value}); 
+                                                      // setSelectedBedSize(selectedBedSize)
+                                                    }}
+                                                  >
+                                                    {Array.isArray(bedSize) && bedSize.map((item) => (
+                                                      <AutocompleteItem value={item}  key={item}>{item}</AutocompleteItem>
+                                                    ))}
+                                                  </Autocomplete>
+                                                </div>
+                                                <div className="col-span-1" style={{margin: "5px 0px 0px 0px"}}>
+                                                  
+                                                </div>
+                                              </div>
+
+                                              {addBed && addBed.map((item,index) => {
+                                                console.log("item",item, index,selectedBedtype, selectedNum,selectedBedSize)
+                                                return (
+                                                  item.value
+                                              )}
+                                              )}
+
+                                              <div>
+                                                <Button style={{width: "fit-content"}} onClick={(e) => handleAddBed(e)}><svg style={{height: "17px"}} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Add another bed</Button>
+                                              </div>
+                                              
+                                            </div>
+                                            
+                                          </div>
+                                        </div></>
+                                      }
+
+
+
+                                    <div className='mt-2 ml-4'>
                                     {actionType === "editmany" ? '' :
                       <>
                                         <h1 className='text-lg text-foreground-500'>Room Occupancy</h1>
-                                        <div className="p-4 grid grid-cols-2 gap-6">
+                                        <div className="p-4 grid grid-cols-3 gap-6">
                                         <Input
                                             isRequired
                                             key=""
@@ -807,7 +1670,11 @@ let actionsContent = (item, onEditClick, onDeleteClick) => (
                                             value={maxGuest}
                                             onChange={(e) => setMaxGuest(e.target.value)}
                                         />
-                                        </div></>}
+                                        </div>
+                                        
+
+                                        
+                                        </>}
                                     </div>
 
               </ModalBody>

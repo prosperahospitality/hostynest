@@ -2,6 +2,7 @@ import  db  from "@/app/_lib/mongoDB";
 import { Hotel_Infos } from "@/app/_lib/model/hotels/hotel_info/hotel_info";
 import { Property_Floor } from "@/app/_lib/model/property/property_floor/property_floor";
 import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
+import { Property_Bedtype } from "@/app/_lib/model/property/property_bedtype/property_bedtype";
 import { Pms_Propertymaster_Roomdetails } from "@/app/_lib/model/pms/property_master/room_details/room_details";
 import { NextResponse } from "next/server";
 
@@ -12,6 +13,7 @@ export async function GET(request){
   let dataAll = [];
   let floor = [];
   let roomtype = [];
+  let bedtype = [];
   let hotel_info = {};
   let dataActive = [];
   let success=true;
@@ -23,14 +25,15 @@ export async function GET(request){
     data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId});
     dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
     floor = await Property_Floor.find().select("property_floor -_id");
-    roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name -_id");
+    roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
+    bedtype = await Property_Bedtype.find({"status" : "Active"})
     console.log("rEs::::>",data);
   } catch (error) {
     data={result:"error"}
     success=false;
   }
   return NextResponse.json({data,dataAll,floor,
-    roomtype, hotel_info, dataActive, success})
+    roomtype, hotel_info, dataActive, bedtype, success})
 }
 
 export async function POST(req){
@@ -65,7 +68,11 @@ export async function POST(req){
             max_adult: payload.max_adult,
             max_child: payload.max_child,
             max_infant: payload.max_infant,
-            max_guest: payload.max_guest});
+            max_guest: payload.max_guest,
+            bed_type: payload.bed_type,
+            number_of_beds: payload.number_of_beds,
+            bed_size: payload.bed_size,
+          });
 
           res = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": payload.Hotel_Id});
 

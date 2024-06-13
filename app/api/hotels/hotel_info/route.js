@@ -20,8 +20,9 @@ export async function GET(){
 }
 
 export async function POST(request){
-  const payload = await request.json();
+  let payload = await request.json();
   let data = [];
+  let res = [];
   let res_facilities;
   let res_payment_Method;
   let res_point_Of_Interest;
@@ -49,7 +50,75 @@ export async function POST(request){
 
     data = await Hotel_Infos.findOne({Hotel_Id : payload.Hotel_Id});
     console.log("Data: ",data)
-    }else{
+    }else if(payload.operation === "updateStatus") {
+      let ress = await Hotel_Infos.updateOne({Hotel_Id : payload.Hotel_Id}, {status : payload.status});
+  
+      data = await Hotel_Infos.findOne({Hotel_Id : payload.Hotel_Id});
+      console.log("Data: ",data)
+    }else if(payload.action === "edit") {
+      console.log("Edit",payload.closing_description)
+      let ress = await Hotel_Infos.updateOne({Hotel_Id : payload.id}, {Hotel_name : payload.Hotel_name,
+        Contact_Name : payload.Contact_Name,
+        Phone_Number : payload.Phone_Number,
+        Address : payload.Address,
+        Location : payload.Location,
+        State : payload.State,
+        status: payload.status,
+        closing_description: payload.closing_description});
+  
+      data = await Hotel_Infos.find();
+      //console.log("Data: ",data)
+    }else if(payload.action === "editmany"){
+
+      console.log("Edit many",payload.ids,
+      payload.action,
+      payload.status, payload.closing_description)
+      
+      if((payload.ids).join('') === 'all') {
+        try {
+      
+          const property_Roomtype = await Hotel_Infos.updateMany( { } , {status : payload.status, closing_description : payload.closing_description});
+        
+          res = await Hotel_Infos.find();
+        
+          console.log("Result Property: ", property_Roomtype);
+          data = { result: "Data updated successfully" };
+        
+        } catch (error) {
+        
+          console.error("Error:", error);
+          data = { result: error };
+          success = false;
+          
+        }
+        return NextResponse.json({ data, res, success });
+      }else{
+        try {
+          payload.ids = (payload.ids).map(str => parseInt(str));
+          console.log("PayloadLLLLLLLLL>",payload)
+          const property_Roomtype = await Hotel_Infos.updateMany({ Hotel_Id: { $in: payload.ids } }, {status : payload.status, closing_description: payload.closing_description.toString()});
+        
+          res = await Hotel_Infos.find();
+        
+          console.log("Result Property: ", property_Roomtype);
+          data = { result: "Data updated successfully" };
+        
+        } catch (error) {
+        
+          console.error("Error:", error);
+          data = { result: error };
+          success = false;
+          
+        }
+        return NextResponse.json({ data, res, success });
+      }
+      
+      
+      
+      
+      
+      
+        }else{
       console.log("payload: ",payload)
 
       const res = await Hotel_Infos.create(payload.payload);
