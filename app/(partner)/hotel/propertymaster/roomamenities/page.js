@@ -77,30 +77,50 @@ const RoomAmenitiesPage = () => {
                 },
             });
             const result = await response.json();
+
+            console.log("Res::::::>>>>>>1111",result)
             
             setResultOfRoomAmenities(result.pms_propertymaster_roomamenities)
             let newResult = result.data;
             let newResultRoomAmen = result.pms_propertymaster_roomamenities;
 
-            if(newResultRoomAmen === 0 || newResult.length > newResultRoomAmen.length) {
+            console.log("Res::::::>>>>>>2222",newResult, newResultRoomAmen, newResult.length, newResultRoomAmen.length)
+
+            if(newResultRoomAmen.length === 0 || newResult.length > newResultRoomAmen.length) {
                 if(newResultRoomAmen.length === 0) {
-                    console.log("Inside If")
+                    console.log("Res::::::>>>>>>If")
                     setResult(result.data)
                     initialCreateFxn(newResult)
                 }else{
-                    setResult(result.pms_propertymaster_roomamenities)
+                    console.log("Res::::::>>>>>>Else")
+                    
                     initialCreateFxn(newResult)
+
+                    const response = await fetch(`/api/property/property_amenities?hotelId=${hotel_id.toString()}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    const result1 = await response.json();
+
+                    setResult(result1.pms_propertymaster_roomamenities)
                 }
                 
             }else if(newResult.length < newResultRoomAmen.length) {
                 let re = newResultRoomAmen.filter(obj1 => !newResult.some(obj2 => obj2.property_area === obj1.property_area));
-        
-                let payload;
-                re.map(async (items) => {
+                
+                let re1 = newResultRoomAmen.filter(obj1 => !newResult.some(obj2 => obj2.property_area === obj1.property_area && obj2.property_amenities === obj1.property_amenities));
+                console.log("Res::::::>>>>>>re", re, re1)
+
+                if(re.length > 0) {
+                    let payload;
+
+                
                     payload = {
                         Hotel_Id: hotel_id,
-                        property_area: items.property_area,
-                        operation: "deleteExtra",
+                        property_area: re,
+                        operation: "deleteExtraArea",
                     }
                     const response = await fetch('/api/pms/property_master/room_amenities', {
                         method: "POST",
@@ -110,12 +130,35 @@ const RoomAmenitiesPage = () => {
                         body: JSON.stringify(payload),
                     });
                     const result = await response.json();
-                })
                 
+                    setResult(result.res)
+                }
+
+                if(re1.length > 0) {
+                    let payload;
+
                 
-                setResult(result.pms_propertymaster_roomamenities)
+                    payload = {
+                        Hotel_Id: hotel_id,
+                        property_area: re1,
+                        operation: "deleteExtraAmenity",
+                    }
+                    const response = await fetch('/api/pms/property_master/room_amenities', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    });
+                    const result = await response.json();
+
+                    console.log("Res::::::>>>>>>re1result",result)
+                
+                    setResult(result.res)
+                }
+       
             }else{
-                console.log("Inside Else")
+                console.log("Res::::::>>>>>>Else1", result.pms_propertymaster_roomamenities)
                 setResult(result.pms_propertymaster_roomamenities)
                 setArr(newResultRoomAmen)
             }
@@ -136,8 +179,8 @@ const RoomAmenitiesPage = () => {
 
     useEffect(() => {
 
-
-    }, [resultOfRoomAmenities])
+        console.log("Res::::::>>>>>>",result)
+    }, [result])
 
     const generateUniqueID = () => {
 
@@ -164,7 +207,7 @@ const RoomAmenitiesPage = () => {
             try {
 
 
-                {newResult?.map(async (item,index) => {
+                let promise = newResult?.map(async (item,index) => {
     
                         payload = {
                             id: generateUniqueID(),
@@ -191,7 +234,9 @@ const RoomAmenitiesPage = () => {
                     });
                     const result = await response.json();
 
-                })}
+                    console.log("ResultMMMM:::::::>",result)
+
+                })
             } catch (error) {
                 console.error("Error fetching data:", error);
             }

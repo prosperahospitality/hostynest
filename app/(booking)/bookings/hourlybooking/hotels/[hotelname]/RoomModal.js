@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import "./styleee.css";
-import {Undo2} from "lucide-react"
+import { Crown, Dot, Star, MapPin, Heart, Share2, Hotel, CreditCard, Search, Wifi, AirVent, Tv, Milk, ParkingSquare, MessageCircleHeart, Wallet, BatteryCharging, Refrigerator, WashingMachine, Cctv, Check, BedDouble, BedSingle, Bath, TvMinimal, VolumeX, SquareM  } from 'lucide-react';
 import RoomCorousel from "./RoomCorousel"
 
-function RoomModal({showRoomModal, onShowRoomModalClose, hotelName, hotelID, roomResult, clickedRoomName, clickedRoomId, clickedRoom}) {
+function RoomModal({showRoomModal, onShowRoomModalClose, hotelName, hotelID, roomResult, clickedRoomName, clickedRoomId, clickedRoom, roomAmenetities}) {
 
     const {isOpen, onOpen, onClose} = useDisclosure();
 
@@ -34,7 +34,7 @@ function RoomModal({showRoomModal, onShowRoomModalClose, hotelName, hotelID, roo
         if(showRoomModal === true) {
             setImageClickFlag(false)
             onOpen();
-            handleRoomClick(" ","Property Main","PM00001")
+            handleRoomClick(" ",clickedRoomName, clickedRoomId)
         }
 
     }, [showRoomModal]);
@@ -113,7 +113,7 @@ function RoomModal({showRoomModal, onShowRoomModalClose, hotelName, hotelID, roo
 <> 
       <Modal 
         // size={"5xl"} 
-        style={{    height: "150%",
+        style={{    height: "fit-content",
           minWidth: "75%",}}
         isOpen={isOpen} 
         onClose={handleOnClose} 
@@ -146,17 +146,210 @@ function RoomModal({showRoomModal, onShowRoomModalClose, hotelName, hotelID, roo
                    
                     <div className="flex col-span-5">
 
-                      <div className="mt-4">
-                        <h1 style={{fontSize: "20px",
-                            lineHeight: "28px",
-                            padding: "0 16px 0 0", fontWeight: "bold"}}
-                          >
-                          {clickedRoomName}
-                        </h1>
-                      </div>
-                        
-                    </div>
+                      <div>
+                        <div className="mt-4">
+                          <h1 style={{fontSize: "20px",
+                              lineHeight: "28px",
+                              padding: "0 16px 0 0", fontWeight: "bold"}}
+                            >
+                            {clickedRoomName}
+                          </h1>
 
+                        </div>
+
+                        
+
+                        <div>
+                          {roomResult && roomResult.map((item, index) => {
+                            if(item.room_name === clickedRoomName) {
+
+                              let roomamenareaa = [];
+                              let roomamen = [];
+                              let roomamenarea = [];
+                              let roomview = '';
+                              if(item.room_type !== undefined) {
+                                roomview = item.room_type.split("-")[1];
+                              }
+
+                              if(roomAmenetities) {
+                                roomAmenetities.map((amenity) => {
+  
+                                    amenity.availability.map((avail) => {
+
+                                        if(avail === item.room_name) {
+                                            roomamen.push({area: amenity.property_area, amenity: amenity.property_amenities});
+                                            roomamenareaa.push(amenity.property_area)
+                                        }
+                                    })
+                                })
+                              }
+
+                              if(roomamenareaa && roomamenareaa.length > 0) {
+                                roomamenarea = [...new Set(roomamenareaa)];
+                              }
+
+                              console.log("roomamen: ",roomamenarea, roomamen)
+
+                              return (<>
+
+                                <div className="mt-4">
+                                  {roomamenarea && roomamenarea.map((area) => {
+                                    if(area === "Top" || area === "Top Facilities" || area === "Popular Facilities") {
+
+                                      return (<>
+                                        
+                                        <ul className="inline-flex flex-wrap gap-2 mt-2">
+                                          {roomamen && roomamen.map((item) => {
+                                            if(item.area === area) {
+                                              if(item.amenity === "Air conditioning") {
+                                                return (<>
+                                                  <li>
+                                                      <div className="inline-flex text-[13px]"><AirVent className="icon-style"/> {"Air Conditioner"}</div>
+                                                  </li>
+                                                </>)
+                                              }
+
+                                              if(item.amenity === "Flat-screen TV") {
+                                                return (<>
+                                                  <li>
+                                                      <div className="inline-flex text-[13px]"><svg xmlns="http://www.w3.org/2000/svg" className="icon-style" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal"><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg> {item.amenity}</div>
+                                                  </li>
+                                                </>)
+                                              }
+
+                                              if(item.amenity === "Free Wifi") {
+                                                return (<>
+                                                  <li>
+                                                      <div className="inline-flex text-[13px]"><Wifi className="icon-style"/> {item.amenity}</div>
+                                                  </li>
+                                                </>)
+                                              }
+
+                                              if(item.amenity === "Soundproof") {
+                                                return (<>
+                                                  <li>
+                                                      <div className="inline-flex text-[13px]"><VolumeX className="icon-style"/> {item.amenity}</div>
+                                                  </li>
+                                                </>)
+                                              }
+
+                                              if(item.amenity === "Attached Bathroom") {
+                                                return (<>
+                                                  <li>
+                                                      <div className="inline-flex text-[13px]"><Bath className="icon-style"/> {item.amenity}</div>
+                                                  </li>
+                                                </>)
+                                              }
+                                              
+                                            }
+                                          })}
+                                        </ul>
+                                      </>)
+                                    }
+
+                                  })}
+                                </div>
+
+                                <div className="mt-4">
+                                  <span className="inline-flex"><p className="font-bold">Room size&nbsp;</p> {item.room_size} {item.room_size_type}</span>
+                                </div>
+
+                                <div className="mt-4">
+                                  {item.bed_type.map((type, index) => {
+
+                                    let numberofbed = item.number_of_beds.find((item) => item.key === type.key)
+
+                                    console.log("Item>>>>,",numberofbed)
+
+                                    if(type.value === "Single Bed") {
+                                      return (
+                                        <>
+                                        <div className="block">
+                                        <span key={""} className="data-fontt inline-flex">{numberofbed.value} {type.value} <BedSingle className="h-[1.5rem] ml-1" /></span>
+                                        </div>
+                                        </>
+                                        )
+                                    }else {
+                                      if(index !== (item.number_of_beds.length - 1)) {
+                                        
+                                          return (<>
+                                          
+                                              <span key={index} className="data-fontt">{numberofbed.value} {type.value}{", "}</span>
+                                    
+                                          </>)
+                                      }else{
+                                        return (<>
+                                        
+                                            <span key={index} className="data-fontt">{numberofbed.value} {type.value} <BedDouble className="h-[1.5rem] ml-1 inline-flex"/></span>
+                                  
+                                        </>)
+                                      }
+                                  }
+
+                                
+                                }
+                                )}
+
+                                <span>
+                                  <p>
+                                    <p className="mt-2 text-[14px]">Comfy beds, 9.1 – Based on 112 reviews</p>
+                                    <p className="mt-4 text-[14px]">Guests will have a special experience as the {item.room_name.toLowerCase()} provides a fireplace. This air-conditioned double room includes a flat-screen TV with cable channels, a private bathroom as well as a terrace. The unit offers 1 bed.</p>
+                                  </p>
+                                </span>
+                              </div>
+
+                              {roomview 
+                                ? <><div className="mt-4">
+                                    <span className="font-bold">{"View"}</span>
+                                  </div><ul className="grid grid-cols-2 mt-4">
+                                      <li key={""} className="flex">
+                                        <div className="inline-flex text-[13px]">
+                                          <Check style={{ height: "1rem" }} /> {roomview}
+                                        </div>
+                                      </li>
+                                    </ul></>
+                                : ""
+                              }
+                              
+
+                              <div>
+                                {roomamenarea && roomamenarea.map((area) => {
+                                  if(area === "Top") {
+
+                                  }else{
+
+                                    return (<>
+                                      <div className="mt-4">
+                                        {area === "Bathroom" ? <span className="font-bold">In your private {area.toLowerCase()}</span> : <span className="font-bold">{area}</span>}
+                                      </div>
+                                      <ul className="grid grid-cols-2 mt-4">
+                                        {roomamen && roomamen.map((item) => {
+                                          if(item.area === area) {
+                                            return (<>
+                                              <li key={index} className="flex">
+                                                  <div className="inline-flex text-[13px]">
+                                                      <Check style={{height:"1rem"}}/> {item.amenity}
+                                                  </div>
+                                              </li> 
+                                          </>)
+                                          }
+                                        })}
+                                      </ul>
+                                    </>)
+                                  }
+                                })}
+                              </div>
+
+
+                              </>)
+
+                            } 
+                                  
+                              
+                          })}
+                        </div>
+                      </div>
+                    </div>
                 </div>
               </ModalBody>
              

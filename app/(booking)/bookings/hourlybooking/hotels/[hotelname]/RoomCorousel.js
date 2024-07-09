@@ -11,6 +11,7 @@ import '@/app/_components/ui/roomcorousel/css/embla.css'
 
 function RoomCorousel({currentClickedRoomImg, hotelNamee, roomNamee, clickedImageTitle, clickedImageid, clickedImageRoom}) {
 
+  console.log("Data imp: ",currentClickedRoomImg, hotelNamee, roomNamee, clickedImageTitle, clickedImageid, clickedImageRoom)
   const OPTIONS = {}
 const SLIDE_COUNT = parseInt(currentClickedRoomImg && currentClickedRoomImg.length)
 const SLIDES = currentClickedRoomImg

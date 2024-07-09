@@ -113,7 +113,7 @@ const RoomDetailsPage = () => {
               },
           });
           const result = await response.json();
-          console.log("Data:", result.dataAll);
+          console.log("Data:123456", result);
           setAllResult(result.dataAll);
           setResult(result.data);
           setFloor(result.floor);

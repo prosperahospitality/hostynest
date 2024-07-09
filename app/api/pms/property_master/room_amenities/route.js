@@ -73,9 +73,32 @@ export async function POST(req){
       }else if(payload.operation === "delete"){
         await Pms_Propertymaster_Roomamenities.deleteMany({"Hotel_Id": payload.Hotel_Id});
         return NextResponse.json({ success });
-      }else if(payload.operation ==="deleteExtra") {
-        await Pms_Propertymaster_Roomamenities.deleteMany({"Hotel_Id": payload.Hotel_Id, property_area: payload.property_area});
-        return NextResponse.json({ success });
+      }else if(payload.operation ==="deleteExtraArea") {
+        let re = payload.property_area;
+
+        let promise = re.map(async (item) => {
+            await Pms_Propertymaster_Roomamenities.deleteMany({"Hotel_Id": payload.Hotel_Id, property_area: item.property_area});
+          })
+
+          await Promise.all(promise);
+          
+          let res = await Pms_Propertymaster_Roomamenities.find({"Hotel_Id": payload.Hotel_Id});
+
+          
+          return NextResponse.json({ res, success });
+
+      }else if(payload.operation === "deleteExtraAmenity") {
+        let re1 = payload.property_area;
+
+        let promise = re1.map(async (item) => {
+          await Pms_Propertymaster_Roomamenities.deleteMany({"Hotel_Id": payload.Hotel_Id, property_area: item.property_area, property_amenities: item.property_amenities});
+        })
+
+        await Promise.all(promise);
+        
+        let res = await Pms_Propertymaster_Roomamenities.find({"Hotel_Id": payload.Hotel_Id});
+        return NextResponse.json({ res, success });
+
       }else if(payload.operation ==="reset") {
         await Pms_Propertymaster_Roomamenities.updateMany({ Hotel_Id : payload.Hotel_Id } , {availability : payload.availability});
         return NextResponse.json({ success });

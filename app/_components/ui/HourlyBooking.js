@@ -15,6 +15,13 @@ export default function HourlyBooking({ searchCity }) {
   // const [selectedDate, setSelectedDate] = useState();
   const [selectedCity, setSelectedCity] = useState(null);
   // const [selectedTime, setSelectedTime] = useState('');
+
+  const [adultsSelect, setAdultsSelect] = useState('');
+  const [childSelect, setChildSelect] = useState('');
+  const [infantsSelect, setInfantsSelect] = useState('');
+  const [roomsSelect, setRoomsSelect] = useState('');
+  const [petsSelect, setPetsSelect] = useState('');
+
   let router = useRouter();
 
   const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with current date
@@ -104,7 +111,11 @@ export default function HourlyBooking({ searchCity }) {
     }
     console.log("Selcted City Test: ",selectedCity)
 
-   router.push(`/bookings/hourlybooking/search?location=${selectedCity}&date=${formattedDate}&time=${time24HoursFormat}`);
+   router.push(`/bookings/hourlybooking/search?location=${selectedCity}&date=${formattedDate}&time=${time24HoursFormat}&adultsSelect=${adultsSelect}
+&childSelect=${childSelect}
+&infantsSelect=${infantsSelect}
+&roomsSelect=${roomsSelect}
+&petsSelect=${petsSelect}`);
 
   }
 
@@ -155,6 +166,22 @@ export default function HourlyBooking({ searchCity }) {
   }, [selectedDate,
     selectedTime]);
 
+    const handleAdultsSelect = (val) => {
+      setAdultsSelect(val)
+    }
+    const handleChildSelect = (val) => {
+      setChildSelect(val)
+    }
+    const handleInfantsSelect = (val) => {
+      setInfantsSelect(val)
+    }
+    const handleRoomsSelect = (val) => {
+      setRoomsSelect(val)
+    }
+    const handlePetsSelect = (val) => {
+      setPetsSelect(val)
+    }
+
   return (
     <>
       <div className='sticky'>
@@ -193,7 +220,11 @@ export default function HourlyBooking({ searchCity }) {
 
           <div className='text-primary text-1.125 font-poppinsmedium landing-1.688'>
             <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><PiUsersLight className="mr-2 h-8 w-8" />Rooms & Guests</p>
-            <RoomsAndGuests />
+            <RoomsAndGuests onAdultsSelect={handleAdultsSelect}
+onChildSelect={handleChildSelect}
+onInfantsSelect={handleInfantsSelect}
+onRoomsSelect={handleRoomsSelect}
+onPetsSelect={handlePetsSelect}/>
           </div>
           <div className='pt-6 ml-8'>
             <Button isIconOnly color="secondary" variant="shadow" size="lg" onClick={(e) => searchAction(e)}>

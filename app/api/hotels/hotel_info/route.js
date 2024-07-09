@@ -21,6 +21,7 @@ export async function GET(){
 
 export async function POST(request){
   let payload = await request.json();
+  console.log("Payload data rateeeeeee",payload)
   let data = [];
   let res = [];
   let res_facilities;
@@ -118,6 +119,48 @@ export async function POST(request){
       
       
       
+        }else if(payload.operation === "updateHotelRates") {
+
+          let filteredHotels = payload.filteredHotels;
+
+          let lowestRatesObjectsArrayy = payload.lowestRatesObjectsArrayy;
+
+          console.log("Inside updateHotelRates: ",filteredHotels.length,
+            lowestRatesObjectsArrayy.length)
+
+          if(filteredHotels.length === lowestRatesObjectsArrayy.length) {
+            let a = [];
+            filteredHotels.map((item) => {
+              lowestRatesObjectsArrayy.map(async (item1) => {
+                if(item.Hotel_Id === parseInt(item1.Hotel_Id)) {
+                  console.log("Inside updateHotelRates If: ", item.Hotel_Id)
+                  a.push(item.Hotel_Id)
+                  await Hotel_Infos.updateOne( { Hotel_Id: item.Hotel_Id } , {
+                    final_display_price_for_3H : item1.rate_3hr, 
+                    final_display_price_for_6H : item1.rate_6hr,
+                    final_display_price_for_12H : item1.rate_12hr,
+                    final_display_price_for_24H : item1.rate_24hr,
+                  });
+                }else {
+                  console.log("Inside updateHotelRates Else: ", a, item.Hotel_Id)
+                  if(a.includes(item.Hotel_Id)) {
+                    console.log("Inside updateHotelRates If 1: ", item.Hotel_Id)
+                  }else {
+                    console.log("Inside updateHotelRates Else 1: ", item.Hotel_Id)
+                    await Hotel_Infos.updateOne( { Hotel_Id: item.Hotel_Id } , {
+                      final_display_price_for_3H : 0, 
+                      final_display_price_for_6H : 0,
+                      final_display_price_for_12H : 0,
+                      final_display_price_for_24H : 0,
+                    });
+                  }
+                }
+              })
+            })
+          }
+
+          return NextResponse.json({ success });
+
         }else{
       console.log("payload: ",payload)
 

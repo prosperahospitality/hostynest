@@ -5,12 +5,13 @@ import { Badge } from "@/app/_components/ui/Badge";
 import { Link, Chip, Divider, Button } from "@nextui-org/react";
 import HourlyBookingSideBar from '@/app/_components/layout/booking/hourlybookings/hourlybookingside-bar';
 import Cityselector from "@/app/_components/ui/CitySelector";
-import { useSearchParams } from 'next/navigation'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import HotelName from "@/public";
 import SearchHero from '@/app/(booking)/bookings/hourlybooking/search/SearchHero';
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import { useSelector } from "react-redux";
+import { usePathname, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -30,18 +31,27 @@ export default function HourlyBookingsearch() {
     const [priceSliderChange, setPriceSliderChange] = useState();
     const [hotelIdsArray, sethotelIdsArray] = useState([]);
     const [lowestRatesObjectsArray, setLowestRatesObjectsArray] = useState([]);
+    const [allRoomDetails, setAllRoomDetails] = useState([]);
     let dat = useSelector((state) => state.log.loginState);
     
-
-
+    const pathname = usePathname()
+    console.log("pathname: ")
+    const router = useRouter()
     const searchParams = useSearchParams();
  
   const searchCity = searchParams.get('location');
   const searchedDate = searchParams.get('date');
   const searchTime = searchParams.get('time');
+  const adultsSelect = searchParams.get('adultsSelect');
+  const childSelect = searchParams.get('childSelect');
+  const infantsSelect = searchParams.get('infantsSelect');
+  const roomsSelect = searchParams.get('roomsSelect');
+  const petsSelect = searchParams.get('petsSelect');
 
 //   const [startTime, setStartTime] = useState('');
 //   const [endTime, setEndTime] = useState('');
+
+
 
 const convertTo24Hour = (time) => {
     if(time !== undefined) {
@@ -186,6 +196,8 @@ useEffect(() => {
 
 
   const cardFunction = async (searchCity, searchedDate, searchTime, hotelsData) => {
+
+    console.log("Info....,0",searchCity, searchedDate, searchTime, hotelsData)
 
     function formatDate(dateString) {
         const [day, month, year] = dateString.split("-");
@@ -383,7 +395,75 @@ useEffect(() => {
                 });
             
                 console.log("Filtered Hotels:", filteredHotels);
-                setHotelsData(filteredHotels)
+                const updateHotel = async(filteredHotels, lowestRatesObjectsArrayy) => {
+                    console.log("Filtered Hotels123:", filteredHotels, lowestRatesObjectsArrayy);
+                    let payload = {
+                        filteredHotels: filteredHotels,
+                        lowestRatesObjectsArrayy: lowestRatesObjectsArrayy,
+                        operation: "updateHotelRates"
+                    }
+                    const results = await fetch("/api/hotels/hotel_info", {
+                        method: "POST",
+                        body: JSON.stringify(payload)
+                      }).then((res) => {
+                        console.log("REs:::::::>res",res)
+                        if(res.status === 200) {
+                            if(filteredHotels.length === lowestRatesObjectsArrayy.length) {
+                                let a = [];
+                                filteredHotels.map((item) => {
+                                  lowestRatesObjectsArrayy.map(async (item1) => {
+                                    if(item.Hotel_Id === parseInt(item1.Hotel_Id)) {
+                                      console.log("Inside updateHotelRates If: ", item.Hotel_Id)
+                                      a.push(item.Hotel_Id);
+                                        item.final_display_price_for_3H = item1.rate_3hr;
+                                        item.final_display_price_for_6H = item1.rate_6hr;
+                                        item.final_display_price_for_12H = item1.rate_12hr;
+                                        item.final_display_price_for_24H = item1.rate_24hr;
+      
+                                    }else {
+                                      console.log("Inside updateHotelRates Else: ", a, item.Hotel_Id)
+                                      if(a.includes(item.Hotel_Id)) {
+                                        console.log("Inside updateHotelRates If 1: ", item.Hotel_Id)
+                                      }else {
+                                        console.log("Inside updateHotelRates Else 1: ", item.Hotel_Id)
+                                        
+                                          item.final_display_price_for_3H = 0; 
+                                          item.final_display_price_for_6H = 0;
+                                          item.final_display_price_for_12H = 0;
+                                          item.final_display_price_for_24H = 0;
+                                        
+                                      }
+                                    }
+                                  })
+                                })
+                              }
+                            
+                              async function getRoomDetails () {
+                                const response = await fetch(`/api/pms/property_master/room_details`, {
+                                    method: "GET",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                });
+                                const result = await response.json();
+                                let activeResults = result.dataAllActive;
+                    
+                                console.log("room details::::::>",activeResults)
+                                setAllRoomDetails(activeResults)
+                                
+                                return activeResults
+                            }
+
+                            getRoomDetails()
+
+                            setHotelsData(filteredHotels)
+                        }
+                      });
+
+                }
+                updateHotel(filteredHotels, lowestRatesObjectsArrayy)
+                
+               
             } else {
                 console.log("Either hotelsData or hotelIdsArray is not defined or is not an array.");
             }
@@ -453,6 +533,7 @@ useEffect(() => {
                                                 hourChange === 12 ? hotel.hour12_display_flag === 1 && parseFloat(hotel.final_display_price_for_12H) >= priceSliderChange[0] && parseFloat(hotel.final_display_price_for_12H) <= priceSliderChange[1]:
                                                 true 
                                             )
+                                            && hotel.status === "open"
                                         );
                                     } else {
                                    
@@ -608,6 +689,7 @@ useEffect(() => {
                                                 hourChange === 12 ? hotel.hour12_display_flag === 1 && parseFloat(hotel.final_display_price_for_12H) >= priceSliderChange[0] && parseFloat(hotel.final_display_price_for_12H) <= priceSliderChange[1]:
                                                 true 
                                             )
+                                            && hotel.status === "open"
                                         );
                                     } else {
                                    
@@ -661,7 +743,7 @@ useEffect(() => {
                                         
                                         <div className="h-full w-full p-3 flex flex-col border-gray-400">
                                             <div className="relative w-full">
-                                            <a href = {`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}`}>
+                                            <a href = {`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}`}>
                                                 <div className="rounded-xl -ml-1 w-fit flex items-center justify-center cursor-pointer">
                                                     {Array.from({ length: Math.floor(hotel.rating) }, (_, index) => (
                                                         // eslint-disable-next-line react/jsx-key
@@ -675,7 +757,7 @@ useEffect(() => {
                                                 </div>
                                                 <div className="flex items-center space-x-5 ">
                                                     <h3 className="max-w-[36.25rem] truncate">
-                                                        <Link href={`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}`} title="Hotel Shubham Inn"
+                                                        <Link href={`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}}&searchedDate=${searchedDate}&searchTime=${searchTime}`} title="Hotel Shubham Inn"
                                                             className="cursor-pointer text-foreground text-lg font-poppinsmedium">
                                                             {hotel.Hotel_name}
                                                         </Link>
@@ -741,8 +823,8 @@ useEffect(() => {
                                                                 key={index}
                                                                 color="primary" 
                                                                 variant="shadow" 
-                                                                className="flex flex-col py-6 px-8" 
-                                                                onClick={() => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=3&hotelId=${hotel.Hotel_Id}`}
+                                                                className="flex flex-col py-6 px-8"
+                                                                onClick={() => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=3&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}&adultsSelect=${adultsSelect}&childSelect=${childSelect}&infantsSelect=${infantsSelect}&roomsSelect=${roomsSelect}&petsSelect=${petsSelect}`}
                                                                 style={isTimeInRange ? {} : { pointerEvents: 'none', opacity: 0.5 }}
                                                             >
                                                                 <p className="text-lg -mb-1">₹ {lowestRate.rate_3hr}</p>
@@ -761,7 +843,7 @@ if(lowestRate && lowestRate?.hotel_id === hotel?.Hotel_Id && lowestRate?.status 
     return ""
 }else if(lowestRate && lowestRate?.Hotel_Id === hotel?.Hotel_Id && lowestRate?.status === "bookable") {
 
-    let t = lowestRate.first_checkin_last_checkout_3hr;
+    let t = lowestRate.first_checkin_last_checkout_6hr;
 
     const timeRangeWithoutSpaces = t.replace(/\s/g, '');
             
@@ -786,7 +868,7 @@ if(lowestRate && lowestRate?.hotel_id === hotel?.Hotel_Id && lowestRate?.status 
             color="primary" 
             variant="shadow" 
             className="flex flex-col py-6 px-8" 
-            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=6&hotelId=${hotel.Hotel_Id}`}
+            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=6&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}&adultsSelect=${adultsSelect}&childSelect=${childSelect}&infantsSelect=${infantsSelect}&roomsSelect=${roomsSelect}&petsSelect=${petsSelect}`}
             style={isTimeInRange ? {} : { pointerEvents: 'none', opacity: 0.5 }}
         >
             <p className="text-lg -mb-1">₹ {lowestRate.rate_6hr}</p>
@@ -805,7 +887,7 @@ if(lowestRate && lowestRate?.hotel_id === hotel?.Hotel_Id && lowestRate?.status 
     return ""
 }else if(lowestRate && lowestRate?.Hotel_Id === hotel?.Hotel_Id && lowestRate?.status === "bookable") {
 
-    let t = lowestRate.first_checkin_last_checkout_3hr;
+    let t = lowestRate.first_checkin_last_checkout_12hr;
 
     const timeRangeWithoutSpaces = t.replace(/\s/g, '');
             
@@ -830,7 +912,7 @@ if(lowestRate && lowestRate?.hotel_id === hotel?.Hotel_Id && lowestRate?.status 
             color="primary" 
             variant="shadow" 
             className="flex flex-col py-6 px-8" 
-            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=12&hotelId=${hotel.Hotel_Id}`}
+            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=12&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}&adultsSelect=${adultsSelect}&childSelect=${childSelect}&infantsSelect=${infantsSelect}&roomsSelect=${roomsSelect}&petsSelect=${petsSelect}`}
             style={isTimeInRange ? {} : { pointerEvents: 'none', opacity: 0.5 }}
         >
             <p className="text-lg -mb-1">₹ {lowestRate.rate_12hr}</p>
@@ -855,7 +937,7 @@ if(lowestRate && lowestRate?.hotel_id === hotel?.Hotel_Id && lowestRate?.status 
             color="primary" 
             variant="shadow" 
             className="flex flex-col py-6 px-8" 
-            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=24&hotelId=${hotel.Hotel_Id}`}
+            onClick={(e) => window.location.href = `hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hour=24&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}&adultsSelect=${adultsSelect}&childSelect=${childSelect}&infantsSelect=${infantsSelect}&roomsSelect=${roomsSelect}&petsSelect=${petsSelect}`}
             
         >
             <p className="text-lg -mb-1">₹ {lowestRate.rate_24hr}</p>

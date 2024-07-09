@@ -8,9 +8,11 @@ export async function GET(request){
   let selectedRoom = request.nextUrl.searchParams.get('selectedRoom');
   let rowDataID = request.nextUrl.searchParams.get('rowDataID');
   let searchedDate = request.nextUrl.searchParams.get('searchedDate');
+  
   let data = [];
   let databydate = [];
   let databyid = [];
+  let databyHoteliddd = [];
   let rowbyid = [];
   let success=true;
   try {
@@ -19,13 +21,14 @@ export async function GET(request){
     data = await Pms_Ratesandinventory_Managerateandinventory.find();
     databydate = await Pms_Ratesandinventory_Managerateandinventory.find({"booking_date": searchedDate});
     databyid = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": hotelId , "room_type": selectedRoom});
+    databyHoteliddd = await Pms_Ratesandinventory_Managerateandinventory.find({"Hotel_Id": hotelId, "booking_date": searchedDate });
     rowbyid = await Pms_Ratesandinventory_Managerateandinventory.findOne({"id": rowDataID});
     
   } catch (error) {
     data={result:"error"}
     success=false;
   }
-  return NextResponse.json({data, databyid, databydate, rowbyid, success})
+  return NextResponse.json({data, databyid, databydate, rowbyid, databyHoteliddd, success})
 }
 
 export async function POST(req){

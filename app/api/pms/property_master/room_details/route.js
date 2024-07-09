@@ -9,8 +9,10 @@ import { NextResponse } from "next/server";
 export async function GET(request){
 
   let hotelId = request.nextUrl.searchParams.get('hotelId');
+  // console.log("hotelIdhotelId",hotelId)
   let data = [];
   let dataAll = [];
+  let dataAllActive = [];
   let floor = [];
   let roomtype = [];
   let bedtype = [];
@@ -19,21 +21,22 @@ export async function GET(request){
   let success=true;
   try {
     db.connect()
-    console.log("Hotttttttt: ",hotelId)
+    // console.log("Hotttttttt: ",hotelId)
     hotel_info = await Hotel_Infos.findOne({"Hotel_Id": hotelId}).select("id Hotel_Type -_id");
     dataAll = await Pms_Propertymaster_Roomdetails.find();
-    data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId});
+    dataAllActive = await Pms_Propertymaster_Roomdetails.find({"status" : "Active"});
+    data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": parseInt(hotelId)});
     dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
     floor = await Property_Floor.find().select("property_floor -_id");
     roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
     bedtype = await Property_Bedtype.find({"status" : "Active"})
-    console.log("rEs::::>",data);
+    // console.log("rEs::::>",data);
   } catch (error) {
     data={result:"error"}
     success=false;
   }
   return NextResponse.json({data,dataAll,floor,
-    roomtype, hotel_info, dataActive, bedtype, success})
+    roomtype, hotel_info, dataActive, bedtype, dataAllActive, success})
 }
 
 export async function POST(req){

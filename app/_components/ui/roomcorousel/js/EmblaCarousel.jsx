@@ -60,6 +60,11 @@ const EmblaCarousel = (props) => {
     emblaThumbsApi])
   
   useEffect(() => {
+
+    if(selectedIndex === 0) {
+      setCurrectSelectedImageIndex(selectedIndex + 1)
+    }
+    
     if (selectedIndex) {
       setCurrectSelectedImageIndex(selectedIndex + 1)
     }

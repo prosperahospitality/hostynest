@@ -14,7 +14,7 @@ export async function GET(request){
   let success=true;
   try {
     db.connect()
-    data = await Property_Amenities.find();
+    data = await Property_Amenities.find({status: "Active"});
     property_area = await Property_Area.find({status: "Active"}).select("id property_area -_id");
     amenities = await Amenities.find({status: "Active"}).select("id amenities value -_id");
     pms_propertymaster_roomamenities = await Pms_Propertymaster_Roomamenities.find({Hotel_Id : hotelId});

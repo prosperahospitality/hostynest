@@ -26,58 +26,125 @@ const FacilitiesAndServicesPage = () => {
                 },
             });
             const result = await response.json();
-            console.log("Data:", result);
+
+            console.log("Res::::::>>>>>>1111",result)
 
             setRoomfands(result.pms_propertymaster_roomfands)
+
             let res_fandscomb = result.data_active;
             let res_roomfands = result.pms_propertymaster_roomfands;
 
-            console.log("Main Data:::::>",res_fandscomb,
-            res_roomfands)
+            console.log("Res::::::>>>>>>2222",res_fandscomb, res_roomfands, res_fandscomb.length, res_roomfands.length)
 
-            if(res_roomfands === 0 || res_fandscomb.length > res_roomfands.length) {
+            if(res_roomfands.length === 0 || res_fandscomb.length > res_roomfands.length) {
                 if(res_roomfands.length === 0) {
-                    console.log("Inside If")
-                    //setResult(result.data_active)
+                    console.log("Res::::::>>>>>>If")
+                    setResult(result.data_active)
                     initialCreateFxn(res_fandscomb)
 
-                    const response = await fetch(`/api/pms/property_master/room_fands?hotelId=${hotel_id.toString()}`, {
+                    // const response = await fetch(`/api/pms/property_master/room_fands?hotelId=${hotel_id.toString()}`, {
+                    //     method: "GET",
+                    //     headers: {
+                    //         "Content-Type": "application/json",
+                    //     },
+                    // });
+                    // const result = await response.json();
+                    
+                }else{
+                    console.log("Res::::::>>>>>>Else")
+                    
+                    initialCreateFxn(res_fandscomb)
+                    const response = await fetch(`/api/fands/fands_combs?hotelId=${hotel_id.toString()}`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                         },
                     });
-                    const result = await response.json();
-                    setResult(result.data_by_id)
-                }else{
-                    setResult(result.pms_propertymaster_roomfands)
-                    initialCreateFxn(res_fandscomb)
+                    const result1 = await response.json();
+                    setResult(result1.pms_propertymaster_roomfands)
+                    setArr(result.pms_propertymaster_roomfands)
+                    let res = result.pms_propertymaster_roomfands;
+                    let init = [];
+                    res?.map((item) => {
+                        if(item.availability === true) {
+                            init.push(item.fands_itemid)
+                        }
+                    })
+                    setSelectedCheckBoxes(init)
                 }
                 
             }else if(res_fandscomb.length < res_roomfands.length) {
+                console.log("Main Data:::::>Else1")
                 let re = res_roomfands.filter(obj1 => !res_fandscomb.some(obj2 => obj2.fands_category === obj1.fands_category));
-        
-                let payload;
-                re.map(async (items) => {
-                    payload = {
-                        Hotel_Id: hotel_id,
-                        fands_category: items.fands_category,
-                        operation: "deleteExtra",
+                let re1 = res_roomfands.filter(obj1 => !res_fandscomb.some(obj2 => obj2.fands_category === obj1.fands_category && obj2.fands_item === obj1.fands_item));
+
+                console.log("Res::::::>>>>>>re", re, re1)
+
+                if(re.length > 0) {
+                    let payload;
+              
+                        payload = {
+                            Hotel_Id: hotel_id,
+                            fands_category: re,
+                            operation: "deleteExtraArea",
+                        }
+                        const response = await fetch('/api/pms/property_master/room_fands', {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                        });
+                        const result = await response.json();
+                  
+                        console.log("Res::::::>>>>>>reIf",result)
+                    
+                    setResult(result.res)
+                    setArr(result.res)
+                let res = result.res;
+                let init = [];
+                res?.map((item) => {
+                    if(item.availability === true) {
+                        init.push(item.fands_itemid)
                     }
-                    const response = await fetch('/api/pms/property_master/room_fands', {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(payload),
-                    });
-                    const result = await response.json();
                 })
-                
-                
-                setResult(result.pms_propertymaster_roomfands)
+                setSelectedCheckBoxes(init)
+                }
+
+                if(re1.length > 0) {
+                    let payload;
+                    
+                        payload = {
+                            Hotel_Id: hotel_id,
+                            fands_category: re1,
+                            operation: "deleteExtraAmenity",
+                        }
+                        const response = await fetch('/api/pms/property_master/room_fands', {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                        });
+                        const result = await response.json();
+                  
+                    
+                        console.log("Res::::::>>>>>>reElse",result)
+                    setResult(result.res)
+                    setArr(result.res)
+                let res = result.res;
+                let init = [];
+                res?.map((item) => {
+                    if(item.availability === true) {
+                        init.push(item.fands_itemid)
+                    }
+                })
+                setSelectedCheckBoxes(init)
+                }
+
+            
             }else{
-                console.log("Inside Else")
+                console.log("Main Data:::::>last Else1")
                 setResult(result.pms_propertymaster_roomfands)
                 setArr(result.pms_propertymaster_roomfands)
                 let res = result.pms_propertymaster_roomfands;
@@ -102,6 +169,14 @@ const FacilitiesAndServicesPage = () => {
         }
 
     }, [])
+
+    useEffect(() => {
+        if (result) { 
+           console.log("Res::::::::>>>>>>>>",result)
+           setArr(result)
+        }
+
+    }, [result])
 
 
 
@@ -156,6 +231,8 @@ const FacilitiesAndServicesPage = () => {
                         body: JSON.stringify(payload),
                     });
                     const result = await response.json();
+
+                    console.log("ResultMMMM:::::::>",result)
 
                 })}
             } catch (error) {
@@ -308,11 +385,11 @@ const FacilitiesAndServicesPage = () => {
                         value={selectedCheckBoxes}
                         onValueChange={setSelectedCheckBoxes}
                     >
-                            <div className='w-full flex justify-between'>
+                            <div className='grid w-full justify-between grid-cols-4'>
                             
                             {result.filter((item) => item.fands_category === fands_category).map((items) => (
                                 // eslint-disable-next-line react/jsx-key
-                                <div className='flex gap-4 justify-between mt-2'>
+                                <div className='flex gap-1 justify-between mt-2 w-[75%]'>
                                     <AirConditioner className="size-8" />
                                     <h4 className='text-base text-foreground-300'>{items.fands_item}</h4>
                                     <Checkbox key={items.fands_item} value={items.fands_itemid}></Checkbox>
