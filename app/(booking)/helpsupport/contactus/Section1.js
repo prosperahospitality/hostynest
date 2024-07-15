@@ -1,9 +1,10 @@
+'use client'
 import React from 'react'
 import { Card, CardHeader, CardBody, Image, Button } from "@nextui-org/react";
 
 const Section1 = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-screen bg-white'>
       <div className='w-full h-[75%] pt-12'>
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d498.2711871149117!2d73.00323381152059!3d19.057299312118012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c150c925caaf%3A0xa9ce45497acd2b23!2sThe%20Affaires%2C%20Palm%20Beach%2C%20Sanpada%2C%20Navi%20Mumbai%2C%20Maharashtra%20400705!5e0!3m2!1sen!2sin!4v1712039846848!5m2!1sen!2sin" className='h-full w-full' style={{ objectFit: 'cover', border: '0' }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
         </iframe>
@@ -11,7 +12,7 @@ const Section1 = () => {
       <div className='w-full h-[25%]'>
         <div className='w-[80%] mx-auto'>
           <div className='flex justify-between w-[80%] mx-auto absolute -mt-24'>
-            <Card className="p-4 pb-10 text-center">
+            <Card className="p-4 pb-10 text-center bg-white">
               <CardHeader className="pb-0 pt-2 px-4 flex-col">
                 <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly startContent={<AtMailIcon height={40} width={40} />}></Button>
                 <h4 className="text-2xl text-primary pt-1">Write to Us</h4>
@@ -20,7 +21,7 @@ const Section1 = () => {
                 <h6 className='text-sm text-gray-500 w-52 mx-auto'>This is the best way to get your questions answered, write your queries at</h6>
               </CardBody>
             </Card>
-            <Card className="p-4 pb-10 text-center">
+            <Card className="p-4 pb-10 text-center bg-white">
               <CardHeader className="pb-0 pt-2 px-4 flex-col">
                 <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly startContent={<PhoneIcon height={40} width={40} />}></Button>
                 <h4 className="text-2xl text-primary pt-1">Call Us</h4>
@@ -29,7 +30,7 @@ const Section1 = () => {
                 <h6 className='text-sm text-gray-500 w-52 mx-auto'>Our Support Team is ready 24x7 to answer you dial a call on</h6>
               </CardBody>
             </Card>
-            <Card className="p-4 pb-10 text-center">
+            <Card className="p-4 pb-10 text-center bg-white">
               <CardHeader className="pb-0 pt-2 px-4 flex-col">
                 <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly startContent={<GPSIcon height={40} width={40} />}></Button>
                 <h4 className="text-2xl text-primary pt-1">Locate Us</h4>

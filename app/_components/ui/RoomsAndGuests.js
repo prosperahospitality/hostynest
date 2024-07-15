@@ -107,7 +107,7 @@ export default function RoomsAndGuests({onAdultsSelect, onChildSelect, onInfants
             <span className="font-semibold text-gray-500">{buttonText}</span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className="bg-white">
           <AdultsRoomfunc title="Adults" description="Ages 13 or above" onChange={setAdults} value={adults} />
           <IncDecfunc title="Children" description="Ages 2–12" onChange={setChildren} value={children} />
           <IncDecfunc title="Infants" description="Under 2" onChange={setInfants} value={infants} />

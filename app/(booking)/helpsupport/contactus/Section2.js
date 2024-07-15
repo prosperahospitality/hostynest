@@ -1,23 +1,27 @@
+'use client'
 import React from 'react'
 import { Button, Input, Textarea } from "@nextui-org/react";
+import Link from 'next/link';
 
 const Section2 = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-screen bg-white'>
       <div className='w-[80%] h-full mx-auto flex flex-col items-center justify-center'>
-        <h2 className='text-4xl text-gray-500 text-center'>Conatact Us</h2>
-        <h5 className='text-sm text-gray-300 text-center mt-4'><span className='underline'>Need any help?</span> Our team is here for you. Fill out the form below, and we'll take care of the rest.</h5>
+        <h2 className='text-4xl text-black/50 text-center'>Conatact Us</h2>
+        <h5 className='text-sm text-black/50 text-center mt-4'><Link href="/" className='underline text-primary'>Need any help?</Link> Our team is here for you. Fill out the form below, and we&apos;ll take care of the rest.</h5>
         <div className='w-[60%] mx-auto mt-10 grid grid-cols-2 gap-5'>
-          <Input type="text" isRequired label="Enter Your Name" variant='bordered' labelPlacement='outside' placeholder='Your Name' />
-          <Input type="text" isRequired label="Enter Your City" variant='bordered' labelPlacement='outside' placeholder='Enter Your City' />
-          <Input type="email" isRequired label="Enter Your Email" variant='bordered' labelPlacement='outside' placeholder='Hostynest@HostyNest.com' />
-          <Input type="text" isRequired label="Enter Mobile Number" variant='bordered' labelPlacement='outside' placeholder='Enter Your Mobile Number' startContent={"+91"} />
+          <Input color='primary' type="text" isRequired label="Enter Your Name" variant='bordered' labelPlacement='outside' placeholder='Your Name' />
+          <Input color='primary' type="text" isRequired label="Enter Your City" variant='bordered' labelPlacement='outside' placeholder='Enter Your City' />
+          <Input color='primary' type="email" isRequired label="Enter Your Email" variant='bordered' labelPlacement='outside' placeholder='Hostynest@HostyNest.com' />
+          <Input color='primary' type="text" isRequired label="Enter Mobile Number" variant='bordered' labelPlacement='outside' placeholder='Enter Your Mobile Number' startContent={"+91"} />
         </div>
         <div className='w-[60%] mx-auto mt-5 items-center justify-center flex flex-col'>
           <Textarea
             label="Tell Us Your Query"
             placeholder="Share Your Query"
             isRequired
+            variant='bordered'
+            color='primary'
           />
           <Button color='primary' variant='shadow' className='mt-10' size='lg' >Submit</Button>
         </div>

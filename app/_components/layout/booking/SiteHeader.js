@@ -6,7 +6,7 @@ import { ThemeSwitch } from "@/app/_components/ui/ThemeSwitch";
 import { button as buttonStyles } from "@nextui-org/theme";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Popover, PopoverTrigger, PopoverContent, Tooltip, Badge } from "@nextui-org/react";
 import { ChevronDown, Lock, Activity, Flash, Server, TagUser, Scale, DiscordIcon, TwitterIcon, GithubIcon, MoonFilledIcon, SunFilledIcon, HeartFilledIcon, SearchIcon, FullLogo, NotificationIcon } from "@/app/_components/icon";
-import { siteConfig } from "@/config/site";
+import siteConfig from "@/config/site";
 import { User } from "@nextui-org/react";
 import { useSearchParams } from 'next/navigation'
 import { useSession, getSession, signIn, signOut } from 'next-auth/react'
@@ -119,6 +119,7 @@ export default function SiteHeader() {
                             <Settings />Settings
         </Link>
       </div>
+
           <label className="mr-28 mt-2 text-xs font-semibold uppercase text-primary">Need Help ?</label>
       <div className="flex flex-col items-start mr-6">
 
@@ -151,7 +152,7 @@ export default function SiteHeader() {
 
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} className="absolute h-12 w-screen z-50 backdrop-blur-0 supports-[backdrop-filter]:bg-background/0" shouldHideOnScroll>
+    <Navbar onMenuOpenChange={setIsMenuOpen} className="absolute h-12 w-screen z-50 bg-white" shouldHideOnScroll>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -167,18 +168,19 @@ export default function SiteHeader() {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem >
-          <Link className={`link ${pathname === '/' ? 'text-black font-bold' : ''}`} href='/'>
-            Home
-          </Link>
-        </NavbarItem>
-        <NavbarItem >
-          <Link className={`link ${pathname === '/partners' ? 'text-black font-bold' : ''}`} href='/partners'>
-            List Hotel
-          </Link>
-        </NavbarItem>
-
-        <Dropdown>
+      <ul className="flex gap-4 justify-start ml-2">
+          {siteConfig.navItems.map((item) => (
+            <NavbarItem key={item.href}>
+              <Link
+                className={`link ${pathname === item.href ? 'text-primary font-bold' : 'text-black font-extralight'}`}
+                href={item.href}
+              >
+                {item.label}  
+              </Link>
+            </NavbarItem>
+          ))}
+        </ul>
+        <Dropdown className='bg-white'>
           <NavbarItem>
             <DropdownTrigger>
               <Button
@@ -186,13 +188,15 @@ export default function SiteHeader() {
                 endContent={icons.chevron}
                 radius="sm"
                 variant="light"
+                color='primary'
+                className='text-black'
               >
                 Help & Support
               </Button>
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu
-            aria-label="ACME features"
+            color='primary'
             className="w-[340px]"
             itemClasses={{
               base: "gap-4",
@@ -226,11 +230,7 @@ export default function SiteHeader() {
         </Dropdown>
 
 
-        <NavbarItem>
-          <Link className={`link ${pathname === '/aboutus' ? 'text-black font-bold' : ''}`} href='/aboutus'>
-            About Us
-          </Link>
-        </NavbarItem>
+       
       </NavbarContent>
 
       <NavbarContent justify="end">

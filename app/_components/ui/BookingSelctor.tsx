@@ -11,11 +11,11 @@ export default function Bookingselctor() {
     <Tabs
       defaultValue="hourlybooking">
       <div >
-        <TabsList className=" bg-white w-fit m-auto rounded-xl rounded-b-none z-10">
-          <TabsTrigger className="rounded-lg text-gray-500" value="hourlybooking">
+        <TabsList className="bg-white w-fit m-auto rounded-xl rounded-b-none z-10">
+          <TabsTrigger className="rounded-lg text-black" value="hourlybooking">
             Hourly Booking
           </TabsTrigger>
-          <TabsTrigger className="rounded-lg text-gray-500" value="fulldaybooking">
+          <TabsTrigger className="rounded-lg text-black" value="fulldaybooking">
             Full Day Booking
           </TabsTrigger>
         </TabsList>

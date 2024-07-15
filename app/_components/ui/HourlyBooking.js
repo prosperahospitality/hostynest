@@ -191,11 +191,11 @@ export default function HourlyBooking({ searchCity }) {
             <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><CiLocationArrow1 className="mr-2 h-8 w-8" />Destination</p>
             <div className='flex items-center gap-2'>
             <Cityselector onCitySelect={handleCitySelect} searchCity={searchCity} nearMeFlag={nearMeFlag}/>
-            <Button variant='shadow' color='default' size='sm' startContent={<Locate className='text-primary-400'/>} onClick={(e) => handleNearMe()}>Near Me</Button>
+            <Button variant='shadow' color='primary' size='sm' startContent={<Locate className='text-white'/>} onClick={(e) => handleNearMe()}>Near Me</Button>
             </div>
           </div>
 
-          <Divider orientation="vertical" className="h-16"/>
+          <Divider orientation="vertical" className="h-16 bg-gray-300"/>
 
           <div className='text-primary text-1.125 font-poppinsmedium landing-1.688 h-[72px]'>
             <p className="flex ml-8 static items-center text-lg font-bold text-gray-600"><CiCalendar className="mr-2 h-8 w-8" />When</p>
@@ -206,20 +206,20 @@ export default function HourlyBooking({ searchCity }) {
             />
           </div>
 
-          <Divider orientation="vertical" className="h-16"/>
+          <Divider orientation="vertical" className="h-16 bg-gray-300"/>
 
           <div className='text-primary text-1.125 font-poppinsmedium landing-1.688 h-[72px]'>
-            <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><CiTimer className="mr-2 h-8 w-8" />What Time</p>
+            <p className="flex ml-4 static items-center text-lg font-bold  text-gray-600"><CiTimer className="mr-2 h-8 w-8" />What Time</p>
             <TimePickerTab selectedDate={selectedDate}
               handleTimeSelection={handleSelectedTime}
               showTimePicker={showTimePicker}
               toggleTimePicker={toggleTimePicker} />
           </div>
 
-          <Divider orientation="vertical" className="h-16"/>
+          <Divider orientation="vertical" className="h-16 bg-gray-300"/>
 
           <div className='text-primary text-1.125 font-poppinsmedium landing-1.688'>
-            <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><PiUsersLight className="mr-2 h-8 w-8" />Rooms & Guests</p>
+            <p className="flex ml-4 static items-center text-base font-bold text-gray-600"><PiUsersLight className="mr-2 h-8 w-8" />Rooms & Guests</p>
             <RoomsAndGuests onAdultsSelect={handleAdultsSelect}
 onChildSelect={handleChildSelect}
 onInfantsSelect={handleInfantsSelect}

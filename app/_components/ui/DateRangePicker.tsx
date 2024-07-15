@@ -50,7 +50,7 @@ export default function Daterangepicker({ className }: React.HTMLAttributes<HTML
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover open={popoverOpen} onOpenChange={(newState) => setPopoverOpen(newState)}>
-        <PopoverTrigger asChild className="text-foreground bg-background">
+        <PopoverTrigger asChild className="text-gray-600 bg-white">
           <Button
             id="date"
             variant={"destructive"}

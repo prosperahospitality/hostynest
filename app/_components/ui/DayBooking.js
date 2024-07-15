@@ -103,14 +103,14 @@ export default function DayBooking() {
             <Cityselector onCitySelect={handleCitySelect}/>
           </div>
 
-          <Divider orientation="vertical" className="h-16" />
+          <Divider orientation="vertical" className="h-16 bg-gray-300" />
 
           <div>
             <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><CiCalendar className="size-8" />Check In-Check Out</p>
             <Daterangepicker />
           </div>
 
-          <Divider orientation="vertical" className="h-16" />
+          <Divider orientation="vertical" className="h-16 bg-gray-300" />
 
           <div>
             <p className="flex ml-8 static items-center text-lg font-bold text-gray-600"><PiUsersLight className="mr-2 size-8" />Travelers</p>

@@ -44,18 +44,24 @@ const PopularqnsData = [
 
 
 const Section3 = () => {
-
+  const itemClasses = {
+    base: "py-0 w-full",
+    title: "font-normal text-medium text-black",
+    trigger: "px-2 py-0 data-[hover=true]:bg-primary/10 rounded-lg h-14 flex items-center",
+    indicator: "text-medium",
+    content: "text-small px-2",
+  };
 
 
   return (
-    <div className='w-screen h-fit'>
+    <div className='w-screen h-fit bg-white'>
       <div className='w-[90%] h-fit mx-auto'>
-        <h2 className='text-4xl text-gray-500 text-center'>Popular Questions</h2>
-        <h5 className='text-sm text-gray-300 text-center mt-4'>Most frequently asked questions by our guests</h5>
+        <h2 className='text-4xl text-black text-center'>Popular Questions</h2>
+        <h5 className='text-sm text-black/50 text-center mt-4'>Most frequently asked questions by our guests</h5>
         <div className='w-full mx-auto mt-10 grid grid-cols-2 gap-5'>
 
-        {PopularqnsData.map((PopularqnData) => 
-          <Accordion>
+        {PopularqnsData.map((PopularqnData, index) => 
+          <Accordion key={index} itemClasses={itemClasses}>
             <AccordionItem title={PopularqnData.title}>
               {PopularqnData.content}
             </AccordionItem>

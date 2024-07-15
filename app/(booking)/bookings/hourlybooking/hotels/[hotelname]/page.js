@@ -1216,14 +1216,14 @@ function HotelPagee() {
     }
     
     return (
-        <div className="w-screen h-full">
+        <div className="w-screen h-full bg-white">
             <div className="py-16 w-[96%] mx-auto">
                 <Breadcrumbs>
-                    <BreadcrumbItem>Home</BreadcrumbItem>
-                    <BreadcrumbItem>Navi Mumbai Hotels</BreadcrumbItem>
-                    <BreadcrumbItem className="capitalize">{hotelsData?.Hotel_name}</BreadcrumbItem>
+                    <BreadcrumbItem color="primary">Home</BreadcrumbItem>
+                    <BreadcrumbItem color="primary">Navi Mumbai Hotels</BreadcrumbItem>
+                    <BreadcrumbItem color="primary" className="capitalize">{hotelsData?.Hotel_name}</BreadcrumbItem>
                 </Breadcrumbs>
-                <h1 className="text-4xl text-foreground px-2 py-2 capitalize">{hotelsData?.Hotel_name}</h1>
+                <h1 className="text-4xl text-black/80 px-2 py-2 capitalize">{hotelsData?.Hotel_name}</h1>
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <a href="#">
@@ -1300,6 +1300,7 @@ function HotelPagee() {
                 <div className="mt-5 flex mx-auto w-full h-full">
                     <div className="w-[60%] h-[50vh] relative">
                         <Image
+                            alt="hotelimg"
                             src={hotelImgs[(hotelsData?.Hotel_name ?? '').toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join("") + 1]}
                             fill
                             sizes="100%"
@@ -1312,6 +1313,7 @@ function HotelPagee() {
                     <div className="w-[40%] h-[50vh] p-1 gap-2 grid grid-cols-2">
                         <div className="relative w-full ">
                             <Image
+                                alt="hotelimg"
                                 src={hotelImgs[(hotelsData?.Hotel_name ?? '').toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join("") + 2]} onLoad={() => setIsLoaded(true)}
                                 fill
                                 sizes="100%"
@@ -1323,6 +1325,7 @@ function HotelPagee() {
                         </div>
                         <div className="relative w-full ">
                             <Image
+                                alt="hotelimg"
                                 src={hotelImgs[(hotelsData?.Hotel_name ?? '').toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join("") + 3]} onLoad={() => setIsLoaded(true)}
                                 fill
                                 sizes="100%"
@@ -1334,6 +1337,7 @@ function HotelPagee() {
                         </div>
                         <div className="relative w-full ">
                             <Image
+                                alt="hotelimg"
                                 src={hotelImgs[(hotelsData?.Hotel_name ?? '').toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join("") + 4]} onLoad={() => setIsLoaded(true)}
                                 fill
                                 sizes="100%"
@@ -1345,6 +1349,7 @@ function HotelPagee() {
                         </div>
                         <div className="relative w-full">
                             <Image
+                                alt="hotelimg"
                                 src={hotelImgs[(hotelsData?.Hotel_name ?? '').toString().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join("") + 5]}
                                 fill
                                 sizes="100%"
@@ -1364,7 +1369,7 @@ function HotelPagee() {
 
                 <ImageModal showImageModal={showImageModal} onShowImageModalClose={handleShowImageModalClose} hotelName={hotelsData?.Hotel_name} hotelID={hotelsData?.Hotel_Id} roomResult={roomResult}/>
 
-                <div className="mt-5 flex mx-auto w-full h-full">
+                <div className="mt-5 flex mx-auto w-full h-full bg-white">
                     <div className="w-[68%] h-full">
                         <div className="w-full">
                             <div className="space-y-2">
@@ -1412,7 +1417,7 @@ function HotelPagee() {
                                 <img className="my-9 w-full" src="https://site-img-res-new.s3.ap-south-1.amazonaws.com/next-site-images/HotelListSignUpCard.png" />
                             </a>
                             <div className="mt-4">
-                                <h2 className="text-black text-xl">
+                                <h2 className="text-black/80 text-xl">
                                     Amenities at {hotelsData?.Hotel_name}
                                 </h2>
                                 <div className="grid grid-cols-3 gap-9 mt-8">
@@ -1447,13 +1452,13 @@ function HotelPagee() {
           <div>
             <p className="flex ml-4 static items-center text-lg font-bold text-gray-600"><CiCalendar className="size-8" />Check In-Check Out</p>
                 <Daterangepickerreact 
-                    className='bg-background rounded-lg border-2 border-gray-300 h-9 w-66 overflow-hidden'
+                    className='bg-white h-9 w-66 overflow-hidden'
                     initialDate={initialDate} 
                     onDateValue= {handleDateSelect}
                 />
           </div>
 
-          <Divider orientation="vertical" className="h-16" />
+          <Divider orientation="vertical" className="h-16 bg-black/20" />
 
           <div>
             <p className="flex ml-8 static items-center text-lg font-bold text-gray-600"><PiUsersLight className="mr-2 size-8" />Travelers</p>
@@ -1469,8 +1474,7 @@ function HotelPagee() {
       </div>
 
 
-
-                            <table className="mt-8">
+<table className="mt-8">
     <thead>
         <tr>
             <th style={{ width: '200px' }}>Room Type</th>
@@ -2704,7 +2708,7 @@ function HotelPagee() {
                                                         <CarouselItem key={index} className="basis-1/2 bg-transparent mr-2">
                                                             <div className="">
                                                                 <Card className="w-[90%]">
-                                                                    <CardBody className="flex w-full rounded-lg">
+                                                                    <CardBody className="flex w-full rounded-lg bg-white">
                                                                         <Image
                                                                             width={400}
                                                                             height={250}

@@ -19,7 +19,7 @@ const Datepicker = ({ selected, onDateChange, toggleTimePicker }) => {
                 placeholderText='Select the date'
                 minDate={new Date()}
                 dateFormat="MMMM d, yyyy"
-                className="text-center rounded-xl border-none outline-none text-gray-500 font-semibold mt-2 cursor-pointer"
+                className="text-center rounded-xl border-none outline-none text-gray-500 bg-white font-semibold mt-2 cursor-pointer"
             />
         </div>
     );

@@ -245,7 +245,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                         <div className="sticky-outer-wrapper w-72">
                             <div className="sticky-inner-wrapper">
                                 <div className="flex pt-4 w-72 justify-between">
-                                    <p className="text-foreground text-lg font-poppinsmedium">Select Filters</p>
+                                    <p className="text-black text-lg">Select Filters</p>
                                     <Button
                                     color='primary'
                                     size='md'
@@ -257,16 +257,16 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                     </Button>
                                 </div>
                                 <div
-                                    className="bg-white mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
+                                    className="bg-primary/50 mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
                                     <span className="flex px-4 pt-3 items-center justify-between">
-                                        <p className="text-foreground text-lg">Area Filter</p>
+                                        <p className="text-white text-lg">Area Filter</p>
                                         <Button
                                         color=''
                                         size='sm'
                                         radius='full'
                                         variant='light'
                                         onClick={handleCityReset}
-                                        className='text-primary'
+                                        className='text-black'
                                         >
                                             Reset
                                         </Button>
@@ -279,13 +279,13 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                             aria-labelledby="cities-table-label"
                                         >
                                             <TableHeader>
-                                                <TableColumn ><Checkbox checked={selectedCheckboxes["Select All"]} onChange={() => alert("Select All")}>Select All</Checkbox></TableColumn>
+                                                <TableColumn className='bg-primary shadow-2xl' ><Checkbox checked={selectedCheckboxes["Select All"]} onChange={() => alert("Select All")}>Select All</Checkbox></TableColumn>
                                             </TableHeader>
                                             <TableBody>
                                                 {areafilter.map((area, index) => (
                                                     index != 0 ?
-                                                        <TableRow key={area.city} >
-                                                            <TableCell><Checkbox 
+                                                        <TableRow key={area.city}>
+                                                            <TableCell><Checkbox
                                                                 // checked={Object.keys(selectedCheckboxes).length !== 0 ? selectedCheckboxes && selectedCheckboxes[area.city] : ""}
                                                                 isSelected = {selectedCheckboxes && selectedCheckboxes[area.city] ? true : false}
                                                                 onChange={() => handleCheckboxChange(area.city)}
@@ -301,7 +301,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         </Table>
                                     </div>
                                 </div>
-                                <div className="bg-background w-72 h-fit mt-6 px-1 pb-3 rounded-3xl shadow-xl">
+                                <div className="bg-primary/50 w-72 h-fit mt-6 px-1 pb-3 rounded-3xl shadow-xl">
                                     <span className="flex items-center justify-between pt-3 px-4">
                                         <p className="text-lg text-foreground font-poppinsmedium">Your Budget</p>
                                         <Button
@@ -311,12 +311,12 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         size='sm'
                                         radius='full'
                                         variant='light'
-                                        className='text-primary'
+                                        className='text-black'
                                         >
                                             Reset
                                         </Button>
                                     </span>
-                                    <div className="flex mt-5  items-center justify-between px-1 space-x-4 ">
+                                    <div className="flex mt-5 items-center justify-between px-1 space-x-4 ">
                                         <Button
                                             onClick={() => handleHourChange(3)}
                                             isDisabled={disabledButton === 3}
@@ -354,13 +354,13 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                             tooltipValueFormatOptions={{ style: "currency", currency: "IND", maximumFractionDigits: 0 }}
                                             classNames={{
                                                 base: "max-w-md",
-                                                filler: "bg-primary-500",
+                                                filler: "bg-white",
                                                 labelWrapper: "mb-2",
-                                                label: "font-medium text-default-700 text-medium",
-                                                value: "font-medium text-default-500 text-small",
+                                                label: "font-medium text-white text-medium",
+                                                value: "font-medium text-white text-small",
                                                 thumb: [
                                                     "transition-size",
-                                                    "bg-primary-500",
+                                                    "bg-white",
                                                     "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
                                                     "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6"
                                                 ],
@@ -395,15 +395,15 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-background mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
+                                <div className="bg-primary/50 mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
                                     <span className="flex items-center justify-between pt-3 px-4">
-                                        <p className=" text-foreground  text-lg font-poppinsmedium ">Categories</p>
+                                        <p className="text-white  text-lg">Categories</p>
                                         <Button
                                             color=''
                                         size='sm'
                                         radius='full'
                                         variant='light'
-                                        className='text-primary'
+                                        className='text-black'
                                             onClick={(e) => {setFacilityState({
                                                 coupleFriendly: false,
                                                 payAtHotel: false,
@@ -443,7 +443,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-background mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
+                                <div className="bg-primary/50 mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
                                     <span className="flex pt-3 px-4 items-center justify-between">
                                         <p className="text-lg font-poppinsmedium text-foreground">Sort By</p>
                                         <Button
@@ -451,7 +451,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         size='sm'
                                         radius='full'
                                         variant='light'
-                                        className='text-primary'
+                                        className='text-black'
                                             onClick={(e) => {
                                                 setCheckboxRatingsValues({popularity: false,
                                                     ratings4_5Above: false,
@@ -481,7 +481,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-background mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
+                                <div className="bg-primary/50 mt-3 pb-4 w-72 h-fit rounded-3xl shadow-xl">
                                     <span className="flex items-center justify-between pt-3 px-4">
                                         <p className="text-lg font-poppinsmedium text-foreground">Hotel Type</p>
                                         <Button
@@ -489,7 +489,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         size='sm'
                                         radius='full'
                                         variant='light'
-                                        className='text-primary'
+                                        className='text-black'
                                             onClick={(e) => setCategoryState({
                                                 premium: false,
                                                 luxury: false
@@ -505,7 +505,7 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                                 onChange={() => handleCheckboxCategoryChange('premium')}>Premium
                                             </Checkbox>
                                         </div>
-                                        <p className="px-8 text-sm font-poppins text-gray-500">
+                                        <p className="px-8 text-sm font-poppins text-white/80">
                                             Hotels with superior facilities and prime location, created for your comfort
                                         </p>
                                         <div className="flex items-center">
@@ -514,13 +514,13 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                                 onChange={() => handleCheckboxCategoryChange('luxury')}>Luxury
                                             </Checkbox>
                                         </div>
-                                        <p className="px-8 text-sm font-poppins text-gray-500">
+                                        <p className="px-8 text-sm font-poppins text-white/80">
                                             Impeccable accomodation and elegant experience in renowned hotel brands.
                                         </p>
                                     </div>
                                 </div>
                                 <div className="mt-6 pb-4 w-80 h-fit">
-                                    <ul className="px-4 text-sm font-poppins text-gray-500 justify-normal space-y-2 ">
+                                    <ul className="px-4 text-sm font-poppins text-primary/80 justify-normal space-y-2 ">
                                         <li>
                                             Prices Shown are inclusive of GST, For Detailed invoice contact the hotel reception once the booking
                                             is confirmed.
@@ -533,10 +533,10 @@ export default function HourlyBookingSideBar({ searchCity, onSelectCheck, onRati
                                         </li>
                                     </ul>
                                     <div className="flex items-center space-x-16 mt-3">
-                                        <Wifi className="text-gray-500" />
-                                        <AirVent className="text-gray-500" />
-                                        <Tv className="text-gray-500" />
-                                        <Milk className="text-gray-500" />
+                                        <Wifi className="text-primary/80" />
+                                        <AirVent className="text-primary/80" />
+                                        <Tv className="text-primary/80" />
+                                        <Milk className="text-primary/80" />
                                     </div>
                                 </div>
                             </div>

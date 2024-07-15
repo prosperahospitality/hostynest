@@ -118,7 +118,7 @@ function PaymentOptionss() {
 
     return (
         <>
-            <div className="w-full h-full bg-bgcolor pb-32 overflow-y-auto">
+            <div className="w-full h-full bg-white pt-10 pb-32 overflow-y-auto">
                 <div className="cursor-pointer mt-6 ml-10 flex items-center space-x-6 w-fit">
                     <ChevronLeft onClick = {(e) => router.push(`/bookings/hourlybooking/hotels/${hotelsData?.Hotel_name}?hotelName=${hotelsData?.Hotel_name}&hour=${hours}&hotelId=${hotelsData?.Hotel_Id}`)}/>
                     <span className="text-black text-sm">

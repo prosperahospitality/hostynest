@@ -75,7 +75,7 @@ const SiteDiscover = () => {
   let time24HoursFormat = hours.toString().padStart(2, '0');
 
   return (
-    <div className='h-fit w-screen bg-white/40'>
+    <div className='h-fit w-screen bg-white'>
       <div className='h-[20%] flex items-center pl-8'>
         <h1 className='text-[100px] font-bold italic bg-gradient-to-r from-blue-300  to-purple-300 inline-block text-transparent bg-clip-text text-opacity-50'>DISCOVER</h1>
         <div className='flex gap-4 mt-3 bg-white bg-opacity-80 absolute'>

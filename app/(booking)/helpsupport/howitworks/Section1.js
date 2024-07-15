@@ -1,13 +1,14 @@
+'use client'
 import React from 'react'
 import { Button, Chip } from "@nextui-org/react";
 
 const Section1 = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-screen bg-white'>
       <div className='flex pt-12 h-full'>
         <div className='w-[55%] h-full p-8'>
           <h2 className='text-4xl text-gray-500'>How it Works?</h2>
-          <p className='text-sm text-gray-400 pt-6'><span className='text-2xl text-primary'>HostyNest</span> is India's emerging hotel marketplace, presenting a diverse range of
+          <p className='text-sm text-gray-400 pt-6'><span className='text-2xl text-primary'>HostyNest</span> is India&apos;s emerging hotel marketplace, presenting a diverse range of
             lodging options catering to various preferences and needs. With flexible booking
             durations of 3, 6, 12, and 24 hours, guests can conveniently find accommodations
             tailored to their schedules. </p>

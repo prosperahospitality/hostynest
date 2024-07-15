@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Card, CardHeader, CardBody, Image, Button, Chip } from "@nextui-org/react";
 
@@ -26,7 +27,7 @@ const ServiceWork = () => {
   return (
     <div className='gap-2'>
       <p>We simplify the process of comparing bookings from various hotels, property owners, and service providers.</p>
-      <p>When you book through our platform, you're entering into a contract directly with the service provider, unless stated otherwise.</p>
+      <p>When you book through our platform, you&apos;re entering into a contract directly with the service provider, unless stated otherwise.</p>
       <p>The information on our platform comes from the service providers themselves. While we strive to keep everything current, updates such as text descriptions and lists of facilities provided by accommodations may take a few hours to reflect</p>
     </div>
   )
@@ -45,7 +46,7 @@ const WorkWith = () => {
 const MakeMoney = () => {
   return (
     <div className='gap-2'>
-      <p>We do not purchase or resell any products or services. Instead, after your stay is completed, the service provider pays us a commission. When the second accommodation in your search results is labeled "Ad," it indicates that the service provider has paid for its placement as part of our "Booking Network Sponsored Ads" program.</p>
+      <p>We do not purchase or resell any products or services. Instead, after your stay is completed, the service provider pays us a commission. When the second accommodation in your search results is labeled &quot;Ad,&quot; it indicates that the service provider has paid for its placement as part of our &quot;Booking Network Sponsored Ads&quot; program.</p>
     </div>
   )
 };
@@ -57,7 +58,7 @@ const RecommendationSystems = () => {
       <p className='flex'><span className='font-semibold text-gray-500 flex gap-1'><SealCheck height={15} width={15} className='mt-1' /> Popular Destinations:</span> Explore trending destinations based on bookings made by travelers with similar preferences to yours.</p>
       <p className='flex'><span className='font-semibold text-gray-500 flex gap-1'><SealCheck height={15} width={15} className='mt-1' /> Homes guests love:</span> Home properties with high review scores.</p>
       <p className='flex'><span className='font-semibold text-gray-500 flex gap-1'><SealCheck height={15} width={15} className='mt-1' /> Looking for the perfect stay?</span> Properties (as opposed to destinations) that you may want to stay at, based on Bookings made by other guests whose searches were similar to yours.</p>
-      <p>Our search results serve as a primary recommendation system, widely utilized by our customers. Explore our "Default Ranking and Sorting Options" to experience its effectiveness firsthand.</p>
+      <p>Our search results serve as a primary recommendation system, widely utilized by our customers. Explore our &quot;Default Ranking and Sorting Options&quot; to experience its effectiveness firsthand.</p>
       <p className='pt-4'>All the recommendation systems we use provide recommendations based on one or more of the following factors:</p>
       <p className='pl-2 flex gap-1 pt-2'><SealCheck height={15} width={15} className='mt-1' /> What you tell us in the search form: destination, dates, number of guests, etc.</p>
       <p className='pl-2 flex gap-1'><SealCheck height={15} width={15} className='mt-1' /> We leverage data from your interactions with our platform, including past searches and your current browsing location, to enhance your user experience and provide tailored recommendations.</p>
@@ -218,13 +219,13 @@ const FunctioningDatas = [
 
 const Section2 = () => {
   return (
-    <div className='w-screen h-fit'>
+    <div className='w-screen h-fit bg-white'>
       <div className='p-8'>
         <h3 className='text-3xl text-primary-500 font-semibold text-center'>Book a room in 3 easy steps ....</h3>
         <div className='w-full h-fit mt-4'>
           <div className='w-[80%] mx-auto'>
             <div className='flex justify-between w-[80%] mx-auto'>
-              <Card className="p-4 pb-10 text-center">
+              <Card className="p-4 pb-10 text-center bg-white">
                 <CardHeader className="pb-0 pt-2 px-4 flex-col">
                   <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly >1</Button>
                   <h4 className="text-2xl text-primary pt-3">City or Property</h4>
@@ -233,7 +234,7 @@ const Section2 = () => {
                   <h6 className='text-sm text-gray-400 w-52 mx-auto'>Select a City and choose a hotel of your choice from the list</h6>
                 </CardBody>
               </Card>
-              <Card className="p-4 pb-10 text-center">
+              <Card className="p-4 pb-10 text-center bg-white">
                 <CardHeader className="pb-0 pt-2 px-4 flex-col">
                   <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly >2</Button>
                   <h4 className="text-2xl text-primary pt-3">Hours & Date</h4>
@@ -242,7 +243,7 @@ const Section2 = () => {
                   <h6 className='text-sm text-gray-400 w-52 mx-auto'>Select a specific Date of your stay then select the number of hours of your stay</h6>
                 </CardBody>
               </Card>
-              <Card className="p-4 pb-10 text-center">
+              <Card className="p-4 pb-10 text-center bg-white">
                 <CardHeader className="pb-0 pt-2 px-4 flex-col">
                   <Button color='primary' variant='shadow' radius='full' size='lg' isIconOnly >3</Button>
                   <h4 className="text-2xl text-primary pt-3">Check In time</h4>
@@ -257,8 +258,8 @@ const Section2 = () => {
         <div className='pt-10'>
           <h3 className='text-lg text-gray-500 font-semibold'>The Core Belief of HostyNest</h3>
           <div className='flex flex-col gap-4 pt-4'>
-            {CoreDatas.map((CoreData) =>
-              <div>
+            {CoreDatas.map((CoreData, index) =>
+              <div key={index}>
                 <Chip color='primary' variant='light' startContent={<SealCheck height={25} width={25} />}>{CoreData.title}</Chip>
                 <p className='text-sm text-gray-400 pl-8'>{CoreData.description}</p>
               </div>

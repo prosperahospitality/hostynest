@@ -60,7 +60,7 @@ const TimePickerTab = ({ selectedDate, handleTimeSelection, showTimePicker, togg
                     return (
                         <div
                             key={hour}
-                            className={`rounded-[5px] justify-self-center flex justify-center text-black items-center h-[3.162rem]   shrink-0 ${disabled ? 'opacity-50 cursor-not-allowed line-through' : 'bg-white hover:bg-primary-50 text-primary w-5/6 hover:text-primary'
+                            className={`rounded-[5px] justify-self-center flex justify-center text-black items-center h-[3.162rem] shrink-0 ${disabled ? 'opacity-50 cursor-not-allowed line-through' : 'bg-white hover:bg-primary text-primary w-5/6 hover:text-white'
                                 }`}
                             onClick={() => handleTimeSlotSelection(hour, disabled)}
                         >
@@ -76,7 +76,7 @@ const TimePickerTab = ({ selectedDate, handleTimeSelection, showTimePicker, togg
     return (
         <div>
             <input
-                type="text" placeholder='select the time' className="text-center rounded-xl border-none outline-none text-gray-500 font-semibold mt-2 cursor-pointer"
+                type="text" placeholder='select the time' className="text-center rounded-xl border-none outline-none text-gray-500 bg-white font-semibold mt-2 cursor-pointer"
                 value={showTimePicker ? currentTime : selectedTime ? selectedTime : new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}
                 readOnly
                 onClick={() => toggleTimePicker(true)} // Toggle showTimePicker to true on input field click
@@ -85,17 +85,17 @@ const TimePickerTab = ({ selectedDate, handleTimeSelection, showTimePicker, togg
                 <div className="w-[45%] right-48 z-50 rounded-2xl mt-6 text-black cursor-pointer absolute text-left bg-white opacity-100" id="headlessui-popover-panel-:ru:" tabIndex="-1" data-headlessui-state="open">
                     <div className="w-full px-4 rounded-2xl shadow-[rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;]">
                         <div className="rounded-[5px] pb-7 text-base text-black">
-                            <div className="rounded-[5px] w-[190px] text-[#333333] mt-4 flex m-auto items-center justify-between text-center">
+                            <div className="rounded-[5px] w-[190px] text-[#333333]  mt-4 flex m-auto items-center justify-between text-center">
                                 <Button
                                     variant='shadow'
-                                    className={` rounded-[5px] w-14 leading-[2.25rem] flex items-center justify-center ${isAM ? 'bg-primary text-white' : ''} `}
+                                    className={` rounded-[5px] w-14 leading-[2.25rem] flex items-center justify-center bg-white text-black ${isAM ? 'bg-primary text-white' : ''} `}
                                     onClick={toggleAM}
                                 >
                                     AM
                                 </Button>
                                 <Button
                                     variant='shadow'
-                                    className={`rounded-[5px] w-14 leading-[2.25rem] flex items-center justify-center ${isPM ? 'bg-primary text-white' : ''} `}
+                                    className={`rounded-[5px] w-14 leading-[2.25rem] flex items-center justify-center bg-white text-black ${isPM ? 'bg-primary text-white' : ''} `}
                                     onClick={togglePM}
                                 >
                                     PM

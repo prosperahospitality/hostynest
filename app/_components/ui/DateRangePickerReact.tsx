@@ -62,7 +62,7 @@ export default function Daterangepickerreact({
 
         <><div className={cn("grid gap-2", className)}>
             <Popover open={popoverOpen} onOpenChange={(newState) => setPopoverOpen(newState)}>
-                <PopoverTrigger asChild className="text-foreground bg-background">
+                <PopoverTrigger asChild className="text-black bg-white">
                 <Button
             id="date"
             variant={"destructive"}
@@ -87,7 +87,7 @@ export default function Daterangepickerreact({
                      </PopoverTrigger>
         <PopoverContent className="w-auto p-0 text-black bg-white" align="start">
         <DateRange
-                className='bg-background rounded-lg border-2 border-gray-300 h-90 w-66 overflow-hidden'
+                className='bg-white rounded-lg border-2 border-gray-300 h-90 w-66 overflow-hidden'
                 editableDateInputs={true}
                 onChange={(item: any) => handleSelect(item)}
                 moveRangeOnFirstSelection={false}

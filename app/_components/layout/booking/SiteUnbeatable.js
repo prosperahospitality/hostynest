@@ -14,7 +14,7 @@ const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
 
 const SiteUnbeatable = () => {
     return (
-        <div className='h-screen w-screen bg-white/40'>
+        <div className='h-screen w-screen bg-white'>
             <div className='h-[20%] flex items-center pl-8'>
 
                 <h1 className='text-[100px] font-bold italic bg-gradient-to-r from-blue-300  to-purple-300 inline-block text-transparent bg-clip-text text-opacity-50'>UNBEATABLE</h1>
@@ -42,7 +42,7 @@ const SiteUnbeatable = () => {
                         className='rounded-2xl'
                         />
                         <div className='absolute w-full text-right p-4 '>
-                        <h6 className='text-white text-sm font-semibold'>"Discover the Majesty of Manali's Snow-Capped Peaks<br/>- Book Your Adventure Today!"</h6>
+                        <h6 className='text-white text-sm font-semibold'>&quot;Discover the Majesty of Manali&apos;s Snow-Capped Peaks<br/>- Book Your Adventure Today!&quot;</h6>
                         <Button variant='shadow' color='primary' size='sm' radius='md' className='mt-1'>Book Now</Button>
                         </div>
                     </div>

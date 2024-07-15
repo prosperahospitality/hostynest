@@ -346,15 +346,15 @@ export default function Partners() {
   
 
   return (
-    <main className="flex h-fit w-screen flex-col items-center justify-between p-2 mt-14">
+    <main className="flex h-fit w-screen flex-col items-center justify-between bg-white p-2 pt-14">
     <div className="relative w-full bg-background flex flex-col h-full">
         <section>
-          <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 h-full bg-white">
             <div className="relative flex h-screen items-end px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
               <div className="absolute inset-0">
                 <Image src={IMAGES.Loginbg} alt="Loginbg" width={500} height={500} className="h-full w-full rounded-xl object-cover " />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t rounded-xl from-black/50 to-transparent"></div>
               <div className="relative">
                 <div className="w-full max-w-xl xl:mx-auto xl:w-full xl:max-w-xl xl:pr-24">
                   <h3 className="text-4xl font-bold text-white">Join {siteConfig.name} And Sell Your Rooms</h3>
@@ -385,16 +385,16 @@ export default function Partners() {
             </div>
             <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-6">
               <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                <h2 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">Register Your hotel</h2>
+                <h2 className="text-3xl font-extralight leading-tight text-black sm:text-4xl">Register Your hotel</h2>
                 <p className="mt-2 text-sm text-black">
-                  <a href="#" title="" className="font-semibold text-foreground transition-all duration-200">
+                  <a href="#" title="" className="font-semibold text-black/50 transition-all duration-200">
                     Fill Out the Form below and our representative will connect with you
                   </a>
                 </p>
                 <form action="#" method="POST" className="mt-8">
                   <div className="space-y-5 items-center">
                     <div className="mt-2">
-                      <label htmlFor="" className="text-base font-medium text-foreground">
+                      <label htmlFor="" className="text-base font-medium text-black/50">
                         Enter Your Hotel Name
                       </label>
                       <div className="mt-2">
@@ -403,12 +403,13 @@ export default function Partners() {
                           type="text"
                           placeholder="Hotel Name"
                           variant="bordered"
+                          color='primary'
                           onChange={(e) => setHotelName(e.target.value)}
                         />
                       </div>
                     </div>
                     <div className="mt-2">
-                      <label htmlFor="" className="text-base font-medium text-foreground">
+                      <label htmlFor="" className="text-base font-medium text-black/50">
                         Enter your Hotel Email
                       </label>
                       <div className="mt-2">
@@ -429,7 +430,7 @@ export default function Partners() {
                       </div>
                     </div>
                     <div className="mt-2">
-                      <label htmlFor="" className="text-base font-medium text-foreground">
+                      <label htmlFor="" className="text-base font-medium text-black/50">
                         Enter Contact Person Name
                       </label>
                       <div className="mt-2">
@@ -438,12 +439,13 @@ export default function Partners() {
                           type="text"
                           placeholder="Enter Contact Person Name"
                           variant="bordered"
+                          color='primary'
                           onChange={(e) => setPersonName(e.target.value)}
                         />
                       </div>
                     </div>
                     <div className="mt-2">
-                      <label htmlFor="" className="text-base font-medium text-foreground">
+                      <label htmlFor="" className="text-base font-medium text-black/50">
                         Enter Hotel Address
                       </label>
                       <div className="mt-2">
@@ -452,12 +454,13 @@ export default function Partners() {
                           type="text"
                           placeholder="Enter Hotel Address"
                           variant="bordered"
+                          color='primary'
                           onChange={(e) => setHotelAddress(e.target.value)}
                         />
                       </div>
                     </div>
                     <div>
-                      <label htmlFor="" className="text-base font-medium text-foreground">
+                      <label htmlFor="" className="text-base font-medium text-black/50">
                         Enter Mobile Number
                       </label>
                       <div className="mt-2">
@@ -466,6 +469,7 @@ export default function Partners() {
                           type="text"
                           placeholder="Mobile No"
                           variant="bordered"
+                          color='primary'
                           value={mobile_number}
                           onChange={handleMobileChange}
                         />

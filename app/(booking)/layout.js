@@ -16,7 +16,7 @@ export const metadata = {
 export default function RootLayout(props) {
   return (
     <html lang="en" className='light'>
-      <body >
+      <body className='bg-white text-black' >
         <main>
         <Providers>
         <Suspense>

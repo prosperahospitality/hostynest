@@ -5,14 +5,17 @@ import { IMAGES } from '@/public/index'
 import { Badge } from "@/app/_components/ui/Badge"
 import { FacebookIcon, TwitterIcon, LinkedinIcon, InstagramIcon, FullLogo } from "@/app/_components/icon"
 import { Button, Divider } from '@nextui-org/react'
-
+import Link from 'next/link'
+import siteConfig from "@/config/site";
+import { usePathname } from "next/navigation";
 
 
 export default function SiteFooter() {
+  const pathname = usePathname();
 
   return (
-    <footer className="w-screen h-fit bg-white/40">
-      <div className="w-[95%] mx-auto mt-10">
+    <footer className="w-screen h-fit bg-white">
+      <div className="w-[95%] mx-auto pt-10">
         <div className="mx-auto flex max-w-full items-center justify-between py-2">
           <div className="flex items-center gap-4">
             <FullLogo height={40} width={200}/>
@@ -26,7 +29,7 @@ export default function SiteFooter() {
             </Button>
           </div>
         </div>
-        <Divider className='w-full' />
+        <Divider className='w-full bg-gray-300' />
         <div className='grid grid-cols-2 pt-4 gap-2'>
           <div className='pr-12'>
             <h3 className='text-gray-700 font-semibold text-base'>Why Choose HostyNest ?</h3>
@@ -53,264 +56,166 @@ export default function SiteFooter() {
             </h6>
           </div>
         </div>
-        <Divider className='w-full mt-4' />
+        <Divider className='w-full mt-4 bg-gray-300' />
         <div className="w-full pt-4 grid grid-cols-7">
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Quick Links
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  About us
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Support
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  List Property
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  FAQ&apos;s
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.QuickLinks.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* ###2 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Terms & Conditions
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Booking Policies
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Cancellation Policies
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Payment Methods
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Refund Policies
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Guest Responsibilities
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Travel Insurance
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.TermsConditions.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* ####3 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               About Us
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Our Story
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Out Team
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Careers
-                </a>
-                <Badge className='ml-1 bg-lime-300 hover:bg-yellow-300'>We are Hiring</Badge>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Newsroom
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.AboutUs.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* ####4 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Explore India
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  North India
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  South India
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  West India
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  East India
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.ExploreIndia.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* #####5 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Stay With Us
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  City View Rooms
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Ocean View Rooms
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Mountain View Rooms
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Pool View Rooms
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.StayWithUs.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* ####6 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Popular Acticities
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Trekking in Himalayas
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Beach Activities
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Wildilife Safaris
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Cultural Experiences
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Adventure Sports
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Spiritual Retreats
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.PopularActicities.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
           {/* #####7 */}
           <div className="h-full">
-            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-foreground">
+            <h3 className="tracking-px mb-2 text-base font-semibold uppercase text-black/50">
               Recommended Hotels
             </h3>
-            <ul >
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Luxury Resorts
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Boutique Hotels
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Heritage Properties
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Budget Accommodations
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-medium text-gray-400 hover:text-purple-600" href="#">
-                  Family-friendly Stays
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Pet-friendly Accommodations
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Eco-friendly Accommodations
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  All-Inclusive Resorts
-                </a>
-              </li>
-              <li>
-                <a className="text-sm font-smedium text-gray-400 hover:text-purple-600" href="#">
-                  Unique Homestays
-                </a>
-              </li>
+            <ul className="flex flex-col justify-start ml-2">
+              {siteConfig.RecommendedHotels.map((item) => (
+                <div key={item.href}>
+                  <Link
+                    className={`link ${
+                      pathname === item.href
+                        ? "text-primary font-extralight"
+                        : "text-gray-600 font-extralight text-sm"
+                    }`}
+                    href={item.href}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
             </ul>
           </div>
         </div>
-        <Divider className='w-full mt-4' />
+        <Divider className='w-full mt-4 bg-gray-300' />
         <div className='w-[50%] mt-4 mb-4 grid grid-cols-2'>
           <div className='pr-16 '>
-            <h4 className='text-base text-foreground/80 font-semibold mb-3'>Contact Us</h4>
+            <h4 className='text-base text-black/50 font-semibold mb-3'>Contact Us</h4>
             <h6 className='text-xs text-gray-500'>
               1204, The Affaires <br />Palm Paradise, Plam Beach Rd, Sector 17, Sanpada, Navi Mumbai, Maharashtra 400 705
             </h6>
@@ -318,33 +223,33 @@ export default function SiteFooter() {
             <h6 className='text-xs text-gray-500'>Phone no. - <b>+91</b> 90823 61628</h6>
           </div>
           <div>
-            <h3 className="tracking-px mb-3 text-base font-semibold text-foreground/80" href="#">
+            <h3 className="tracking-px mb-3 text-base font-semibold text-black/50" href="#">
               Stay Connected
             </h3>
             <div className="flex flex-wrap justify-between items-center w-[60%]">
               <div >
-                <a href="#">
+                <a href={siteConfig.links.facebook}>
                   <div className="flex size-8">
                     <FacebookIcon />
                   </div>
                 </a>
               </div>
               <div >
-                <a href="#">
+                <a href={siteConfig.links.twitter}>
                   <div className="flex size-6">
                     <TwitterIcon />
                   </div>
                 </a>
               </div>
               <div >
-                <a href="#">
+                <a href={siteConfig.links.instagram}>
                   <div className="flex size-6">
                     <InstagramIcon />
                   </div>
                 </a>
               </div>
               <div >
-                <a href="#">
+                <a href={siteConfig.links.linkdin}>
                   <div className="flex size-8">
                     <LinkedinIcon />
                   </div>
@@ -353,9 +258,9 @@ export default function SiteFooter() {
             </div>
           </div>
         </div>
-        <Divider className='w-full' />
-        <p className="mt-4 mb-10 text-sm text-foreground">
-          &copy; Copyright 2023. All Rights Reserved by Krafitech Hospitality.
+        <Divider className='w-full bg-gray-300' />
+        <p className="mt-4 pb-10 text-sm text-balck">
+          &copy; Copyright 2023. All Rights Reserved by Prospera Hospitality Pvt. Ltd.
         </p>
       </div>
     </footer>

@@ -640,7 +640,7 @@ useEffect(() => {
           <SearchHero />
 
 
-        <div className="flex w-screen h-[210vh]">
+        <div className="flex w-screen h-[210vh] bg-white">
             <div className="w-[30%]">
             <HourlyBookingSideBar searchCity={searchCity} onSelectCheck = {handleCheckBoxSelect} onRatingsCheck = {handleRatingsCheck} onPriceCheck = {handlePriceCheck} onCategoryCheck = {handleCategoryCheck} onFacilityCheck = {handleFacilityCheck} onHourChange = {handleHourChange} onPriceChange={handlePriceChange}/>
             </div>
@@ -648,11 +648,11 @@ useEffect(() => {
             <div className="w-[70%] pb-4">
             <div className="w-full h-full overflow-y-scroll">
             <Breadcrumbs className="pl-6" >
-                <BreadcrumbItem>Home</BreadcrumbItem>
-                <BreadcrumbItem>{searchCity} Hotels</BreadcrumbItem>
+                <BreadcrumbItem color="primary">Home</BreadcrumbItem>
+                <BreadcrumbItem color="primary">{searchCity} Hotels</BreadcrumbItem>
             </Breadcrumbs>
                 <div className="space-y-3">
-                    <h1 className="text-3xl text-gray-500 pt-4 pl-6">Showing {filteredHotelsDataRatings && filteredHotelsDataRatings.length} Hourly Hotels in {searchCity}</h1>                         
+                    <h1 className="text-3xl text-black/60 pt-4 pl-6">Showing {filteredHotelsDataRatings && filteredHotelsDataRatings.length} Hourly Hotels in {searchCity}</h1>                         
                         <>
                             {hotelsData && hotelsData
                             .filter(hotel => {
@@ -743,7 +743,7 @@ useEffect(() => {
                                         
                                         <div className="h-full w-full p-3 flex flex-col border-gray-400">
                                             <div className="relative w-full">
-                                            <a href = {`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}`}>
+                                            <a href={`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}&searchedDate=${searchedDate}&searchTime=${searchTime}`}>
                                                 <div className="rounded-xl -ml-1 w-fit flex items-center justify-center cursor-pointer">
                                                     {Array.from({ length: Math.floor(hotel.rating) }, (_, index) => (
                                                         // eslint-disable-next-line react/jsx-key
@@ -753,12 +753,12 @@ useEffect(() => {
                                                         // eslint-disable-next-line react/jsx-key
                                                         <StarHalf className="h-4 w-4" fill="#FCB332" strokeWidth={0} />
                                                     )}
-                                                    <span className="ml-0.5 text-foreground text-xs font-poppinssemibold">{hotel.rating} ({hotel.user_review_count} Reviews)</span>
+                                                    <span className="ml-0.5 text-black/50 text-xs font-poppinssemibold">{hotel.rating} ({hotel.user_review_count} Reviews)</span>
                                                 </div>
                                                 <div className="flex items-center space-x-5 ">
                                                     <h3 className="max-w-[36.25rem] truncate">
                                                         <Link href={`hotels/${hotel.Hotel_name}?hotelName=${hotel.Hotel_name}&hotelId=${hotel.Hotel_Id}}&searchedDate=${searchedDate}&searchTime=${searchTime}`} title="Hotel Shubham Inn"
-                                                            className="cursor-pointer text-foreground text-lg font-poppinsmedium">
+                                                            className="cursor-pointer text-black/80 text-lg font-poppinsmedium">
                                                             {hotel.Hotel_name}
                                                         </Link>
                                                     </h3>
@@ -767,7 +767,7 @@ useEffect(() => {
                                                 </div>
                                                 <div className="pt-0 flex items-center space-x-2">
                                                     <MapPin className="h-4 w-4 text-gray-500" />
-                                                    <p className="text-gray-500 text-sm font-poppinsmedium">{hotel.City}</p>
+                                                    <p className="text-black/50 text-sm font-poppinsmedium">{hotel.City}</p>
                                                 </div>
                                                 <div className="pt-3 flex items-center">
                                                     {Array.isArray(hotel.facilities) && hotel.facilities.includes('coupleFriendly') ? <Chip className="text-lime-500" variant="light" startContent={<Heart size={18} fill="#fb7185" strokeWidth={0} />}>Couple Friendly</Chip> : ""}

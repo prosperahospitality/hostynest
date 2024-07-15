@@ -698,7 +698,7 @@ const LoginFunc = ({ loginFlag, loginFlagBookingsPage, onResultFlag, rFlag }) =>
       <form action="#" method="POST" className="mt-8">
         <div className="space-y-5 items-center">
           <div>
-            <label htmlFor="" className="text-base font-medium text-foreground">
+            <label htmlFor="" className="text-base font-medium text-black/50">
               Enter Mobile Number
             </label>
             <div className="mt-2">
@@ -715,6 +715,7 @@ const LoginFunc = ({ loginFlag, loginFlagBookingsPage, onResultFlag, rFlag }) =>
                 type="text"
                 placeholder="Mobile No"
                 variant="bordered"
+                color='primary'
                 value={mobile_number}
                 onChange={handleMobileChange}
                 disabled={showSignupForm || showOtpInput}
@@ -869,7 +870,7 @@ const LoginFunc = ({ loginFlag, loginFlagBookingsPage, onResultFlag, rFlag }) =>
             {showOtpInput && (
               <>
                 <div className="flex items-center justify-between">
-                  <label htmlFor="" className="text-base font-medium text-foreground">
+                  <label htmlFor="" className="text-base font-medium text-black/50">
                     Enter OTP
                   </label>
                 </div>
@@ -884,6 +885,7 @@ const LoginFunc = ({ loginFlag, loginFlagBookingsPage, onResultFlag, rFlag }) =>
                   <Input
                     className="inline-flex w-full"
                     type="text"
+                    color='primary'
                     placeholder="OTP"
                     variant="bordered"
                     value={otp_number}
