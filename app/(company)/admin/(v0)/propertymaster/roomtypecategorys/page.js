@@ -14,8 +14,8 @@ import { useRouter } from "next/navigation";
 
 const columns = [
     {name: "ID", uid: "id", sortable: true},
-    {name: "PROPERTY F&S CATEGORYS", uid: "fands_category", sortable: true},
-    {name: "PROPERTY F&S CATEGORYS DESCRIPTION", uid: "fandscategory_desc", sortable: true},
+    {name: "PROPERTY ROOM TYPE CATEGORYS", uid: "property_roomtype_category", sortable: true},
+    {name: "PROPERTY ROOM TYPE CATEGORYS DESCRIPTION", uid: "property_roomtype_category_desc", sortable: true},
     {name: "STATUS", uid: "status", sortable: true},
     {name: "ACTIONS", uid: "actions", sortable: true},
   ];
@@ -53,8 +53,8 @@ const columns = [
 
 export default function RoomTypeCategorys() {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-    const [ fandsCategorys, setFandSCategorys ] = useState();
-    const [ fandsDesc, setFandSDesc ] = useState();
+    const [ roomtypeCategorys, setRoomtypeCategorys ] = useState();
+    const [ roomtypeDesc, setRoomtypeDesc ] = useState();
     const [ status, setStatus ] = useState('');
     const [ result, setResult ] = useState([]);
     const [ currRowId, setCurrRowId ] = useState('');
@@ -71,7 +71,7 @@ export default function RoomTypeCategorys() {
 
     const initialFxn = async () => {
         try {
-            const response = await fetch("/api/fands/fands_categorys", {
+            const response = await fetch("/api/property/property_roomtype_category", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export default function RoomTypeCategorys() {
 
     const generateUniqueID = () => {
         console.log("Last IF:",lastID)
-      const newID = `PFSCID${String(lastID + 1).padStart(5, '0')}`;
+      const newID = `PRTCID${String(lastID + 1).padStart(5, '0')}`;
       setLastID(lastID + 1);
       return newID;
     };
@@ -114,15 +114,15 @@ export default function RoomTypeCategorys() {
 
                 const data = {
                     id: generateUniqueID(),
-                    fands_category: fandsCategorys,
-                    fandscategory_desc: fandsCategorys,
+                    property_roomtype_category: roomtypeCategorys,
+                    property_roomtype_category_desc: roomtypeDesc,
                     status: status,
                     creation_date: getCurrentDateTime(),
                     last_update_on: getCurrentDateTime(),
                 };
         
                 try {
-                    const response = await fetch("/api/fands/fands_categorys", {
+                    const response = await fetch("/api/property/property_roomtype_category", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -145,13 +145,13 @@ export default function RoomTypeCategorys() {
             }else if(actionType === "edit"){
                 console.log("EDit")
                 try {
-                    const response = await fetch("/api/fands/fands_categorys", {
+                    const response = await fetch("/api/property/property_roomtype_category", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({id: currRowId, action: actionType, fands_category: fandsCategorys,
-                            fandscategory_desc: fandsDesc,
+                        body: JSON.stringify({id: currRowId, action: actionType, property_roomtype_category: roomtypeCategorys,
+                            property_roomtype_category_desc: roomtypeDesc,
                             status: status}),
                     });
                     const result = await response.json();
@@ -166,7 +166,7 @@ export default function RoomTypeCategorys() {
                 console.log("Edit Many: ",checksRef.current);
 
                 try {
-                  const response = await fetch("/api/fands/fands_categorys", {
+                  const response = await fetch("/api/property/property_roomtype_category", {
                       method: "POST",
                       headers: {
                           "Content-Type": "application/json",
@@ -191,7 +191,7 @@ export default function RoomTypeCategorys() {
             if (result && result.length > 0) {
                 const lastElement = result[result.length - 1]; // Get the last element
                 const lastElementId = lastElement.id; // Extract the id property from the last element
-                const numericPart = lastElementId.match(/(?<=PFSCID)0*(\d+)/); // Extract numeric part using regular expression
+                const numericPart = lastElementId.match(/(?<=PRTCID)0*(\d+)/); // Extract numeric part using regular expression
                 const lastNumericId = numericPart ? parseInt(numericPart[1]) : null;
                 console.log("Numeric ID of the last element:", lastNumericId);
                 setLastID(lastNumericId);
@@ -213,8 +213,8 @@ export default function RoomTypeCategorys() {
         const rowEdit = async (key,type,desc) => {
 console.log(key,type,desc)
             setCurrRowId(key)
-            setFandSCategorys(type)
-            setFandSDesc(desc)
+            setRoomtypeCategorys(type)
+            setRoomtypeDesc(desc)
         }
 
         useEffect(() => {
@@ -262,7 +262,7 @@ console.log(key,type,desc)
                 }).then(async (result) => {
                   if (result.isConfirmed) {
       
-                    const response = await fetch("/api/fands/fands_categorys", {
+                    const response = await fetch("/api/property/property_roomtype_category", {
                       method: "POST",
                       headers: {
                           "Content-Type": "application/json",
@@ -298,7 +298,7 @@ console.log(key,type,desc)
                 }).then(async (result) => {
                   if (result.isConfirmed) {
   
-                    const response = await fetch("/api/fands/fands_categorys", {
+                    const response = await fetch("/api/property/property_roomtype_category", {
                       method: "POST",
                       headers: {
                           "Content-Type": "application/json",
@@ -346,7 +346,7 @@ console.log(key,type,desc)
                     variant="light"
                     size="sm"
                     onClick={(e) => {
-                      rowEdit(item.id,item.fands_category,item.fandscategory_desc);
+                      rowEdit(item.id,item.property_roomtype_category,item.property_roomtype_category_desc);
                     }}
                   >
                     <EditIcon className="size-4" />
@@ -374,8 +374,8 @@ console.log(key,type,desc)
 
           const handleClick = () => {
             setCurrRowId('')
-            setFandSCategorys('')
-            setFandSDesc('')
+            setRoomtypeCategorys('')
+            setRoomtypeDesc('')
         };
 
    
@@ -398,36 +398,36 @@ console.log(key,type,desc)
                                         <Input
                                             isRequired
                                             type="text"
-                                            label="Property Facilites & Services Categorys"
+                                            label="Room Type Categorys"
                                             labelPlacement="outside"
                                             placeholder="Enter your Custom Name"
                                             variant="bordered"
                                             size="md"
                                             className="max-w-xs"
-                                            value={actionType === "edit" ? fandsCategorys : fandsCategorys}
-                                            onChange={(e) => setFandSCategorys(e.target.value)}
+                                            value={actionType === "edit" ? roomtypeCategorys : roomtypeCategorys}
+                                            onChange={(e) => setRoomtypeCategorys(e.target.value)}
                                         />
                                         <Textarea
                                             isRequired
                                             type="text"
-                                            label="Property Area Description"
+                                            label="Room Type Category Description"
                                             labelPlacement="outside"
                                             variant="bordered"
-                                            placeholder="Property Facilites & Services Categorys description"
+                                            placeholder="Property Room Type Categorys description"
                                             disableAnimation
                                             disableAutosize
                                             classNames={{
                                                 base: "max-w-xs",
                                                 input: "resize-y min-h-[40px]",
                                             }}
-                                            value={actionType === "edit" ? fandsDesc : fandsDesc}
-                                            onChange={(e) => setFandSDesc(e.target.value)}
+                                            value={actionType === "edit" ? roomtypeDesc : roomtypeDesc}
+                                            onChange={(e) => setRoomtypeDesc(e.target.value)}
                                             /></>}
                                         <Autocomplete
                                         isRequired
                                         labelPlacement="outside"
                                         placeholder="Select...."
-                                        label="Property Facilites & Services Categorys Status"
+                                        label="Room Type Category Status"
                                         variant="bordered"
                                         size="md"
                                         className="max-w-xs" 
@@ -456,7 +456,7 @@ console.log(key,type,desc)
             </div>
             <div className="mt-10 ml-2 mr-2">
                 <DataTable data = {result} columns = {columns}
-  statusOptions = {statusOptions} statusColorMap = {statusColorMap} columnSort = "id" columnName = {"fands_category"} actionsContent = {actionsContent} operation = "fandsCategory" handleOpen = {handleOpen} handleClick = {handleClick} handleDelete = {handleDelete} handleSubmit = {handleSubmit}/>            
+  statusOptions = {statusOptions} statusColorMap = {statusColorMap} columnSort = "id" columnName = {"property_roomtype_category"} actionsContent = {actionsContent} operation = "roomtypeCategory" handleOpen = {handleOpen} handleClick = {handleClick} handleDelete = {handleDelete} handleSubmit = {handleSubmit}/>            
             </div>
         </div></>
     );

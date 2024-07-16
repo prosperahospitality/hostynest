@@ -1,35 +1,19 @@
 import  db  from "@/app/_lib/mongoDB";
-import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
 import { Property_Roomname } from "@/app/_lib/model/property/property_roomname/property_roomname";
-import { Property_Roomtype_Category } from "@/app/_lib/model/property/property_roomtype_category/property_roomtype_category";
 import { NextResponse } from "next/server";
 
 export async function GET(){
   let data = [];
-  let property_type = [];
-  let property_roomtypecategory = [];
-  let property_roomnames = [];
-
   let success=true;
-
   try {
     db.connect()
-
-    data = await Property_Roomtype.find();
-
-    property_roomtypecategory = await Property_Roomtype_Category.find({status : "Active"}).select("property_roomtype_category -_id");
-    
-    property_roomnames = await Property_Roomname.find({status : "Active"}).select("property_roomname -_id");
-
-
+    data = await Property_Roomname.find();
+    console.log("rEs::::>",data);
   } catch (error) {
     data={result:"error"}
     success=false;
   }
-  return NextResponse.json({data, property_type,
-    property_roomtypecategory,
-    property_roomnames,
-    success})
+  return NextResponse.json({data,success})
 }
 
 export async function POST(req){
@@ -40,18 +24,19 @@ export async function POST(req){
     let success = true;
     await db.connect();
 
-    if(payload.action === "edit") {
+    if(payload.action === "edit"){
 
-        console.log("Edit")
-        try {
-          console.log("Payload ID: ",payload.id)
-          const property_roomtype = await Property_Roomtype.updateOne({ id: payload.id }, {property_roomtype_category : payload.property_roomtype_category,
-            property_roomname : payload.property_roomname,
-            status: payload.status});
+      console.log("Edit")
 
-          res = await Property_Roomtype.find();
+      try {
 
-          console.log("Result Property: ", property_roomtype);
+          const property_roomname = await Property_Roomname.updateOne({ id: payload.id }, {property_roomname : payload.property_roomname,
+            property_roomname_desc : payload.property_roomname_desc,
+            status : payload.status});
+
+          res = await Property_Roomname.find();
+
+          console.log("Result Property: ", property_roomname);
           data = { result: "Data updated successfully" };
 
       } catch (error) {
@@ -63,15 +48,13 @@ export async function POST(req){
       }
       return NextResponse.json({ data, res, success });
 
+    }else if(payload.action === "delete"){
+      console.log("Delete")
+      try {
 
-    }else if(payload.action === "delete") {
-
-        console.log("Delete")
-        try {
-
-          const property_roomtype = await Property_Roomtype.deleteOne({id : payload.id});
-          res = await Property_Roomtype.find();
-          console.log("Result Property: ", property_roomtype);
+          const property_bedtype = await Property_Roomname.deleteOne({id : payload.id});
+          res = await Property_Roomname.find();
+          console.log("Result Property: ", property_bedtype);
           data = { result: "Data deleted successfully" };
 
       } catch (error) {
@@ -93,9 +76,9 @@ export async function POST(req){
 
           try {
 
-            const property_Roomtype = await Property_Roomtype.deleteMany();
-            res = await Property_Roomtype.find();
-            console.log("Result Property: ", property_Roomtype);
+            const property_bedtype = await Property_Roomname.deleteMany();
+            res = await Property_Roomname.find();
+            console.log("Result Property: ", property_bedtype);
             data = { result: "Data deleted successfully" };
   
         } catch (error) {
@@ -112,9 +95,9 @@ export async function POST(req){
           try {
 
             console.log("payload.selectedChecks: ",payload.selectedChecks)
-            const property_Roomtype = await Property_Roomtype.deleteMany({ id: { $in: payload.selectedChecks } });
-            res = await Property_Roomtype.find();
-            console.log("Result Property: ", property_Roomtype);
+            const property_Bedtype = await Property_Roomname.deleteMany({ id: { $in: payload.selectedChecks } });
+            res = await Property_Roomname.find();
+            console.log("Result Property: ", property_Bedtype);
             data = { result: "Data deleted successfully" };
             
         } catch (error) {
@@ -150,11 +133,11 @@ payload.status)
 if((payload.ids).join('') === 'all') {
   try {
 
-    const property_Roomtype = await Property_Roomtype.updateMany( { } , {status : payload.status});
+    const property_Bedtype = await Property_Roomname.updateMany( { } , {status : payload.status});
   
-    res = await Property_Roomtype.find();
+    res = await Property_Roomname.find();
   
-    console.log("Result Property: ", property_Roomtype);
+    console.log("Result Property: ", property_Bedtype);
     data = { result: "Data updated successfully" };
   
   } catch (error) {
@@ -168,11 +151,11 @@ if((payload.ids).join('') === 'all') {
 }else{
   try {
 
-    const property_Roomtype = await Property_Roomtype.updateMany({ id: { $in: payload.ids } }, {status : payload.status});
+    const property_Bedtype = await Property_Roomname.updateMany({ id: { $in: payload.ids } }, {status : payload.status});
   
-    res = await Property_Roomtype.find();
+    res = await Property_Roomname.find();
   
-    console.log("Result Property: ", property_Roomtype);
+    console.log("Result Property: ", property_Bedtype);
     data = { result: "Data updated successfully" };
   
   } catch (error) {
@@ -190,28 +173,29 @@ if((payload.ids).join('') === 'all') {
 
 
 
-  }else{
-      console.log("Add::::::::>", payload)
+  }else {
 
+      console.log("Add")
       try {
 
-      //   let search = await Property_Roomtype.find({
-      //     property_name: { $regex: new RegExp(payload.property_name, 'i') },
-      // });
+        let search = await Property_Roomname.find({
+            property_roomname: { $regex: new RegExp(payload.property_roomname, 'i') },
+            property_roomname_desc: { $regex: new RegExp(payload.property_roomname_desc, 'i') }
+      });
 
-      //   console.log("Search: ",search);
+        console.log("Search: ",search);
         
-      //   if(search.length === 0) {
-
-          const property_roomtype= await Property_Roomtype.create(payload);
-          res = await Property_Roomtype.find();
-          console.log("Result Property: ", property_roomtype);
+        if(search.length === 0) {
+          res = await Property_Roomname.find();
+          payload.serial_id = res.length + 1;
+          const property_bedtype = await Property_Roomname.create(payload);
+          res = await Property_Roomname.find();
+          console.log("Result Property: ", property_bedtype);
           data = { result: "Data inserted successfully" };
-
-        // }else {
-        //   res = await Property_Roomtype.find();
-        //   data = { result: "Data already existed" };
-        // }
+        }else {
+          res = await Property_Roomname.find();
+          data = { result: "Data already existed" };
+        }
 
 
     } catch (error) {
@@ -222,12 +206,14 @@ if((payload.ids).join('') === 'all') {
 
     }
     return NextResponse.json({ data, res, success });
+
+
+
+
+
+      
     }
 
-
-
-   
-    return NextResponse.json({ data, res, success });
 
 }
 

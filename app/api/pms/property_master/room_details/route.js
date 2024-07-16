@@ -3,6 +3,7 @@ import { Hotel_Infos } from "@/app/_lib/model/hotels/hotel_info/hotel_info";
 import { Property_Floor } from "@/app/_lib/model/property/property_floor/property_floor";
 import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
 import { Property_Bedtype } from "@/app/_lib/model/property/property_bedtype/property_bedtype";
+import { Property_Roomview } from "@/app/_lib/model/property/property_roomview/property_roomview";
 import { Pms_Propertymaster_Roomdetails } from "@/app/_lib/model/pms/property_master/room_details/room_details";
 import { NextResponse } from "next/server";
 
@@ -15,6 +16,8 @@ export async function GET(request){
   let dataAllActive = [];
   let floor = [];
   let roomtype = [];
+  let roomtypeAll = [];
+  let roomView = [];
   let bedtype = [];
   let hotel_info = {};
   let dataActive = [];
@@ -23,20 +26,25 @@ export async function GET(request){
     db.connect()
     // console.log("Hotttttttt: ",hotelId)
     hotel_info = await Hotel_Infos.findOne({"Hotel_Id": hotelId}).select("id Hotel_Type -_id");
+    console.log("hotel_info:::::::::>",hotel_info)
     dataAll = await Pms_Propertymaster_Roomdetails.find();
     dataAllActive = await Pms_Propertymaster_Roomdetails.find({"status" : "Active"});
     data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": parseInt(hotelId)});
     dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
     floor = await Property_Floor.find().select("property_floor -_id");
-    roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
+    //// roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
+    roomtype = await Property_Roomtype.find({"status" : "Active"}).select("property_roomtype_category -_id");
+    roomtypeAll = await Property_Roomtype.find({"status" : "Active"});
+    console.log("roomtype:::::::::>",roomtype)
     bedtype = await Property_Bedtype.find({"status" : "Active"})
+    roomView = await Property_Roomview.find({"status" : "Active"})
     // console.log("rEs::::>",data);
   } catch (error) {
     data={result:"error"}
     success=false;
   }
   return NextResponse.json({data,dataAll,floor,
-    roomtype, hotel_info, dataActive, bedtype, dataAllActive, success})
+    roomtype, hotel_info, dataActive, bedtype, dataAllActive, roomtypeAll, roomView, success})
 }
 
 export async function POST(req){

@@ -1,14 +1,17 @@
 import  db  from "@/app/_lib/mongoDB";
 import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
-import { Property_Roomname } from "@/app/_lib/model/property/property_roomname/property_roomname";
-import { Property_Roomtype_Category } from "@/app/_lib/model/property/property_roomtype_category/property_roomtype_category";
+import { Property_Type } from "@/app/_lib/model/property/property_type/property_type";
+import { Property_Bedtype } from "@/app/_lib/model/property/property_bedtype/property_bedtype";
+import { Property_Extbedtype } from "@/app/_lib/model/property/property_extbedtype/property_extbedtype";
+import { Property_Roomview } from "@/app/_lib/model/property/property_roomview/property_roomview";
 import { NextResponse } from "next/server";
 
 export async function GET(){
   let data = [];
   let property_type = [];
-  let property_roomtypecategory = [];
-  let property_roomnames = [];
+  let property_bedtype = [];
+  let property_extbedtype = [];
+  let property_roomview = [];
 
   let success=true;
 
@@ -17,9 +20,13 @@ export async function GET(){
 
     data = await Property_Roomtype.find();
 
-    property_roomtypecategory = await Property_Roomtype_Category.find({status : "Active"}).select("property_roomtype_category -_id");
+    property_type = await Property_Type.find({status : "Active"}).select("property_category -_id");
+
+    property_bedtype = await Property_Bedtype.find({status : "Active"}).select("property_bedtype -_id");
     
-    property_roomnames = await Property_Roomname.find({status : "Active"}).select("property_roomname -_id");
+    property_extbedtype = await Property_Extbedtype.find({status : "Active"}).select("property_extbedtype -_id");
+    
+    property_roomview = await Property_Roomview.find({status : "Active"}).select("property_roomview -_id");
 
 
   } catch (error) {
@@ -27,9 +34,9 @@ export async function GET(){
     success=false;
   }
   return NextResponse.json({data, property_type,
-    property_roomtypecategory,
-    property_roomnames,
-    success})
+    property_bedtype,
+    property_extbedtype,
+    property_roomview, success})
 }
 
 export async function POST(req){
@@ -45,8 +52,12 @@ export async function POST(req){
         console.log("Edit")
         try {
           console.log("Payload ID: ",payload.id)
-          const property_roomtype = await Property_Roomtype.updateOne({ id: payload.id }, {property_roomtype_category : payload.property_roomtype_category,
-            property_roomname : payload.property_roomname,
+          const property_roomtype = await Property_Roomtype.updateOne({ id: payload.id }, {property_name : payload.property_name,
+            property_type : payload.property_type,
+            property_bedtype : payload.property_bedtype,
+            property_extbedtype : payload.property_extbedtype,
+            property_roomview : payload.property_roomview,
+            property_rateplan : payload.property_rateplan,
             status: payload.status});
 
           res = await Property_Roomtype.find();
@@ -191,7 +202,7 @@ if((payload.ids).join('') === 'all') {
 
 
   }else{
-      console.log("Add::::::::>", payload)
+      console.log("Add")
 
       try {
 

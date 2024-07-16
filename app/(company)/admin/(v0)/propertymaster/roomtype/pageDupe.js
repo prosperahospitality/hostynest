@@ -16,8 +16,12 @@ import DataTable from "@/app/_components/ui/DataTable";
 
 const columns = [
     {name: "ID", uid: "id", sortable: true},
-    {name: "ROOM TYPE CATEGORY", uid: "property_roomtype_category", sortable: true},
-    {name: "PROPERTY ROOM NAME", uid: "property_roomname", sortable: true},
+    {name: "NAME", uid: "property_name", sortable: true},
+    {name: "PROPERTY CATEGORY", uid: "property_type", sortable: true},
+    {name: "BED TYPE", uid: "property_bedtype", sortable: true},
+    {name: "EXTRA BED Type", uid: "property_extbedtype", sortable: true},
+    {name: "ROOM VIEW", uid: "property_roomview", sortable: true},
+    {name: "RATE PLAN", uid: "property_rateplan", sortable: true},
     {name: "STATUS", uid: "status", sortable: true},
     {name: "ACTIONS", uid: "actions", sortable: true},
   ];
@@ -114,13 +118,19 @@ export default function RoomType() {
 
     const dispatch = useDispatch();
     const property_res = useSelector((data) => data.propRes.property_res); 
-    console.log("property_res: ", property_res)
 
-    const [ roomTypeCategory, setRoomTypeCategory ] = useState([])
-    const [ roomNameList, setRoomNameList ] = useState([])
+    const [ propertyBedtype, setPropertyBedtype ] = useState([]);
+    const [ propertyExtbedtype, setPropertyExtbedtype ] = useState([]);
+    const [ propertyRoomview, setPropertyRoomview ] = useState([]);
+    const [ propertyType, setPropertyType ] = useState([]);
+    const [ propertyRatePlans, setPropertyRatePlans ] = useState('');
 
-    const [ selectedRoomTypeCategory, setSelectedRoomTypeCategory ] = useState('');
-    const [ selectedRoomName, setSelectedRoomName ] = useState('');
+    const [ customName, setCustomName ] = useState('');
+    const [ selectedCategory, setSelectedCategory ] = useState('');
+    const [ selectedBT, setSelectedBT ] = useState('');
+    const [ selectedEBT, setSelectedEBT ] = useState('');
+    const [ selectedRV, setSelectedRV ] = useState('');
+    const [ selectedRatePlans, setSelectedRatePlans ] = useState('');
 
     const [ lastID, setLastID ] = useState(0);
     
@@ -153,8 +163,10 @@ export default function RoomType() {
 
     useEffect(() => {
 
-        setRoomTypeCategory(property_res.property_roomtypecategory)
-        setRoomNameList(property_res.property_roomnames)
+        setPropertyBedtype(property_res.property_bedtype)
+        setPropertyExtbedtype(property_res.property_extbedtype)
+        setPropertyRoomview(property_res.property_roomview)
+        setPropertyType(property_res.property_type)
         
     }, [property_res])
 
@@ -203,15 +215,17 @@ export default function RoomType() {
 
         const handleSubmit = async () => {
 
-            
-
             if(actionType === "add") {
                 console.log("Add")
-                console.log("ADd Function: ", selectedRoomTypeCategory, selectedRoomName)
+    
                 const data = {
                     id: generateUniqueID(),
-                    property_roomtype_category : selectedRoomTypeCategory,
-                    property_roomname : selectedRoomName,
+                    property_name : customName,
+                    property_type : selectedCategory,
+                    property_bedtype : selectedBT,
+                    property_extbedtype : selectedEBT,
+                    property_roomview : selectedRV,
+                    property_rateplan : selectedRatePlans,
                     status: status,
                     creation_date: getCurrentDateTime(),
                     last_update_on: getCurrentDateTime(),
@@ -246,9 +260,12 @@ export default function RoomType() {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({id: currRowId, action: actionType, 
-                            property_roomtype_category : selectedRoomTypeCategory,
-                            property_roomname : selectedRoomName,
+                        body: JSON.stringify({id: currRowId, action: actionType, property_name : customName,
+                            property_type : selectedCategory,
+                            property_bedtype : selectedBT,
+                            property_extbedtype : selectedEBT,
+                            property_roomview : selectedRV,
+                            property_rateplan : selectedRatePlans,
                             status: status}),
                     });
                     const result = await response.json();
@@ -310,29 +327,29 @@ export default function RoomType() {
             setStatus(status)
         }, [status])
 
-        const rowEdit = async (key) => {
-            console.log("Data of Row: ",key)
+        const rowEdit = async (key,name,type,bedtype,extbedtype,roomview,rateplan) => {
+            console.log("Data of Row: ",key,name,type,bedtype,extbedtype,roomview,rateplan)
             setCurrRowId(key)
         }
 
-        // useEffect(() => {
-        //     console.log("Current Row ID::::::>",currRowId,customName,
-        //     selectedCategory,
-        //     selectedBT,
-        //     selectedEBT,
-        //     selectedRV,
-        //     selectedRatePlans,actionType,status);
-        // }, [currRowId,customName,
-        //     selectedCategory,
-        //     selectedBT,
-        //     selectedEBT,
-        //     selectedRV,
-        //     selectedRatePlans,actionType,
-        //     status])
+        useEffect(() => {
+            console.log("Current Row ID::::::>",currRowId,customName,
+            selectedCategory,
+            selectedBT,
+            selectedEBT,
+            selectedRV,
+            selectedRatePlans,actionType,status);
+        }, [currRowId,customName,
+            selectedCategory,
+            selectedBT,
+            selectedEBT,
+            selectedRV,
+            selectedRatePlans,actionType,
+            status])
 
         const handleOpen = (type) => {
             if(type === "add") {
-                setSelectedRoomTypeCategory('');
+                setCustomName('');
             }
 
             console.log("Inside Hanlde Open",checksRef.current,type,result.length)
@@ -454,8 +471,12 @@ export default function RoomType() {
                     onPress={() => {
                       onEditClick(item); 
                       setStatus(item.status);            
-                      setSelectedRoomName(item.property_roomname);
-                      setSelectedRoomTypeCategory(item.property_roomtype_category);
+                      setSelectedRatePlans(item.property_rateplan);
+                      setSelectedBT(item.property_bedtype);
+                      setSelectedEBT(item.property_extbedtype);
+                      setSelectedRV(item.property_roomview);
+                      setCustomName(item.property_name,);
+                      setSelectedCategory(item.property_type);
                       handleOpen("edit")
                     }}
                     color="default"
@@ -509,49 +530,107 @@ export default function RoomType() {
                                 <ModalBody>
                                     <div className="p-4 grid grid-cols-2 gap-2">
                                     {actionType === "editmany" ? '' :
-                                        <>
-
-                            
-                            <Autocomplete
+                                        <><Input
+                            isRequired
+                            type="text"
+                            label="Display Name"
+                            labelPlacement="outside"
+                            placeholder="Enter your Custom Name"
+                            variant="bordered"
+                            size="md"
+                            className="max-w-xs"
+                            value={actionType === "edit" ? customName : customName}
+                            onChange={(e) => setCustomName(e.target.value)} /><Autocomplete
                               isRequired
                               labelPlacement="outside"
                               placeholder="Select...."
-                              label="Property Room Type Category"
+                              label="Property Category"
                               variant="bordered"
                               size="md"
                               className="max-w-xs"
-                              defaultSelectedKey={actionType === "edit" ? selectedRoomTypeCategory : ''}
-                              value={selectedRoomTypeCategory}
+                              defaultSelectedKey={actionType === "edit" ? selectedCategory : ''}
+                              value={selectedCategory}
                               allowsCustomValue={true}
-                              onInputChange={(value) => setSelectedRoomTypeCategory(value)}
+                              onInputChange={(value) => setSelectedCategory(value)}
                             >
-                              {roomTypeCategory?.map((item) => (
-                                <AutocompleteItem key={item.property_roomtype_category} value={item.property_roomtype_category}>
-                                  {item.property_roomtype_category}
+                              {propertyType?.map((item) => (
+                                <AutocompleteItem key={item.property_category} value={item.property_category}>
+                                  {item.property_category}
                                 </AutocompleteItem>
                               ))}
-                            </Autocomplete>
-                            <Autocomplete
+                            </Autocomplete><Autocomplete
                               isRequired
                               labelPlacement="outside"
                               placeholder="Select...."
-                              label="Room Name"
+                              label="Bed Type"
                               variant="bordered"
                               size="md"
                               className="max-w-xs"
-                              defaultSelectedKey={actionType === "edit" ? selectedRoomName : ''}
-                              value={selectedRoomName}
+                              defaultSelectedKey={actionType === "edit" ? selectedBT : ''}
+                              value={selectedBT}
                               allowsCustomValue={true}
-                              onInputChange={(value) => setSelectedRoomName(value)}
+                              onInputChange={(value) => setSelectedBT(value)}
                             >
-                              {roomNameList?.map((item) => (
-                                <AutocompleteItem key={item.property_roomname} value={item.property_roomname}>
-                                  {item.property_roomname}
+                              {propertyBedtype?.map((item) => (
+                                <AutocompleteItem key={item.property_bedtype} value={item.property_bedtype}>
+                                  {item.property_bedtype}
                                 </AutocompleteItem>
                               ))}
-                            </Autocomplete>
-                            
-                            </>}
+                            </Autocomplete><Autocomplete
+                              isRequired
+                              labelPlacement="outside"
+                              placeholder="Select...."
+                              label="Extra Bed Type"
+                              variant="bordered"
+                              size="md"
+                              className="max-w-xs"
+                              defaultSelectedKey={actionType === "edit" ? selectedEBT : ''}
+                              value={selectedEBT}
+                              allowsCustomValue={true}
+                              onInputChange={(value) => setSelectedEBT(value)}
+                            >
+                              {propertyExtbedtype?.map((item) => (
+                                <AutocompleteItem key={item.property_extbedtype} value={item.property_extbedtype}>
+                                  {item.property_extbedtype}
+                                </AutocompleteItem>
+                              ))}
+                            </Autocomplete><Autocomplete
+                              isRequired
+                              labelPlacement="outside"
+                              placeholder="Select...."
+                              label="Room View"
+                              variant="bordered"
+                              size="md"
+                              className="max-w-xs"
+                              defaultSelectedKey={actionType === "edit" ? selectedRV : ''}
+                              value={selectedRV}
+                              allowsCustomValue={true}
+                              onInputChange={(value) => setSelectedRV(value)}
+                            >
+                              {propertyRoomview?.map((item) => (
+                                <AutocompleteItem key={item.property_roomview} value={item.property_roomview}>
+                                  {item.property_roomview}
+                                </AutocompleteItem>
+                              ))}
+                            </Autocomplete><Autocomplete
+                              isRequired
+                              labelPlacement="outside"
+                              placeholder="Select...."
+                              label="Rate Plan"
+                              variant="bordered"
+                              size="md"
+                              className="max-w-xs"
+                              defaultSelectedKey={actionType === "edit" ? selectedRatePlans : ''}
+                              value={selectedRatePlans}
+                              allowsCustomValue={true}
+                              onInputChange={(value) => setSelectedRatePlans(value)}
+                            >
+                              {rateplans?.map((rateplan) => (
+                                <AutocompleteItem key={rateplan.value} value={rateplan.value}>
+                                  {rateplan.label}
+                                </AutocompleteItem>
+                              ))}
+                            </Autocomplete></>}
 
                                     <Autocomplete
                                         isRequired
@@ -586,9 +665,60 @@ export default function RoomType() {
                 </Modal>
             </div>
             <div className="mt-10 ml-2 mr-2">
-                
+                {/* <Table aria-label="Example static collection table">
+                    <TableHeader>
+                        {columns.map((column) => (
+                        <TableColumn key={column.uid}>{column.name}</TableColumn>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                    {result?.map((roomtype) => (
+                        <TableRow key={roomtype.id}>
+                            <TableCell>{roomtype.id}</TableCell>
+                            <TableCell>{roomtype.property_name}</TableCell>
+                            <TableCell>{roomtype.property_type}</TableCell>
+                            <TableCell>{roomtype.property_bedtype}</TableCell>
+                            <TableCell>{roomtype.property_extbedtype}</TableCell>
+                            <TableCell>{roomtype.property_roomview}</TableCell>
+                            <TableCell>
+                                <Chip className="capitalize" color="primary" size="sm" variant="solid">
+                                {roomtype.property_rateplan}
+                                </Chip>
+                            </TableCell>
+                            <TableCell>
+                                <Chip className="capitalize" color={statusColorMap[roomtype.status]} size="sm" variant="flat">
+                                {roomtype.status}
+                                </Chip>
+                            </TableCell>
+                            <TableCell>
+                                <Tooltip color="default" content="Edit user">
+                                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <Button isIconOnly onPress={() => {setStatus(roomtype.status);            
+                                    setSelectedRatePlans(roomtype.property_rateplan);
+                                    setSelectedBT(roomtype.property_bedtype);
+                                    setSelectedEBT(roomtype.property_extbedtype);
+                                    setSelectedRV(roomtype.property_roomview);
+                                    setCustomName(roomtype.property_name);
+                                    setSelectedCategory(roomtype.property_type);
+                                    handleOpen("edit")
+                                }} 
+                                    color="default" variant="light" size="sm" 
+                                    onClick= {(e) => {rowEdit(roomtype.id)}}>    
+                                    <EditIcon className="size-4"/></Button>
+                                </span>
+                                </Tooltip>
+                                <Tooltip color="danger" content="Delete">
+                                <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                <Button isIconOnly color="danger" variant="light" size="sm" onClick={(e) => handleDelete(roomtype.id)}><DeleteIcon className="size-4"/></Button>
+                                </span>
+                                </Tooltip>
+                            </TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                </Table> */}
                 <DataTable data = {result} columns = {columns}
-  statusOptions = {statusOptions} statusColorMap = {statusColorMap} columnSort = "id" columnName = {"property_roomtype_category"} actionsContent = {actionsContent} operation = "propRT" handleOpen = {handleOpen} handleClick = {handleClick} handleDelete = {handleDelete} handleSubmit = {handleSubmit}/>
+  statusOptions = {statusOptions} statusColorMap = {statusColorMap} columnSort = "id" columnName = {"property_name"} actionsContent = {actionsContent} operation = "propRT" handleOpen = {handleOpen} handleClick = {handleClick} handleDelete = {handleDelete} handleSubmit = {handleSubmit}/>
             </div>
         </div></>
     );
