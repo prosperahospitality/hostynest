@@ -23,7 +23,7 @@ export default function PropertyMasterDropDown ({ isOpen }) {
         >
         <div className='flex gap-2'>
         
-        {isOpen ? <><Building2 aria-hidden="true"/>Property Management</> : 
+        {isOpen ? <><Building2 aria-hidden="true"/>Property Settings</> : 
         <>
         <Tooltip
           showArrow
@@ -60,6 +60,8 @@ export default function PropertyMasterDropDown ({ isOpen }) {
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<Bed aria-hidden="true" />} key="new"><Link href="/admin/propertymaster/extrabedtype">Extra Bed Type</Link></DropdownItem>
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<MountainSnow aria-hidden="true" />} key="new"><Link href="/admin/propertymaster/roomview">Room View</Link></DropdownItem>
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<RiServiceLine aria-hidden="true" className="size-6"/>} key="new"><Link href="/admin/propertymaster/amenities">Amenities</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<RiServiceLine aria-hidden="true" className="size-6"/>} key="new"><Link href="/admin/propertymaster/roomtypecategorys">Room Type Categorys</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<RiServiceLine aria-hidden="true" className="size-6"/>} key="new"><Link href="/admin/propertymaster/roomname">Room Name</Link></DropdownItem>
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<DoorOpen aria-hidden="true" />} key="new"><Link href="/admin/propertymaster/roomtype">Room Type</Link></DropdownItem>
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<RiServiceLine aria-hidden="true" className="size-6"/>} key="new"><Link href="/admin/propertymaster/propertyamenities">Property Amenities</Link></DropdownItem>
         <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<TbHotelService aria-hidden="true" className='size-6'/>} key="new"><Link href="/admin/propertymaster/addonservices">Add on Services</Link></DropdownItem>
