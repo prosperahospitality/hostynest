@@ -5,7 +5,7 @@ export async function middleware(request) {
   const { pathname, cookies } = request;
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    const authToken = cookies.get("next-auth.session-token")?.value;
+    const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
 
     // if (!authToken) {
     //   return NextResponse.redirect(new URL('/adminlogin', request.url));
