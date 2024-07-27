@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import RIMainContTopBar from '@/app/(partner)/hotel/rateandinventory/managerateandinventory/RIMainContTopBar'
-import { Chip, Button } from "@nextui-org/react";
+import { Chip, Button, Input } from "@nextui-org/react";
 import EditModal from '@/app/(partner)/hotel/rateandinventory/managerateandinventory/EditModal';
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from 'next/navigation'
@@ -11,6 +11,8 @@ import { handleQuickSoldFormattedDate } from "@/app/redux/slices/rateandinventor
 import { handleFormattedDateUpdateProp } from "@/app/redux/slices/rateandinventorySlice";
 import { handleUpdatePropArray } from "@/app/redux/slices/rateandinventorySlice";
 import { useSession, getSession, signIn, signOut } from 'next-auth/react'
+import { addinputs } from "@/app/redux/slices/editroompriceSlice";
+import "@/public/style.css"
 
 
 const arrs = [1, 2, 3, 4, 5, 6, 7]
@@ -19,7 +21,10 @@ const RIMainCont = () => {
     const searchParams = useSearchParams();
     const hotel_id = searchParams.get('hotel_id');
     const hotel_name = searchParams.get('hotel_name');
-    const [result, setResult] = useState([])
+
+    const [result, setResult] = useState([]);
+    console.log(result, 'result');
+
     const [allResult, setAllResult] = useState([])
     const [lastID, setLastID] = useState(0);
     const dispatch = useDispatch();
@@ -42,13 +47,13 @@ const RIMainCont = () => {
     let updatePropArray = useSelector((state) => state.rateandinventory.updatePropArray);
     let updateRoomArray = useSelector((state) => state.rateandinventory.updateRoomArray);
     let updateRateArray = useSelector((state) => state.rateandinventory.updateRateArray);
-    
+
     let formattedDateUpdateRoom = useSelector((state) => state.rateandinventory.formattedDateUpdateRoom);
     let selectedRoomUpdateRooms = useSelector((state) => state.rateandinventory.selectedRoomUpdateRooms);
     let valueTotalRoom = useSelector((state) => state.rateandinventory.valueTotalRoom);
 
     let checkPricePerGuest = useSelector((state) => state.rateandinventory.checkPricePerGuest);
-    
+
 
     const [editableSelectedRoom, setEditableSelectedRoom] = useState([]);
     const [editableSelectedRoomCopy, setEditableSelectedRoomCopy] = useState([]);
@@ -57,40 +62,41 @@ const RIMainCont = () => {
     const [editableUpdatePropCopy, setEditableUpdatePropCopy] = useState([]);
 
 
-    let selectedRoomUpdateRate= useSelector((state) => state.rateandinventory.selectedRoomUpdateRate);
-    let formattedDateUpdateRate= useSelector((state) => state.rateandinventory.formattedDateUpdateRate);
-    let value3HourRate= useSelector((state) => state.rateandinventory.value3HourRate);
-    let value6HourRate= useSelector((state) => state.rateandinventory.value6HourRate);
-    let value12HourRate= useSelector((state) => state.rateandinventory.value12HourRate);
-    let valueBaseRate= useSelector((state) => state.rateandinventory.valueBaseRate);
-    let valueChildRate= useSelector((state) => state.rateandinventory.valueChildRate);
-    let valueExtraPersonRate= useSelector((state) => state.rateandinventory.valueExtraPersonRate);
+    let selectedRoomUpdateRate = useSelector((state) => state.rateandinventory.selectedRoomUpdateRate);
+    let formattedDateUpdateRate = useSelector((state) => state.rateandinventory.formattedDateUpdateRate);
+    let value3HourRate = useSelector((state) => state.rateandinventory.value3HourRate);
+
+    let value6HourRate = useSelector((state) => state.rateandinventory.value6HourRate);
+    let value12HourRate = useSelector((state) => state.rateandinventory.value12HourRate);
+    let valueBaseRate = useSelector((state) => state.rateandinventory.valueBaseRate);
+    let valueChildRate = useSelector((state) => state.rateandinventory.valueChildRate);
+    let valueExtraPersonRate = useSelector((state) => state.rateandinventory.valueExtraPersonRate);
 
     const [session, setSession] = React.useState({});
 
     React.useEffect(() => {
-    
+
         const getSessionInfo = async () => {
-          const session = await getSession();
-          setSession(session);
+            const session = await getSession();
+            setSession(session);
         };
         getSessionInfo();
     }, [])
 
     React.useEffect(() => {
-    
-console.log("Sessionnnnn: ",session)
+
+        console.log("Sessionnnnn: ", session)
     }, [session])
 
     useEffect(() => {
 
-        if(selectedDateRange.length !== 0) {
+        if (selectedDateRange.length !== 0) {
             setPreviousDateRange(prevDateRange => [...prevDateRange, selectedDateRange]);
         }
-        
 
 
-        if(selectedDateRange || selectedRoom) {
+
+        if (selectedDateRange || selectedRoom) {
             dataFxn(selectedDateRange, selectedRoom, quickSoldFormattedDate, editableSelectedRoom)
         }
 
@@ -98,7 +104,7 @@ console.log("Sessionnnnn: ",session)
 
     useEffect(() => {
 
-        console.log("Previous Date Range: ",previousDateRange)
+        console.log("Previous Date Range: ", previousDateRange)
 
     }, [previousDateRange])
 
@@ -108,7 +114,7 @@ console.log("Sessionnnnn: ",session)
         const newID = `MRI${String(lastID + 1).padStart(5, '0')}`;
         setLastID(lastID + 1);
         return newID;
-        };
+    };
 
     function getCurrentDateTime() {
         const today = new Date();
@@ -119,66 +125,66 @@ console.log("Sessionnnnn: ",session)
         const minutes = String(today.getMinutes()).padStart(2, '0');
         const seconds = String(today.getSeconds()).padStart(2, '0');
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-    }    
+    }
 
 
     const handleEditResult = (res, selectedDateRange, selectedRowID, selectedRowDate, selectedRoomtype, selectedRowStatus) => {
 
-        if(selectedRoom === selectedRoomtype) {
+        if (selectedRoom === selectedRoomtype) {
 
-            if(quickSoldSelectedRadio === "soldout") {
-                if(selectedRowStatus === "bookable") {
+            if (quickSoldSelectedRadio === "soldout") {
+                if (selectedRowStatus === "bookable") {
 
                     let updatedDates = quickSoldFormattedDate.filter((item) => item !== selectedRowDate)
-    
+
                     editableSelectedRoom.forEach((item) => {
-             
-                        if(item.roomtype === selectedRoom) {
-              
+
+                        if (item.roomtype === selectedRoom) {
+
                             item.updatedDates = updatedDates
                         }
                     })
-    
+
                     setEditableSelectedRoomCopy(editableSelectedRoom)
-    
+
                     dispatch(removeQuickSoldFormattedDate(updatedDates));
-    
-    
-                }else{
+
+
+                } else {
                     editableSelectedRoom.forEach((item) => {
-                    
+
                         if (item.roomtype === selectedRoom) {
-                        
+
                             item.updatedDates = [...(item.updatedDates || []), selectedRowDate];
-    
+
                             dispatch(handleQuickSoldFormattedDate(item.updatedDates));
-    
+
                         }
                     });
-    
+
                     setEditableSelectedRoomCopy(editableSelectedRoom)
-    
+
                 }
             }
 
-            
 
-        }else{
-            
+
+        } else {
+
         }
-        
+
         res = res?.filter((item) => {
             return selectedDateRange.includes(item.booking_date);
         });
 
         const sortedData = res?.sort((a, b) => a.id - b.id);
         setResult(sortedData)
-        
+
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const dataFxn = useCallback(async (selectedDateRange, selectedRoom, quickSoldFormattedDate, editableSelectedRoom) => {
-        
+
         try {
             const response0 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
                 method: "GET",
@@ -191,14 +197,14 @@ console.log("Sessionnnnn: ",session)
             setAllResult(result0.data)
             let lstID;
             if (resultData && resultData.length > 0) {
-                const lastElement = resultData[resultData.length - 1]; 
-                const lastElementId = lastElement.id; 
-                const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/); 
+                const lastElement = resultData[resultData.length - 1];
+                const lastElementId = lastElement.id;
+                const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/);
                 const lastNumericId = numericPart ? parseInt(numericPart[1]) : null;
-               
+
                 lstID = lastNumericId;
             } else {
-              
+
                 lstID = 0;
             }
 
@@ -211,12 +217,12 @@ console.log("Sessionnnnn: ",session)
             const result = await response.json();
             let activeResults = result.dataActive;
             let filteredResults = activeResults.find((item) => item.Hotel_Id === parseInt(hotel_id) && item.room_name === selectedRoom);
-           
-            console.log("Rooms Selection::::::>", selectedDateRange,selectedRoom)
+
+            console.log("Rooms Selection::::::>", selectedDateRange, selectedRoom)
             await Promise.all(selectedDateRange?.map(async (item) => {
                 lstID = lstID + 1;
-               
-                if(selectedRoom !== " " || selectedRoom !== undefined) {
+
+                if (selectedRoom !== " " || selectedRoom !== undefined) {
                     let payload;
                     payload = {
                         id: `MRI${String(lstID).padStart(5, '0')}`,
@@ -242,11 +248,11 @@ console.log("Sessionnnnn: ",session)
                         first_checkin_last_checkout_status_6hr: "Active",
                         first_checkin_last_checkout_status_12hr: "Active",
                         first_checkin_last_checkout_status_24hr: "Active",
-                        status:"bookable",
+                        status: "bookable",
                         creation_date: getCurrentDateTime(),
                         last_update_on: getCurrentDateTime(),
                     }
-        
+
                     const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
                         method: "POST",
                         headers: {
@@ -258,128 +264,128 @@ console.log("Sessionnnnn: ",session)
                 }
 
 
-            //     let payload;
-            //     payload = {
-            //         id: `MRI${String(lstID).padStart(5, '0')}`,
-            //         Hotel_Id: hotel_id,
-            //         Hotel_name: hotel_name,
-            //         user_id: session ? session?.user?.user_id : "",
-            //         user_name: "",
-            //         booking_date: item.toString(),
-            //         room_type: selectedRoom,
-            //         price_per_guest_flag: false,
-            //         room_occupancy: filteredResults?.base_adult,
-            //         rate_3hr: 0,
-            //         rate_6hr: 0,
-            //         rate_12hr: 0,
-            //         rate_24hr: filteredResults?.room_rate,
-            //         total_rooms_count: 0,
-            //         booked_rooms_count: 0,
-            //         first_checkin_last_checkout_3hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_6hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_12hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_24hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_status_3hr: "Active",
-            //         first_checkin_last_checkout_status_6hr: "Active",
-            //         first_checkin_last_checkout_status_12hr: "Active",
-            //         first_checkin_last_checkout_status_24hr: "Active",
-            //         status:"bookable",
-            //         creation_date: getCurrentDateTime(),
-            //         last_update_on: getCurrentDateTime(),
-            //     }
-    
-            //     const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //         body: JSON.stringify(payload),
-            //     });
-            //     const result = await response.json();
-               
-             }));
+                //     let payload;
+                //     payload = {
+                //         id: `MRI${String(lstID).padStart(5, '0')}`,
+                //         Hotel_Id: hotel_id,
+                //         Hotel_name: hotel_name,
+                //         user_id: session ? session?.user?.user_id : "",
+                //         user_name: "",
+                //         booking_date: item.toString(),
+                //         room_type: selectedRoom,
+                //         price_per_guest_flag: false,
+                //         room_occupancy: filteredResults?.base_adult,
+                //         rate_3hr: 0,
+                //         rate_6hr: 0,
+                //         rate_12hr: 0,
+                //         rate_24hr: filteredResults?.room_rate,
+                //         total_rooms_count: 0,
+                //         booked_rooms_count: 0,
+                //         first_checkin_last_checkout_3hr: "12 AM - 11 PM",
+                //         first_checkin_last_checkout_6hr: "12 AM - 11 PM",
+                //         first_checkin_last_checkout_12hr: "12 AM - 11 PM",
+                //         first_checkin_last_checkout_24hr: "12 AM - 11 PM",
+                //         first_checkin_last_checkout_status_3hr: "Active",
+                //         first_checkin_last_checkout_status_6hr: "Active",
+                //         first_checkin_last_checkout_status_12hr: "Active",
+                //         first_checkin_last_checkout_status_24hr: "Active",
+                //         status:"bookable",
+                //         creation_date: getCurrentDateTime(),
+                //         last_update_on: getCurrentDateTime(),
+                //     }
 
-            if(quickSoldSelectedRadio === "soldout") {
+                //     const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                //         method: "POST",
+                //         headers: {
+                //             "Content-Type": "application/json",
+                //         },
+                //         body: JSON.stringify(payload),
+                //     });
+                //     const result = await response.json();
+
+            }));
+
+            if (quickSoldSelectedRadio === "soldout") {
                 editableSelectedRoom?.map(async (item) => {
-                    
-                    if(item.roomtype === selectedRoom) {
-                        if(item.updatedDates.length === 0) {
-                            
-                            if(quickSoldFormattedDateCopy) {
-                                
-                          
-                                    let payload = {
-                                        Hotel_Id: hotel_id,
-                                        formattedDates: quickSoldFormattedDateCopy,
-                                        status: quickSoldSelectedRadio,
-                                        selectedRoom: selectedRoom,
-                                        operation: "bulkEdit",
-                                    }
-                                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify(payload),
-                                    });
-                                    const result = await response.json();
-                                    getData();
-                           
+
+                    if (item.roomtype === selectedRoom) {
+                        if (item.updatedDates.length === 0) {
+
+                            if (quickSoldFormattedDateCopy) {
+
+
+                                let payload = {
+                                    Hotel_Id: hotel_id,
+                                    formattedDates: quickSoldFormattedDateCopy,
+                                    status: quickSoldSelectedRadio,
+                                    selectedRoom: selectedRoom,
+                                    operation: "bulkEdit",
+                                }
+                                const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(payload),
+                                });
+                                const result = await response.json();
+                                getData();
+
                             }
-                            
-                        }else{
-                            
-                            if(quickSoldFormattedDate) {
-                        
+
+                        } else {
+
+                            if (quickSoldFormattedDate) {
+
                                 let datessss = item.updatedDates;
                                 const filteredQuickSoldFormattedDateCopy = quickSoldFormattedDateCopy.filter(
                                     item => !datessss.includes(item)
                                 );
-                                
-                                    let payload = {
+
+                                let payload = {
+                                    Hotel_Id: hotel_id,
+                                    formattedDates: quickSoldFormattedDate,
+                                    status: quickSoldSelectedRadio,
+                                    selectedRoom: selectedRoom,
+                                    operation: "bulkEdit",
+                                }
+                                const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(payload),
+                                });
+                                const result = await response.json();
+
+
+                                if (filteredQuickSoldFormattedDateCopy.length !== 0) {
+                                    let payload1 = {
                                         Hotel_Id: hotel_id,
-                                        formattedDates: quickSoldFormattedDate,
-                                        status: quickSoldSelectedRadio,
+                                        formattedDates: filteredQuickSoldFormattedDateCopy,
+                                        status: "bookable",
                                         selectedRoom: selectedRoom,
                                         operation: "bulkEdit",
                                     }
-                                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                                    const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",
                                         },
-                                        body: JSON.stringify(payload),
+                                        body: JSON.stringify(payload1),
                                     });
-                                    const result = await response.json();
-                                   
-    
-                                    if(filteredQuickSoldFormattedDateCopy.length !== 0){
-                                        let payload1 = {
-                                            Hotel_Id: hotel_id,
-                                            formattedDates: filteredQuickSoldFormattedDateCopy,
-                                            status: "bookable",
-                                            selectedRoom: selectedRoom,
-                                            operation: "bulkEdit",
-                                        }
-                                        const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                            },
-                                            body: JSON.stringify(payload1),
-                                        });
-                                        const result1 = await response1.json();
-                                        getData();
-                                    }
-                                    
-                           
+                                    const result1 = await response1.json();
+                                    getData();
+                                }
+
+
                             }
                         }
-                    }else{
+                    } else {
                         console.log("Room Not Found")
                     }
                 })
-    
+
                 setEditableSelectedRoomCopy(editableSelectedRoom)
 
                 const updatedArray = updatePropArray?.map(item => ({
@@ -388,20 +394,20 @@ console.log("Sessionnnnn: ",session)
                 }));
                 dispatch(handleUpdatePropArray(updatedArray));
 
-            }else {
-                
+            } else {
+
             }
 
-            
 
-            if(selectedRadioUpdateProp === "soldout") {
-                if(selectedRoomUpdateProperty === selectedRoom) {
-                    
+
+            if (selectedRadioUpdateProp === "soldout") {
+                if (selectedRoomUpdateProperty === selectedRoom) {
+
                     updatePropArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-                           
+                        if (item.roomtype === selectedRoom) {
+
                             let filteredUpdateProp = selectedDateRange.filter(date => item.updatedDates.includes(date))
-                           
+
                             let payload = {
                                 Hotel_Id: hotel_id,
                                 formattedDates: filteredUpdateProp,
@@ -420,12 +426,12 @@ console.log("Sessionnnnn: ",session)
                         }
                     })
                 }
-            }else {
-                if(selectedRoomUpdateProperty === selectedRoom) {
-                   
+            } else {
+                if (selectedRoomUpdateProperty === selectedRoom) {
+
                     updatePropArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-                            
+                        if (item.roomtype === selectedRoom) {
+
                             // let filteredUpdateProp = selectedDateRange.filter(date => item.updatedDates.includes(date))
                             // console.log("Bulk Updateeeeee 2: ",filteredUpdateProp)
                             let payload = {
@@ -449,47 +455,48 @@ console.log("Sessionnnnn: ",session)
             }
 
 
-            if(updateRoomArray) {
-       
-                    
-                    updateRoomArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-
-                            let previousDateRangeNew = previousDateRange[previousDateRange.length - 2]
-
-                            console.log("previousDateRangeNew: ", previousDateRangeNew)
-
-                            let filteredUpdateRoom = selectedDateRange.filter(date => !previousDateRangeNew?.includes(date))
-                            let filteredUpdateRoomnew = filteredUpdateRoom.filter(date => item.updatedDates?.includes(date))
-                            console.log("Filtered Data: ",selectedDateRange, filteredUpdateRoom,filteredUpdateRoomnew, item.updatedDates)
+            if (updateRoomArray) {
 
 
+                updateRoomArray?.map(async (item) => {
+                    if (item.roomtype === selectedRoom) {
 
-                            let payload = {
-                                Hotel_Id: hotel_id,
-                                formattedDates: filteredUpdateRoomnew,
-                                selectedRoom: selectedRoom,
-                                totalRooms: parseInt(item.value),
-                                operation: "bulkUpdateRoom",
-                            }
-                            const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(payload),
-                            });
-                            const result = await response.json();
-                            getData()
-                        }})
-                 
+                        let previousDateRangeNew = previousDateRange[previousDateRange.length - 2]
+
+                        console.log("previousDateRangeNew: ", previousDateRangeNew)
+
+                        let filteredUpdateRoom = selectedDateRange.filter(date => !previousDateRangeNew?.includes(date))
+                        let filteredUpdateRoomnew = filteredUpdateRoom.filter(date => item.updatedDates?.includes(date))
+                        console.log("Filtered Data: ", selectedDateRange, filteredUpdateRoom, filteredUpdateRoomnew, item.updatedDates)
+
+
+
+                        let payload = {
+                            Hotel_Id: hotel_id,
+                            formattedDates: filteredUpdateRoomnew,
+                            selectedRoom: selectedRoom,
+                            totalRooms: parseInt(item.value),
+                            operation: "bulkUpdateRoom",
+                        }
+                        const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                        });
+                        const result = await response.json();
+                        getData()
+                    }
+                })
+
             }
 
-            if(updateRateArray) {
+            if (updateRateArray) {
 
-                console.log("updateRateArray: ",updateRateArray)
+                console.log("updateRateArray: ", updateRateArray)
                 updateRateArray?.map(async (item) => {
-                    if(item.roomtype === selectedRoom) {
+                    if (item.roomtype === selectedRoom) {
 
                         let previousDateRangeNew = previousDateRange[previousDateRange.length - 2]
 
@@ -519,9 +526,10 @@ console.log("Sessionnnnn: ",session)
                         });
                         const result = await response.json();
                         getData()
-                    }})
+                    }
+                })
             }
-            
+
 
 
 
@@ -541,7 +549,7 @@ console.log("Sessionnnnn: ",session)
 
             const sortedData = databyid?.sort((a, b) => a.id - b.id);
 
-            
+
 
             setResult(sortedData);
         } catch (error) {
@@ -550,7 +558,7 @@ console.log("Sessionnnnn: ",session)
     });
 
     const getData = async () => {
-        
+
         const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`, {
             method: "GET",
             headers: {
@@ -572,35 +580,35 @@ console.log("Sessionnnnn: ",session)
 
     useEffect(() => {
         if (allResult && allResult.length > 0) {
-            const lastElement = allResult[allResult.length - 1]; 
-            const lastElementId = lastElement.id; 
-            const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/); 
+            const lastElement = allResult[allResult.length - 1];
+            const lastElementId = lastElement.id;
+            const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/);
             const lastNumericId = numericPart ? parseInt(numericPart[1]) : null;
-        
+
             setLastID(lastNumericId);
         } else {
-          
+
             setLastID(0);
         }
-    }, [allResult,dataFxn])
+    }, [allResult, dataFxn])
 
 
 
     useEffect(() => {
 
-   
 
-        if(quickSold) {
+
+        if (quickSold) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             quickSold = quickSold?.filter((item) => {
                 return selectedDateRange.includes(item.booking_date);
             });
-    
+
             const sortedData = quickSold?.sort((a, b) => a.id - b.id);
             setResult(sortedData)
         }
 
-        if(editableSelectedRoom) {
+        if (editableSelectedRoom) {
             editableSelectedRoom?.map((item) => {
                 item.updatedDates = []
             })
@@ -615,7 +623,7 @@ console.log("Sessionnnnn: ",session)
 
         if (selectedRoom && quickSoldFormattedDateCopy && !editableSelectedRoom.some(item => item.roomtype === selectedRoom)) {
 
-            
+
             let payload = {
                 roomtype: selectedRoom,
                 updatedDates: [],
@@ -625,13 +633,13 @@ console.log("Sessionnnnn: ",session)
             dispatch(handleQuickSoldFormattedDate(quickSoldFormattedDateCopy));
 
         }
-        
-        if(editableSelectedRoom) {
+
+        if (editableSelectedRoom) {
             editableSelectedRoom?.map((item) => {
-                if(item.roomtype === selectedRoom) {
-                    if(item.updatedDates.length === 0) {
+                if (item.roomtype === selectedRoom) {
+                    if (item.updatedDates.length === 0) {
                         dispatch(handleQuickSoldFormattedDate(quickSoldFormattedDateCopy));
-                    }else{
+                    } else {
                         dispatch(handleQuickSoldFormattedDate(item.updatedDates));
                     }
                 }
@@ -651,7 +659,7 @@ console.log("Sessionnnnn: ",session)
         //     dispatch(handleFormattedDateUpdateProp(formattedDateUpdatePropCopy));
 
         // }
-        
+
         // if(editableUpdateProp) {
         //     editableUpdateProp?.map((item) => {
         //         if(item.roomtype === selectedRoom) {
@@ -664,18 +672,18 @@ console.log("Sessionnnnn: ",session)
         //     })
         // }
 
-        
+
 
     }, [selectedRoom])
 
 
     useEffect(() => {
 
-        if(editableSelectedRoomCopy) {
-          
-           editableSelectedRoomCopy?.map(async (item) => {
-                if(item.roomtype === selectedRoom) {
-                    if(item.updatedDates.length !== 0) {
+        if (editableSelectedRoomCopy) {
+
+            editableSelectedRoomCopy?.map(async (item) => {
+                if (item.roomtype === selectedRoom) {
+                    if (item.updatedDates.length !== 0) {
                         let payload = {
                             Hotel_Id: hotel_id,
                             formattedDates: item.updatedDates,
@@ -694,26 +702,26 @@ console.log("Sessionnnnn: ",session)
                         getData()
                     }
                 }
-           })
-           
+            })
+
         }
 
     }, [editableSelectedRoomCopy, selectedRoom])
 
-   
+
 
     ///////////////////////////////////////////////////Bulk Bupdate Prop///////////////////////////////////////
 
     useEffect(() => {
 
-   
 
-        if(updateBulkProperty) {
+
+        if (updateBulkProperty) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             updateBulkProperty = updateBulkProperty?.filter((item) => {
                 return selectedDateRange.includes(item.booking_date);
             });
-    
+
             const sortedData = updateBulkProperty?.sort((a, b) => a.id - b.id);
             setResult(sortedData)
 
@@ -723,132 +731,376 @@ console.log("Sessionnnnn: ",session)
 
     useEffect(() => {
 
-      
+
 
     }, [editableUpdatePropCopy])
 
 
     useEffect(() => {
 
-        
 
-    }, [updateRoomArray])
 
-    
+    }, [updateRoomArray]);
+
+    const rates = useSelector((state) => state.editroomprice.price);
+    console.log(rates, "rates")
+
+    // const handleInputChange = (e, index) => {
+    //     const { value } = e.target;
+    //     const newData = [...result];
+    //     const updatedItem = { ...newData[index], rate_3hr: value };
+    //     newData[index] = updatedItem;
+    //     setResult(newData);
+    //     dispatch(addinputs(updatedItem));
+    // };
+
+    // const getUpdatedValue = (item, index) => {
+    //     const updatedItem = rates.find(updated => updated._id === item._id);
+    //     return updatedItem ? updatedItem.rate_3hr : item.rate_3hr;
+    // };
+
+    const handleInputChange = (e, index, field) => {
+        const { value } = e.target;
+        const newData = [...result];
+        const updatedItem = { ...newData[index], [field]: value };
+        newData[index] = updatedItem;
+        setResult(newData);
+        dispatch(addinputs(updatedItem));
+    };
+
+    const getUpdatedValue = (item, field) => {
+        const updatedItem = rates.find(updated => updated._id === item._id);
+        return updatedItem ? updatedItem[field] : item[field];
+    };
+
     return (
         <>
             <RIMainContTopBar />
 
-            {result?.map((item) => {
+            {result?.map((item, index) => {
                 const [day, date, month] = item?.booking_date ? item.booking_date.split(" ") : ["", "", ""];
                 const isSoldOut = item?.status === "soldout";
 
                 return (
-                    <div className='mt-1 pl-2 pr-2 w-screen' key="">
-                <div className='grid grid-cols-12'>
-                    <div className='col-span-1 text-center flex flex-row'>
-                        <div className={`w-[70%] h-14 ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <h5 className='text-sm font-semibold text-foreground-400'>{day}</h5>
-                            <h5 className='text-xs font-semibold text-foreground-400'>{date}</h5>
-                            <h5 className='text-sm font-semibold text-foreground-400'>{month}</h5>
-                        </div>
-                        <div className={`w-[30%] flex flex-col gap-2 items-center justify-center' ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <div className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy}</div>
-                            {checkPricePerGuest 
-                                ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                    <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                ))
-                                : ""
-                            }
-                          
+                    <div className='mt-1 pl-2 pr-2 w-screen' key={item._id}>
+                        <div className='grid grid-cols-12'>
+                            <div className='col-span-1 text-center flex flex-row'>
+                                <div className={`w-[70%] h-14 ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <h5 className='text-sm font-semibold text-foreground-400'>{day}</h5>
+                                    <h5 className='text-xs font-semibold text-foreground-400'>{date}</h5>
+                                    <h5 className='text-sm font-semibold text-foreground-400'>{month}</h5>
+                                </div>
+                                <div className={`w-[30%] flex flex-col gap-2 items-center justify-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    {checkPricePerGuest
+                                        ? [...Array(item?.room_occupancy - 1)].map((_, idx) => (
+                                            <div key={idx} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - idx - 1}</div>
+                                        ))
+                                        : ""
+                                    }
+                                </div>
+                            </div>
+                            <div className={`col-span-3 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                <div className='grid grid-cols-12 h-16 place-items-center'>
+                                    <div className='col-span-3 flex flex-col gap-1'>
+
+                                        <Input
+                                            type="text"
+                                            name="rate_3hr"
+                                            value={getUpdatedValue(item, 'rate_3hr')}
+                                            onChange={(e) => handleInputChange(e, index, 'rate_3hr')}
+                                            // className='bg-white border-1 border-foreground-300 rounded-lg text-xs bg-none h-full p-0'
+                                            classNames={{
+                                                label: "text-black/50 dark:text-white/90",
+                                                input: [
+                                                    "bg-transparent",
+                                                    "text-black/90 dark:text-white/90",
+                                                    "placeholder:text-center-700/50 dark:placeholder:text-white/60",
+                                                    "text-center"
+                                                ],
+                                                innerWrapper: "bg-transparent, pb-0",
+                                                inputWrapper: [
+                                                    "pt-0",
+                                                    "pb-0",
+                                                    "h-auto",
+                                                    "bg-white",
+                                                    "border-1",
+                                                    "border-foreground-300",
+                                                    "rounded-lg",
+                                                    "text-xs",
+                                                    "min-h-unit-0",
+                                                    
+                                                ],
+                                            }}
+                                        />
+
+
+                                        {checkPricePerGuest
+                                            ? [...Array(item?.room_occupancy - 1)].map((_, idx) => (
+                                                <Input
+                                                    key={idx}
+                                                    type="text"
+                                                    name="rate_3hr"
+                                                    value={getUpdatedValue(item, 'rate_3hr')}
+                                                    onChange={(e) => handleInputChange(e, index, 'rate_3hr')}
+                                                    // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                                    classNames={{
+                                                        label: "text-black/50 dark:text-white/90",
+                                                        input: [
+                                                            "bg-transparent",
+                                                            "text-black/90 dark:text-white/90",
+                                                            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                        "text-center"
+                                                        ],
+                                                        innerWrapper: "bg-transparent, pb-0",
+                                                        inputWrapper: [
+                                                            "pt-0",
+                                                            "pb-0",
+                                                            "h-auto",
+                                                            "bg-white",
+                                                            "border-1",
+                                                            "border-foreground-300",
+                                                            "rounded-lg",
+                                                            "text-xs",
+                                                            "min-h-unit-0",
+                                                        ],
+                                                    }}
+                                                />
+                                            ))
+                                            : ""
+                                        }
+                                    </div>
+                                    <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                        <Input
+                                            type="text"
+                                            name="rate_6hr"
+                                            value={getUpdatedValue(item, 'rate_6hr')}
+                                            onChange={(e) => handleInputChange(e, index, 'rate_6hr')}
+                                            // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                            classNames={{
+                                                label: "text-black/50 dark:text-white/90",
+                                                input: [
+                                                    "bg-transparent",
+                                                    "text-black/90 dark:text-white/90",
+                                                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                    "text-center"
+                                                ],
+                                                innerWrapper: "bg-transparent, pb-0",
+                                                inputWrapper: [
+                                                    "pt-0",
+                                                    "pb-0",
+                                                    "h-auto",
+                                                    "bg-white",
+                                                    "border-1",
+                                                    "border-foreground-300",
+                                                    "rounded-lg",
+                                                    "text-xs",
+                                                    "min-h-unit-0",
+                                                ],
+                                            }}
+                                        />
+                                        {checkPricePerGuest
+                                            ? [...Array(item?.room_occupancy - 1)].map((_, idx) => (
+                                                <Input
+                                                    key={idx}
+                                                    type="text"
+                                                    name="rate_6hr"
+                                                    value={getUpdatedValue(item, 'rate_6hr')}
+                                                    onChange={(e) => handleInputChange(e, index, 'rate_6hr')}
+                                                    // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                                    classNames={{
+                                                        label: "text-black/50 dark:text-white/90",
+                                                        input: [
+                                                            "bg-transparent",
+                                                            "text-black/90 dark:text-white/90",
+                                                            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                            "text-center"
+                                                        ],
+                                                        innerWrapper: "bg-transparent, pb-0",
+                                                        inputWrapper: [
+                                                            "pt-0",
+                                                            "pb-0",
+                                                            "h-auto",
+                                                            "bg-white",
+                                                            "border-1",
+                                                            "border-foreground-300",
+                                                            "rounded-lg",
+                                                            "text-xs",
+                                                            "min-h-unit-0",
+                                                        ],
+                                                    }}
+                                                    />
+                                            ))
+                                            : ""
+                                        }
+                                    </div>
+                                    <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                        <Input
+                                            type="text"
+                                            name="rate_12hr"
+                                            value={getUpdatedValue(item, 'rate_12hr')}
+                                            onChange={(e) => handleInputChange(e, index, 'rate_12hr')}
+                                            // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                            classNames={{
+                                                label: "text-black/50 dark:text-white/90",
+                                                input: [
+                                                    "bg-transparent",
+                                                    "text-black/90 dark:text-white/90",
+                                                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                    "text-center"
+                                                ],
+                                                innerWrapper: "bg-transparent, pb-0",
+                                                inputWrapper: [
+                                                    "pt-0",
+                                                    "pb-0",
+                                                    "h-auto",
+                                                    "bg-white",
+                                                    "border-1",
+                                                    "border-foreground-300",
+                                                    "rounded-lg",
+                                                    "text-xs",
+                                                    "min-h-unit-0",
+                                                ],
+                                            }}
+                                        />
+                                        {checkPricePerGuest
+                                            ? [...Array(item?.room_occupancy - 1)].map((_, idx) => (
+                                                <Input
+                                                    key={idx}
+                                                    type="text"
+                                                    name="rate_12hr"
+                                                    value={getUpdatedValue(item, 'rate_12hr')}
+                                                    onChange={(e) => handleInputChange(e, index, 'rate_12hr')}
+                                                    // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                                    classNames={{
+                                                        label: "text-black/50 dark:text-white/90",
+                                                        input: [
+                                                            "bg-transparent",
+                                                            "text-black/90 dark:text-white/90",
+                                                            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                            "text-center"
+                                                        ],
+                                                        innerWrapper: "bg-transparent, pb-0",
+                                                        inputWrapper: [
+                                                            "pt-0",
+                                                            "pb-0",
+                                                            "h-auto",
+                                                            "bg-white",
+                                                            "border-1",
+                                                            "border-foreground-300",
+                                                            "rounded-lg",
+                                                            "text-xs",
+                                                            "min-h-unit-0",
+                                                        ],
+                                                    }}
+                                                />
+                                            ))
+                                            : ""
+                                        }
+                                    </div>
+                                    <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                        <Input
+                                            type="text"
+                                            name="rate_24hr"
+                                            value={getUpdatedValue(item, 'rate_24hr')}
+                                            onChange={(e) => handleInputChange(e, index, 'rate_24hr')}
+                                            // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                            classNames={{
+                                                label: "text-black/50 dark:text-white/90",
+                                                input: [
+                                                    "bg-transparent",
+                                                    "text-black/90 dark:text-white/90",
+                                                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                    "text-center"
+                                                ],
+                                                innerWrapper: "bg-transparent, pb-0",
+                                                inputWrapper: [
+                                                    "pt-0",
+                                                    "pb-0",
+                                                    "h-auto",
+                                                    "bg-white",
+                                                    "border-1",
+                                                    "border-foreground-300",
+                                                    "rounded-lg",
+                                                    "text-xs",
+                                                    "min-h-unit-0",
+                                                ],
+                                            }}
+                                        />
+                                        {checkPricePerGuest
+                                            ? [...Array(item?.room_occupancy - 1)].map((_, idx) => (
+                                                <Input
+                                                    key={idx}
+                                                    type="text"
+                                                    name="rate_24hr"
+                                                    value={getUpdatedValue(item, 'rate_24hr')}
+                                                    onChange={(e) => handleInputChange(e, index, 'rate_24hr')}
+                                                    // className='bg-white border-1 border-foreground-300 px-4 py-px rounded-lg text-xs bg-none h-[22px]'
+                                                    classNames={{
+                                                        label: "text-black/50 dark:text-white/90",
+                                                        input: [
+                                                            "bg-transparent",
+                                                            "text-black/90 dark:text-white/90",
+                                                            "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                                            "text-center"
+                                                        ],
+                                                        innerWrapper: "bg-transparent, pb-0",
+                                                        inputWrapper: [
+                                                            "pt-0",
+                                                            "pb-0",
+                                                            "h-auto",
+                                                            "bg-white",
+                                                            "border-1",
+                                                            "border-foreground-300",
+                                                            "rounded-lg",
+                                                            "text-xs",
+                                                            "min-h-unit-0",
+                                                        ],
+                                                    }}
+                                                />
+                                            ))
+                                            : ""
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`col-span-2 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                <div className='grid grid-cols-12 h-16'>
+                                    <div className='col-span-6 flex justify-center items-center'>
+                                        <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.total_rooms_count}</div>
+                                    </div>
+                                    <div className='col-span-6 flex justify-center items-center'>
+                                        <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.booked_rooms_count}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-span-6 text-center'>
+                                <div className='grid grid-cols-12 h-16 place-items-center items-center justify-center'>
+                                    <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_3hr}</div>
+                                        <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_3hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_3hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_3hr}</Chip></div>
+                                    </div>
+                                    <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_6hr}</div>
+                                        <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_6hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_6hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_6hr}</Chip></div>
+                                    </div>
+                                    <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_12hr}</div>
+                                        <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_12hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_12hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_12hr}</Chip></div>
+                                    </div>
+                                    <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_24hr}</div>
+                                        <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_24hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_24hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_24hr}</Chip></div>
+                                    </div>
+                                    <div className='col-span-4 flex gap-4'>
+                                        <EditModal rowDataID={item?._id} onEditResult={handleEditResult} selectedDateRange={selectedDateRange} isSoldOut={isSoldOut} />
+                                        <Button color='primary' variant='shadow' size='sm' startContent={<ViewIcon size={15} />}>View</Button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className={`col-span-3 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                        <div className='grid grid-cols-12 h-16 place-items-center'>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_3hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_3hr}</div>
-                                    ))
-                                    : ""
-                                }
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_6hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_6hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_12hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index}  className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_12hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item.rate_24hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item.rate_24hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div className={`col-span-2 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                        <div className='grid grid-cols-12 h-16'>
-                            <div className='col-span-6 flex justify-center items-center'>
-                                <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.total_rooms_count}</div>
-                            </div>
-                            <div className='col-span-6 flex justify-center items-center'>
-                                <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.booked_rooms_count}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-span-6 text-center'>
-                        <div className='grid grid-cols-12 h-16 place-items-center items-center justify-center'>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_3hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_3hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_3hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_3hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_6hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_6hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_6hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_6hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_12hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_12hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_12hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_12hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_24hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_24hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_24hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_24hr}</Chip></div>
-                            </div>
-                            <div className='col-span-4 flex gap-4'>
-                                <EditModal rowDataID={item?.id} onEditResult={handleEditResult} selectedDateRange={selectedDateRange} isSoldOut={isSoldOut}/>
-                                <Button color='primary' variant='shadow' size='sm' startContent={<ViewIcon size={15} />}>View</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                 )
             })}
-           
         </>
     )
 }

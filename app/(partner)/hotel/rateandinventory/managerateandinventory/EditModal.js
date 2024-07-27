@@ -52,8 +52,6 @@ const EditModal = ({rowDataID, onEditResult, selectedDateRange, isSoldOut}) => {
     const handleEditAction = async (rowDataID) => {
         console.log("Edit: ", rowDataID)
 
-
-
         const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory?rowDataID=${rowDataID}`, {
             method: "GET",
             headers: {

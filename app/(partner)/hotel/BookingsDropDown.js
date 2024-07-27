@@ -52,10 +52,10 @@ export default function BookingsDropDown ({ isOpen }) {
         color="primary"
         variant="flat"
       >
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarPlus aria-hidden="true" className="text-foreground" />} key="new"><Link href="/admin/propertymaster/propertytype">New Reservation</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ClockCounterClockwise aria-hidden="true" className="text-foreground" />} key="new"><Link href="/admin/propertymaster/propertytype">Booking History</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CurrencyInr aria-hidden="true" />} key="new"><Link href="/admin/propertymaster/propertyarea">Payment</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<SealQuestion aria-hidden="true" />} key="new"><Link href="/admin/propertymaster/floor">Adjustmnets</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarPlus aria-hidden="true" className="text-foreground" />} key="new"><Link href="/hotel/bookings/new_reservation">New Reservation</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ClockCounterClockwise aria-hidden="true" className="text-foreground" />} key="new"><Link href="/hotel/bookings/booking_history">Booking History</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CurrencyInr aria-hidden="true" />} key="new"><Link href="/hotel/bookings/payment">Payment</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<SealQuestion aria-hidden="true" />} key="new"><Link href="/hotel/bookings/adjustment">Adjustmnets</Link></DropdownItem>
         </DropdownMenu>
     </Dropdown>
     )

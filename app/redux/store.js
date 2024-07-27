@@ -6,6 +6,7 @@ import selectedChecksSlice from "@/app/redux/slices/selectedChecksSlice"
 import loginStateSlice from "@/app/redux/slices/loginStateSlice"
 import refundStateSlice from "@/app/redux/slices/refundSlice"
 import rateandinventorySlice from "@/app/redux/slices/rateandinventorySlice"
+import editroompriceSlice from "@/app/redux/slices/editroompriceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     log:loginStateSlice,
     refund:refundStateSlice,
     rateandinventory:rateandinventorySlice,
+    editroomprice : editroompriceSlice,
   },
 });

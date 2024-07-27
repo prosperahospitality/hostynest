@@ -1,0 +1,15 @@
+.react-datepicker-ignore-onclickoutside {
+    width: 100% !important;
+}
+
+.react-datepicker__input-container {
+    position: initial !important;
+}
+
+.react-datepicker-wrapper {
+    width: 60% !important;
+}
+
+input {
+    width: 100% !important;
+}
