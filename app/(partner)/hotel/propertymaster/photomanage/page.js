@@ -517,7 +517,7 @@ const PhotoManage = () => {
       <div>
 
 
-
+{console.log("currentRoomImage: ", currentRoomImage)}
         <PhotoManageGrid currentRoomImage={currentRoomImage} hotelName={hotelName} roomName={roomName} roomResult={roomResult} onSelectedCheckboxes={handleSelectedCheckboxes} />
       </div></>
   )
