@@ -1,10 +1,10 @@
 'use client'
-import ImgCarousel from "@/app/_components/ui/ImgCarousel"
+import ImgCarousel from "@/_components/ui/ImgCarousel"
 import { Crown, Star, StarHalf, MapPin, Heart, Hotel, CreditCard, Wifi, AirVent, Tv, Milk, ParkingSquare } from 'lucide-react';
-import { Badge } from "@/app/_components/ui/Badge";
+import { Badge } from "@/_components/ui/Badge";
 import { Link, Chip, Divider, Button } from "@nextui-org/react";
-import HourlyBookingSideBar from '@/app/_components/layout/booking/hourlybookings/hourlybookingside-bar';
-import Cityselector from "@/app/_components/ui/CitySelector";
+import HourlyBookingSideBar from '@/_components/layout/booking/hourlybookings/hourlybookingside-bar';
+import Cityselector from "@/_components/ui/CitySelector";
 import React, { useState, useEffect, useCallback } from 'react';
 import HotelName from "@/public";
 import SearchHero from '@/app/(booking)/bookings/hourlybooking/search/SearchHero';

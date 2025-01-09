@@ -1,7 +1,7 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
-import { Property_Roomname } from "@/app/_lib/model/property/property_roomname/property_roomname";
-import { Property_Roomtype_Category } from "@/app/_lib/model/property/property_roomtype_category/property_roomtype_category";
+import  db  from "@/_lib/mongoDB";
+import { Property_Roomtype } from "@/_lib/model/property/property_roomtype/property_roomtype";
+import { Property_Roomname } from "@/_lib/model/property/property_roomname/property_roomname";
+import { Property_Roomtype_Category } from "@/_lib/model/property/property_roomtype_category/property_roomtype_category";
 import { NextResponse } from "next/server";
 
 export async function GET(){

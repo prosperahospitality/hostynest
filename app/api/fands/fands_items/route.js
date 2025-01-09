@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { FandS_Items } from "@/app/_lib/model/fands/fands_items/fands_items";
+import  db  from "@/_lib/mongoDB";
+import { FandS_Items } from "@/_lib/model/fands/fands_items/fands_items";
 import { NextResponse } from "next/server";
 
 export async function GET(){

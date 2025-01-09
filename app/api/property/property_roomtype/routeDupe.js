@@ -1,9 +1,9 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
-import { Property_Type } from "@/app/_lib/model/property/property_type/property_type";
-import { Property_Bedtype } from "@/app/_lib/model/property/property_bedtype/property_bedtype";
-import { Property_Extbedtype } from "@/app/_lib/model/property/property_extbedtype/property_extbedtype";
-import { Property_Roomview } from "@/app/_lib/model/property/property_roomview/property_roomview";
+import  db  from "@/_lib/mongoDB";
+import { Property_Roomtype } from "@/_lib/model/property/property_roomtype/property_roomtype";
+import { Property_Type } from "@/_lib/model/property/property_type/property_type";
+import { Property_Bedtype } from "@/_lib/model/property/property_bedtype/property_bedtype";
+import { Property_Extbedtype } from "@/_lib/model/property/property_extbedtype/property_extbedtype";
+import { Property_Roomview } from "@/_lib/model/property/property_roomview/property_roomview";
 import { NextResponse } from "next/server";
 
 export async function GET(){

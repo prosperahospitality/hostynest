@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Button, Chip } from "@nextui-org/react";
 import { IMAGES } from '@/public/index'
 import { MapPin } from 'lucide-react'
-import Daterangepicker from '@/app/_components/ui/DateRangePicker';
+import Daterangepicker from '@/_components/ui/DateRangePicker';
 
 const FullDayStay = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with current date

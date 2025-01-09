@@ -1,9 +1,9 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Hotel_Infos } from "@/app/_lib/model/hotels/hotel_info/hotel_info";
-import { Bank_Details } from "@/app/_lib/model/hotels/bank_details/bank_details";
-import { Hotel_Facilities } from "@/app/_lib/model/hotels/hotel_facilities/hotel_facilities";
-import { Hotel_Payment_Method } from "@/app/_lib/model/hotels/hotel_payment_method/hotel_payment_method";
-import { Hotel_Point_Of_Interest } from "@/app/_lib/model/hotels/hotel_point_of_interest/hotel_point_of_interest";
+import  db  from "@/_lib/mongoDB";
+import { Hotel_Infos } from "@/_lib/model/hotels/hotel_info/hotel_info";
+import { Bank_Details } from "@/_lib/model/hotels/bank_details/bank_details";
+import { Hotel_Facilities } from "@/_lib/model/hotels/hotel_facilities/hotel_facilities";
+import { Hotel_Payment_Method } from "@/_lib/model/hotels/hotel_payment_method/hotel_payment_method";
+import { Hotel_Point_Of_Interest } from "@/_lib/model/hotels/hotel_point_of_interest/hotel_point_of_interest";
 import { NextResponse } from "next/server";
 
 export async function GET(){

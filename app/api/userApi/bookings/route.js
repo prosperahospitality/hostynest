@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { User_Bookings } from "@/app/_lib/model/bookings";
+import  db  from "@/_lib/mongoDB";
+import { User_Bookings } from "@/_lib/model/bookings";
 import { NextResponse } from "next/server";
 
 

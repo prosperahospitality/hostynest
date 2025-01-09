@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useMemo } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon } from '@/_components/icon'
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { auth } from '@/app/config';
 import bcrypt from 'bcryptjs';

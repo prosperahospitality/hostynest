@@ -1,0 +1,9 @@
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: center;
+  border-radius: 30px;
+  overflow: hidden;  
+}

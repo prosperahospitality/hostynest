@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Property_Roomview } from "@/app/_lib/model/property/property_roomview/property_roomview";
+import  db  from "@/_lib/mongoDB";
+import { Property_Roomview } from "@/_lib/model/property/property_roomview/property_roomview";
 import { NextResponse } from "next/server";
 
 export async function GET(){

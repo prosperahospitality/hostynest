@@ -1,6 +1,6 @@
 'use client'
 import React, {useState,useEffect,  useCallback, useRef} from "react";
-import DataTable from "@/app/_components/ui/DataTable";
+import DataTable from "@/_components/ui/DataTable";
 import {
   Table,
   TableHeader,
@@ -28,7 +28,7 @@ import {
     Autocomplete,
     AutocompleteItem,
 } from "@nextui-org/react";
-import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@/app/_components/icon";
+import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@/_components/icon";
 import { Eye } from 'lucide-react';
 import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'

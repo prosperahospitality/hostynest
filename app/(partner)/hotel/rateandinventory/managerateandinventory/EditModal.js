@@ -1,11 +1,11 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import RIMainContTopBar from '@/app/(partner)/hotel/rateandinventory/managerateandinventory/RIMainContTopBar'
-import Daterangepicker from '@/app/_components/ui/DateRangePicker'
+import Daterangepicker from '@/_components/ui/DateRangePicker'
 import { Chip, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Card, CardBody, Input, Slider, RadioGroup, Radio, Switch } from "@nextui-org/react";
 import { Save } from 'lucide-react'
-import Datepicker from '@/app/_components/ui/DatePicker';
-import Daterangepickerreact from '@/app/_components/ui/DateRangePickerReact'
+import Datepicker from '@/_components/ui/DatePicker';
+import Daterangepickerreact from '@/_components/ui/DateRangePickerReact'
 
 
 const EditModal = ({rowDataID, onEditResult, selectedDateRange, isSoldOut}) => {

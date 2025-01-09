@@ -5,7 +5,7 @@ import { Save, Zap } from 'lucide-react'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
-import { cn } from "@/app/_lib/utils";
+import { cn } from "@/_lib/utils";
 import { addDays, format } from "date-fns"
 import { CiCalendar } from "react-icons/ci";
 import {useDispatch} from "react-redux";

@@ -1,0 +1,62 @@
+#app {
+    height: 100%;
+}
+
+.swiper-button-prev {
+    left: 95%;
+    top: 72%;
+    border: 2px solid white;
+    width: 3%;
+    height: 40px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.swiper-button-next {
+    right: 2%;
+    top: 62%;
+    border: 2px solid white;
+    width: 3%;
+    height: 40px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    font-size: 13px;
+    color: white;
+}
+
+body {
+    background: #eee;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    border-radius: 40px
+}
+
+.swiper-pagination{
+    top:75% !important;
+}

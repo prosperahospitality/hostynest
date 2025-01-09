@@ -2,8 +2,8 @@
 import React from 'react'
 import { Menu, X, ChevronDown, ChevronRight, Search } from 'lucide-react'
 import {Input, Avatar} from "@nextui-org/react";
-import { ThemeSwitch } from "@/app/_components/ui/ThemeSwitch";
-import { CompanyDashLogo } from "@/app/_components/icon";
+import { ThemeSwitch } from "@/_components/ui/ThemeSwitch";
+import { CompanyDashLogo } from "@/_components/icon";
 
 
 const menuItems = [

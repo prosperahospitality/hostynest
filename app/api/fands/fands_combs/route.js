@@ -1,8 +1,8 @@
-import  db  from "@/app/_lib/mongoDB";
-import { FandS_Combs } from "@/app/_lib/model/fands/fands_combs/fands_combs";
-import { FandS_Categorys } from "@/app/_lib/model/fands/fands_categorys/fands_categorys";
-import { FandS_Items } from "@/app/_lib/model/fands/fands_items/fands_items";
-import { Pms_Propertymaster_Roomfands } from "@/app/_lib/model/pms/property_master/room_fands/room_fands";
+import  db  from "@/_lib/mongoDB";
+import { FandS_Combs } from "@/_lib/model/fands/fands_combs/fands_combs";
+import { FandS_Categorys } from "@/_lib/model/fands/fands_categorys/fands_categorys";
+import { FandS_Items } from "@/_lib/model/fands/fands_items/fands_items";
+import { Pms_Propertymaster_Roomfands } from "@/_lib/model/pms/property_master/room_fands/room_fands";
 import { NextResponse } from "next/server";
 
 export async function GET(req){

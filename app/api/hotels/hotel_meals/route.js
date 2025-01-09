@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Hotel_Meals } from "@/app/_lib/model/hotels/hotel_meals/hotel_meals";
+import  db  from "@/_lib/mongoDB";
+import { Hotel_Meals } from "@/_lib/model/hotels/hotel_meals/hotel_meals";
 import { NextResponse } from "next/server";
 
 export async function GET(){

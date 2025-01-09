@@ -1,11 +1,11 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import EmblaCarousel from "@/app/_components/ui/roomcorousel/js/EmblaCarousel"
-import Header from "@/app/_components/ui/roomcorousel/js/Header"
-import Footer from  "@/app/_components/ui/roomcorousel/js/Footer"
-import "@/app/_components/ui/roomcorousel/css/base.css"
-import '@/app/_components/ui/roomcorousel/css/sandbox.css'
-import '@/app/_components/ui/roomcorousel/css/embla.css'
+import EmblaCarousel from "@/_components/ui/roomcorousel/js/EmblaCarousel"
+import Header from "@/_components/ui/roomcorousel/js/Header"
+import Footer from  "@/_components/ui/roomcorousel/js/Footer"
+import "@/_components/ui/roomcorousel/css/base.css"
+import '@/_components/ui/roomcorousel/css/sandbox.css'
+import '@/_components/ui/roomcorousel/css/embla.css'
 
 
 

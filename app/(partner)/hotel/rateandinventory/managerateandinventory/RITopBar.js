@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import Daterangepicker from '@/app/_components/ui/DateRangePicker'
+import Daterangepicker from '@/_components/ui/DateRangePicker'
 import { Autocomplete, AutocompleteItem, Button, CheckboxGroup, Checkbox, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tabs, Tab, Card, CardBody, RadioGroup, Radio, Input } from "@nextui-org/react";
 import { Save, Zap, CalendarRange } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -31,13 +31,13 @@ import { handleUpdateRateArray } from "@/app/redux/slices/rateandinventorySlice"
 
 import { handleCheckPricePerGuest } from "@/app/redux/slices/rateandinventorySlice";
 
-import Daterangepickerreact from '@/app/_components/ui/DateRangePickerReact';
+import Daterangepickerreact from '@/_components/ui/DateRangePickerReact';
 import QuickSoldModal from "@/app/(partner)/hotel/rateandinventory/managerateandinventory/QuickSoldModal"
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRange } from 'react-date-range';
-import { cn } from "@/app/_lib/utils";
+import { cn } from "@/_lib/utils";
 import { CiCalendar } from "react-icons/ci";
 
 

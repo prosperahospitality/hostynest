@@ -96,6 +96,8 @@ const IMAGES = {
     Goldentemple: '/img/ACROSSINDIA/Goldentemple.jpg',
     Lalbaughraja: '/img/ACROSSINDIA/Lalbaughraja.jpg',
     Adminloginbg: '/img/adminloginbg.jpg',
+      sitelogo: '/img/favicon.ico',
+  loginbg: '/img/loginbg.jpg'
 }
 
 

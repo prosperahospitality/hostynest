@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Divider } from "@nextui-org/react";
 import { MapPin, CalendarCheck2, Clock, Search, UserRound, CalendarDays, Users, Locate } from 'lucide-react';
-import Cityselector from "@/app/_components/ui/CitySelector";
-import Datepicker from "@/app/_components/ui/DatePicker";
-import TimePickerTab from '@/app/_components/ui/TimePickerTab';
-import RoomsAndGuests from "@/app/_components/ui/RoomsAndGuests";
+import Cityselector from "@/_components/ui/CitySelector";
+import Datepicker from "@/_components/ui/DatePicker";
+import TimePickerTab from '@/_components/ui/TimePickerTab';
+import RoomsAndGuests from "@/_components/ui/RoomsAndGuests";
 import { useRouter } from 'next/navigation';
 import { CiLocationArrow1, CiCalendar, CiTimer } from "react-icons/ci";
 import { PiUsersLight } from "react-icons/pi";

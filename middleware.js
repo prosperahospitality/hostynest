@@ -58,5 +58,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'nodejs',
 };

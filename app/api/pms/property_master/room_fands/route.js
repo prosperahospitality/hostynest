@@ -1,5 +1,5 @@
-import db from "@/app/_lib/mongoDB";
-import { Pms_Propertymaster_Roomfands } from "@/app/_lib/model/pms/property_master/room_fands/room_fands";
+import db from "@/_lib/mongoDB";
+import { Pms_Propertymaster_Roomfands } from "@/_lib/model/pms/property_master/room_fands/room_fands";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
@@ -101,8 +101,8 @@ export async function POST(req) {
 
 
 
-// import  db  from "@/app/_lib/mongoDB";
-// import { Pms_Propertymaster_Roomfands } from "@/app/_lib/model/pms/property_master/room_fands/room_fands";
+// import  db  from "@/_lib/mongoDB";
+// import { Pms_Propertymaster_Roomfands } from "@/_lib/model/pms/property_master/room_fands/room_fands";
 // import { NextResponse } from "next/server";
 
 // export async function GET(req){

@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import { Tooltip, Button, Input, Chip, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Autocomplete, AutocompleteItem } from "@nextui-org/react"
-import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@/app/_components/icon";
+import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@/_components/icon";
 
 const columns = [
     {name: "ID", uid: "id"},

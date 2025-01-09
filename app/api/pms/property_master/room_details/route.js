@@ -1,10 +1,10 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Hotel_Infos } from "@/app/_lib/model/hotels/hotel_info/hotel_info";
-import { Property_Floor } from "@/app/_lib/model/property/property_floor/property_floor";
-import { Property_Roomtype } from "@/app/_lib/model/property/property_roomtype/property_roomtype";
-import { Property_Bedtype } from "@/app/_lib/model/property/property_bedtype/property_bedtype";
-import { Property_Roomview } from "@/app/_lib/model/property/property_roomview/property_roomview";
-import { Pms_Propertymaster_Roomdetails } from "@/app/_lib/model/pms/property_master/room_details/room_details";
+import  db  from "@/_lib/mongoDB";
+import { Hotel_Infos } from "@/_lib/model/hotels/hotel_info/hotel_info";
+import { Property_Floor } from "@/_lib/model/property/property_floor/property_floor";
+import { Property_Roomtype } from "@/_lib/model/property/property_roomtype/property_roomtype";
+import { Property_Bedtype } from "@/_lib/model/property/property_bedtype/property_bedtype";
+import { Property_Roomview } from "@/_lib/model/property/property_roomview/property_roomview";
+import { Pms_Propertymaster_Roomdetails } from "@/_lib/model/pms/property_master/room_details/room_details";
 import { NextResponse } from "next/server";
 
 export async function GET(request){

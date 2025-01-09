@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Property_Addonservice } from "@/app/_lib/model/property/property_addonservice/property_addonservice";
+import  db  from "@/_lib/mongoDB";
+import { Property_Addonservice } from "@/_lib/model/property/property_addonservice/property_addonservice";
 import { NextResponse } from "next/server";
 
 export async function GET(){

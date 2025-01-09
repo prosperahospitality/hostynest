@@ -1,0 +1,56 @@
+.menu {
+    height: 3rem;
+    width: 15rem;
+  }
+  
+  .menuul {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    margin: 7px 0 0 0;
+    background: white;
+    width: 15rem;
+  }
+  
+  .menuli {
+    color: var(--background);
+    display: block;
+    transform-origin: -20px 50%;
+    text-align: start;
+  }
+  
+  .menuul,
+  .menuli {
+    list-style: none;
+    padding: 10px;
+  }
+  
+
+
+
+
+  /* Example: Override for a specific container */
+.custom-scrollbarrrrrr {
+  overflow-x: auto; /* Ensure scrolling is enabled */
+}
+
+/* Show scrollbar for the specific container */
+.custom-scrollbarrrrrr::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbarrrrrr::-webkit-scrollbar-track {
+  background: #e2e8f0; /* Adjust as needed */
+  border-radius: 5px;
+}
+
+.custom-scrollbarrrrrr::-webkit-scrollbar-thumb {
+  background: #94a3b8; /* Adjust as needed */
+  border-radius: 50px;
+}
+
+.custom-scrollbarrrrrr::-webkit-scrollbar-thumb:hover {
+  background: #64748b; /* Adjust as needed */
+}

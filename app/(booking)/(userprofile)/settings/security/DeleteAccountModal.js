@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon } from '@/_components/icon'
 import Swal from 'sweetalert2'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
 

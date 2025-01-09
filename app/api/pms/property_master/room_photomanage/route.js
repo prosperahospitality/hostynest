@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { Type } from 'lucide-react';
-import {Pms_Propertymaster_Roomphotomanage} from "@/app/_lib/model/pms/property_master/room_photomanage/room_photomanage";
-import { Pms_Propertymaster_Roomdetails } from "@/app/_lib/model/pms/property_master/room_details/room_details";
+import {Pms_Propertymaster_Roomphotomanage} from "@/_lib/model/pms/property_master/room_photomanage/room_photomanage";
+import { Pms_Propertymaster_Roomdetails } from "@/_lib/model/pms/property_master/room_details/room_details";
 
 const initialCreateFunction = async (hotelName, roomName, room_result) => {
  try {
