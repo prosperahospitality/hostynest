@@ -16,16 +16,18 @@ export async function GET(req) {
                 `http://api.geonames.org/searchJSON?name_startsWith=${name_startsWith}&featureClass=${featureClass}&maxRows=${maxRows}&username=S2m3e7_`
             );
             const data = await response.json();
+            conosle.log("Data1:::::>", data)
             return NextResponse.json(data)
         } else {
             const response = await fetch(
                 `http://api.geonames.org/searchJSON?name_startsWith=${name_startsWith}&featureClass=${featureClass}&country=${country}&maxRows=${maxRows}&username=S2m3e7_`
             );
             const data = await response.json();
+            conosle.log("Data2:::::>", data)
             return NextResponse.json(data)
         }
     } catch (error) {
-        data = { result: "error" }
+        conosle.log("error:::::>", error)
         success = false;
     }
     return NextResponse.json({ success })
