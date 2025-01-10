@@ -162,6 +162,75 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
   }
 
 
+  // async function list_of_cities(curr_val: string) {
+  //   try {
+  //     // Fetch Indian cities and global cities concurrently
+  //     const [indiaResults, globalResults] = await Promise.all([
+  //       fetch(`/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100&country=IN`)
+  //         .then((res) => res.json()),
+  //       fetch(
+  //         `/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100`
+  //       ).then((res) => res.json()),
+  //     ]);
+
+  //     // Extract geonames from both responses
+  //     const indianCities = indiaResults.geonames || [];
+  //     const globalCities = globalResults.geonames || [];
+
+  //     // Filter global cities to exclude any that are already in the Indian cities list
+  //     const globalCitiesFiltered = globalCities.filter(
+  //       (city: Location) => !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
+  //     );
+
+  //     // Combine Indian cities first, followed by global cities
+  //     const combinedResults = [...indianCities, ...globalCitiesFiltered];
+
+  //     console.log("Combined Results:", combinedResults);
+
+  //     // Update the filtered locations state
+  //     setFilteredLocations(combinedResults);
+
+  //     if (combinedResults.length === 0) {
+  //       console.log("Is zero");
+
+  //       const [indiaResults, globalResults] = await Promise.all([
+  //         fetch(
+  //           `http://api.geonames.org/childrenJSON?geonameId=1269750&username=S2m3e7_`
+  //         ).then((res) => res.json()),
+  //         fetch(
+  //           `http://api.geonames.org/childrenJSON?username=S2m3e7_`
+  //         ).then((res) => res.json()),
+  //       ]);
+
+  //       // Extract geonames from both responses
+  //       const indianCities = indiaResults.geonames || [];
+  //       const globalCities = globalResults.geonames || [];
+
+  //       // Filter global cities to exclude any that are already in the Indian cities list
+  //       const globalCitiesFiltered = globalCities.filter(
+  //         (city: Location) =>
+  //           !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
+  //       );
+
+  //       // Combine Indian cities first, followed by global cities
+  //       const combinedResults = [...indianCities, ...globalCitiesFiltered];
+
+  //       console.log("Combined Results states:", combinedResults);
+
+  //       // Now filter the combined results based on the search query
+  //       const filtered = combinedResults.filter((city: Location) =>
+  //         city.name.toLowerCase().includes(curr_val.toLowerCase()) // Case-insensitive search
+  //       );
+  //       setFilteredLocations(filtered);
+  //     }
+
+
+  //   } catch (error) {
+  //     console.error("Error fetching cities:", error);
+  //     setFilteredLocations([]);
+  //   }
+  // }
+
 
 
 
@@ -356,6 +425,7 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
 
 
   const handleSelect = (item: Location) => {
+    console.log("SElected::::::::>", item.name)
     setValue(item.name);
     setIsOpenn(false);
   };
@@ -374,7 +444,7 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
           type="text"
           placeholder="Select city or area"
           onFocus={() => setIsOpenn(true)}
-          onBlur={() => setIsOpenn(false)}
+          onBlur={() => setIsOpenn(true)}
           onChange={(e) => {
             list_of_cities(e.target.value);
             capitalize_each_word(e.target.value);
