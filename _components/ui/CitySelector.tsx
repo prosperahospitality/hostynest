@@ -91,6 +91,96 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
   const [addressArray, setAddressArray] = useState<string[]>([]);
 
 
+  async function list_of_cities(curr_val: string) {
+    try {
+      // Fetch Indian cities and global cities concurrently using Geoapify API
+      const [indiaResults, globalResults] = await Promise.all([
+        fetch(
+          `https://api.geoapify.com/v1/geocode/autocomplete?text=${curr_val}&filter=countrycode:in&limit=100&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
+        ).then((res) => res.json()),
+        fetch(
+          `https://api.geoapify.com/v1/geocode/autocomplete?text=${curr_val}&limit=100&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
+        ).then((res) => res.json()),
+      ]);
+  
+      const indianCities = indiaResults.features || [];
+      const globalCities = globalResults.features || [];
+  
+      const globalCitiesFiltered = globalCities.filter(
+        (city: any) =>
+          !indianCities.some(
+            (indianCity: any) =>
+              indianCity.properties.place_id === city.properties.place_id
+          )
+      );
+  
+      // Combine Indian cities first, followed by global cities
+      const combinedResults = [...indianCities, ...globalCitiesFiltered];
+  
+      console.log("Combined Results:", combinedResults)
+
+      setFilteredLocations(
+        combinedResults.map((city: any) => ({
+          name: city.properties.city || city.properties.address_line1,
+          adminName1: city.properties.state,
+          countryName: city.properties.country,
+          geonameId: city.properties.place_id,
+        }))
+      );
+  
+      // Handle no results scenario
+      if (combinedResults.length === 0) {
+        console.log("No matching results, fetching broader location data...");
+  
+        // Fetch broader location data if no results match
+        const [indiaBroadResults, globalBroadResults] = await Promise.all([
+          fetch(
+            `https://api.geoapify.com/v1/geocode/reverse?lat=20.5937&lon=78.9629&type=city&filter=countrycode:in&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
+          ).then((res) => res.json()),
+          fetch(
+            `https://api.geoapify.com/v1/geocode/reverse?lat=20.5937&lon=78.9629&type=city&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
+          ).then((res) => res.json()),
+        ]);
+  
+        // Extract features array from both broader responses
+        const indianBroadCities = indiaBroadResults.features || [];
+        const globalBroadCities = globalBroadResults.features || [];
+  
+        // Filter global broader cities
+        const globalBroadCitiesFiltered = globalBroadCities.filter(
+          (city: any) =>
+            !indianBroadCities.some(
+              (indianCity: any) =>
+                indianCity.properties.place_id === city.properties.place_id
+            )
+        );
+  
+        // Combine broader Indian cities first, followed by global cities
+        const broaderResults = [
+          ...indianBroadCities,
+          ...globalBroadCitiesFiltered,
+        ];
+  
+        console.log("Broader Combined Results:", broaderResults);
+  
+        // Update the filtered locations with broader results
+        setFilteredLocations(
+          broaderResults.map((city: any) => ({
+            name: city.properties.city || city.properties.address_line1,
+            adminName1: city.properties.state,
+            countryName: city.properties.country,
+            geonameId: city.properties.place_id,
+          }))
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setFilteredLocations([]);
+    }
+  }
+  
+
+
   // async function list_of_cities(curr_val: string) {
   //   try {
   //     // Fetch Indian cities and global cities concurrently
@@ -162,74 +252,74 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
   // }
 
 
-  async function list_of_cities(curr_val: string) {
-    try {
-      // Fetch Indian cities and global cities concurrently
-      const [indiaResults, globalResults] = await Promise.all([
-        fetch(`/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100&country=IN`)
-          .then((res) => res.json()),
-        fetch(
-          `/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100`
-        ).then((res) => res.json()),
-      ]);
+  // async function list_of_cities(curr_val: string) {
+  //   try {
+  //     // Fetch Indian cities and global cities concurrently
+  //     const [indiaResults, globalResults] = await Promise.all([
+  //       fetch(`/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100&country=IN`)
+  //         .then((res) => res.json()),
+  //       fetch(
+  //         `/api/cities?name_startsWith=${curr_val}&featureClass=P&maxRows=100`
+  //       ).then((res) => res.json()),
+  //     ]);
 
-      // Extract geonames from both responses
-      const indianCities = indiaResults.geonames || [];
-      const globalCities = globalResults.geonames || [];
+  //     // Extract geonames from both responses
+  //     const indianCities = indiaResults.geonames || [];
+  //     const globalCities = globalResults.geonames || [];
 
-      // Filter global cities to exclude any that are already in the Indian cities list
-      const globalCitiesFiltered = globalCities.filter(
-        (city: Location) => !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
-      );
+  //     // Filter global cities to exclude any that are already in the Indian cities list
+  //     const globalCitiesFiltered = globalCities.filter(
+  //       (city: Location) => !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
+  //     );
 
-      // Combine Indian cities first, followed by global cities
-      const combinedResults = [...indianCities, ...globalCitiesFiltered];
+  //     // Combine Indian cities first, followed by global cities
+  //     const combinedResults = [...indianCities, ...globalCitiesFiltered];
 
-      console.log("Combined Results:", combinedResults);
+  //     console.log("Combined Results:", combinedResults);
 
-      // Update the filtered locations state
-      setFilteredLocations(combinedResults);
+  //     // Update the filtered locations state
+  //     setFilteredLocations(combinedResults);
 
-      if (combinedResults.length === 0) {
-        console.log("Is zero");
+  //     if (combinedResults.length === 0) {
+  //       console.log("Is zero");
 
-        const [indiaResults, globalResults] = await Promise.all([
-          fetch(
-            `http://api.geonames.org/childrenJSON?geonameId=1269750&username=S2m3e7_`
-          ).then((res) => res.json()),
-          fetch(
-            `http://api.geonames.org/childrenJSON?username=S2m3e7_`
-          ).then((res) => res.json()),
-        ]);
+  //       const [indiaResults, globalResults] = await Promise.all([
+  //         fetch(
+  //           `http://api.geonames.org/childrenJSON?geonameId=1269750&username=S2m3e7_`
+  //         ).then((res) => res.json()),
+  //         fetch(
+  //           `http://api.geonames.org/childrenJSON?username=S2m3e7_`
+  //         ).then((res) => res.json()),
+  //       ]);
 
-        // Extract geonames from both responses
-        const indianCities = indiaResults.geonames || [];
-        const globalCities = globalResults.geonames || [];
+  //       // Extract geonames from both responses
+  //       const indianCities = indiaResults.geonames || [];
+  //       const globalCities = globalResults.geonames || [];
 
-        // Filter global cities to exclude any that are already in the Indian cities list
-        const globalCitiesFiltered = globalCities.filter(
-          (city: Location) =>
-            !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
-        );
+  //       // Filter global cities to exclude any that are already in the Indian cities list
+  //       const globalCitiesFiltered = globalCities.filter(
+  //         (city: Location) =>
+  //           !indianCities.some((indianCity: Location) => indianCity.geonameId === city.geonameId)
+  //       );
 
-        // Combine Indian cities first, followed by global cities
-        const combinedResults = [...indianCities, ...globalCitiesFiltered];
+  //       // Combine Indian cities first, followed by global cities
+  //       const combinedResults = [...indianCities, ...globalCitiesFiltered];
 
-        console.log("Combined Results states:", combinedResults);
+  //       console.log("Combined Results states:", combinedResults);
 
-        // Now filter the combined results based on the search query
-        const filtered = combinedResults.filter((city: Location) =>
-          city.name.toLowerCase().includes(curr_val.toLowerCase()) // Case-insensitive search
-        );
-        setFilteredLocations(filtered);
-      }
+  //       // Now filter the combined results based on the search query
+  //       const filtered = combinedResults.filter((city: Location) =>
+  //         city.name.toLowerCase().includes(curr_val.toLowerCase()) // Case-insensitive search
+  //       );
+  //       setFilteredLocations(filtered);
+  //     }
 
 
-    } catch (error) {
-      console.error("Error fetching cities:", error);
-      setFilteredLocations([]);
-    }
-  }
+  //   } catch (error) {
+  //     console.error("Error fetching cities:", error);
+  //     setFilteredLocations([]);
+  //   }
+  // }
 
 
 
