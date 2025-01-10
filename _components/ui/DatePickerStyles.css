@@ -1,0 +1,16 @@
+/* DatePickerStyles.css */
+
+.custom-datepicker {
+  /* Your custom styles for the input field go here */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.custom-calendar {
+  /* Your custom styles for the calendar go here */
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}

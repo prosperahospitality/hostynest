@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { FandS_Categorys } from "@/app/_lib/model/fands/fands_categorys/fands_categorys";
+import  db  from "@/_lib/mongoDB";
+import { FandS_Categorys } from "@/_lib/model/fands/fands_categorys/fands_categorys";
 import { NextResponse } from "next/server";
 
 export async function GET(){

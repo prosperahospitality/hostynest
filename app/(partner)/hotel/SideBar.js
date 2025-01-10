@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image'
 import { IMAGES } from '@/public/index'
-import Dropdown from '@/app/_components/ui/Dropdown';
+import Dropdown from '@/_components/ui/Dropdown';
 import Link from 'next/link'
 import { button as buttonStyles } from "@nextui-org/theme";
 import {Tooltip} from "@nextui-org/react";
@@ -13,7 +13,7 @@ import GrowYourBusinessDropDown from "@/app/(partner)/hotel/GrowYourBusinessDrop
 import ReviewsDropDown from "@/app/(partner)/hotel/ReviewsDropDown"
 import GuestChatDropDown from "@/app/(partner)/hotel/GuestChatDropDown"
 import MoreDropDown from "@/app/(partner)/hotel/MoreDropDown"
-import { Logo } from "@/app/_components/icon";
+import { Logo } from "@/_components/icon";
 import PropertyMasterDropDown from "@/app/(partner)/hotel/PropertyMasterDropDown"
 import ReportsDropDown from './ReportsDropDown';
 

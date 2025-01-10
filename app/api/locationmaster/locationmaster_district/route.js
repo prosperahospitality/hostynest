@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Locationmaster_District } from "@/app/_lib/model/locationmaster/locationmaster_district/locationmaster_district";
+import  db  from "@/_lib/mongoDB";
+import { Locationmaster_District } from "@/_lib/model/locationmaster/locationmaster_district/locationmaster_district";
 import { NextResponse } from "next/server";
 
 export async function GET(){

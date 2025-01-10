@@ -1,8 +1,8 @@
 import { Inter } from 'next/font/google'
 import { Providers } from "@/app/providers";
 import '@/app/globals.css'
-import SiteHeader from '@/app/_components/layout/booking/SiteHeader';
-import SiteFooter from '@/app/_components/layout/booking/SiteFooter';
+import SiteHeader from '@/_components/layout/booking/SiteHeader';
+import SiteFooter from '@/_components/layout/booking/SiteFooter';
 import { Suspense } from 'react';
 
 

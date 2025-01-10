@@ -2,15 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumbs, BreadcrumbItem, Button, Skeleton, Card, CardFooter, Progress, Divider, CardBody, Mountain, RadioGroup, Radio, cn, Popover, PopoverTrigger, PopoverContent, Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { Crown, Dot, Star, MapPin, Heart, Share2, Hotel, CreditCard, Search, Wifi, AirVent, Tv, Milk, ParkingSquare, MessageCircleHeart, Wallet, BatteryCharging, Refrigerator, WashingMachine, Cctv, Check, BedDouble, BedSingle, Bath, TvMinimal, VolumeX, SquareM  } from 'lucide-react';
-import { Badge } from "@/app/_components/ui/Badge";
+import { Badge } from "@/_components/ui/Badge";
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-} from "@/app/_components/ui/Carousel"
-import RoomsAndGuests from "@/app/_components/ui/RoomsAndGuests";
+} from "@/_components/ui/Carousel"
+import RoomsAndGuests from "@/_components/ui/RoomsAndGuests";
 import HotelName, { IMAGES } from '@/public/index'
 import { useSearchParams } from 'next/navigation'
 import LoginFunc from "@/app/(auth)/login/LoginFunc";
@@ -19,10 +19,10 @@ import Swal from 'sweetalert2'
 import { SessionProvider, useSession, getSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'
-import DateTimeCombo from '@/app/_components/ui/DateTimeCombo'
+import DateTimeCombo from '@/_components/ui/DateTimeCombo'
 import ImageModal from "@/app/(booking)/bookings/hourlybooking/hotels/[hotelname]/ImageModal";
 import RoomModal from "@/app/(booking)/bookings/hourlybooking/hotels/[hotelname]/RoomModal";
-import Daterangepickerreact from '@/app/_components/ui/DateRangePickerReact'
+import Daterangepickerreact from '@/_components/ui/DateRangePickerReact'
 import { CiLocationArrow1, CiCalendar, CiTimer } from "react-icons/ci";
 import { PiUsersLight } from "react-icons/pi";
 import "./styleee.css"

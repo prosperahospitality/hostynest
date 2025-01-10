@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import DateTimeCombo from '@/app/_components/ui/DateTimeCombo'
+import DateTimeCombo from '@/_components/ui/DateTimeCombo'
 import { CiCirclePlus } from "react-icons/ci";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import Image from 'next/image'
@@ -8,8 +8,8 @@ import { Button, Chip, Divider } from "@nextui-org/react";
 import { IMAGES } from '@/public/index'
 import Link from 'next/link'
 import { Crown, Star, StarHalf, MapPin, Heart, Hotel, CreditCard, Wifi, AirVent, Tv, Milk, ParkingSquare } from 'lucide-react';
-import { Badge } from "@/app/_components/ui/Badge";
-import ImgCarousel from "@/app/_components/ui/ImgCarousel"
+import { Badge } from "@/_components/ui/Badge";
+import ImgCarousel from "@/_components/ui/ImgCarousel"
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
 
 const HourlyStayy = () => {

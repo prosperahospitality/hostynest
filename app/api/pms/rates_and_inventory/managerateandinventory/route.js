@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Pms_Ratesandinventory_Managerateandinventory } from "@/app/_lib/model/pms/rates_and_inventory/managerateandinventory/managerateandinventory";
+import  db  from "@/_lib/mongoDB";
+import { Pms_Ratesandinventory_Managerateandinventory } from "@/_lib/model/pms/rates_and_inventory/managerateandinventory/managerateandinventory";
 import { NextResponse } from "next/server";
 
 export async function GET(request){

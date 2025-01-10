@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Avatar, Button, Chip, Input } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon } from '@/_components/icon'
 import InfoModal from '@/app/(booking)/(userprofile)/userprofile/InfoModal'
 import ProfileBookingTab from '@/app/(booking)/(userprofile)/userprofile/ProfileBookingTab'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { IMAGES } from '@/public/index';
 import { useRouter } from 'next/navigation';
 import siteConfig from '@/config/site';
-import PasswordInput from '@/app/_components/ui/PasswordInput';
+import PasswordInput from '@/_components/ui/PasswordInput';
 import { Input } from '@nextui-org/react';
 import { Button } from '@nextui-org/react';
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";

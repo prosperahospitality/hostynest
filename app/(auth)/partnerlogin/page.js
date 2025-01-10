@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect,useState} from "react";
 import { Input, Button, Checkbox } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon, Logo } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon, Logo } from '@/_components/icon'
 import { Comfortaa } from 'next/font/google'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation';

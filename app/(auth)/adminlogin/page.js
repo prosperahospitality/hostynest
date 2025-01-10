@@ -3,7 +3,7 @@ import React, {useState,useEffect} from "react";
 import Image from 'next/image';
 import { IMAGES } from '@/public/index';
 import { Input, Autocomplete, AutocompleteItem, Button, Checkbox } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon, CompanyLogiLogo } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon, CompanyLogiLogo } from '@/_components/icon'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 

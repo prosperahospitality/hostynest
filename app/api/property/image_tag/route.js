@@ -1,6 +1,6 @@
-import  db  from "@/app/_lib/mongoDB";
+import  db  from "@/_lib/mongoDB";
 import { NextResponse } from "next/server";
-import { Image_Tag } from "@/app/_lib/model/property/image_tag/image_tag";
+import { Image_Tag } from "@/_lib/model/property/image_tag/image_tag";
 
 export async function GET(){
   let data = [];

@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Search_Cities } from "@/app/_lib/model/search_cities";
+import  db  from "@/_lib/mongoDB";
+import { Search_Cities } from "@/_lib/model/search_cities";
 import { NextResponse } from "next/server";
 
 export async function POST(request){

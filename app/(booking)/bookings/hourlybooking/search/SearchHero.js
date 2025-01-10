@@ -1,8 +1,8 @@
 import React from 'react'
-import HourlyBooking from '@/app/_components/ui/HourlyBooking';
+import HourlyBooking from '@/_components/ui/HourlyBooking';
 import Image from 'next/image'
 import { IMAGES } from '@/public/index'
-import { IndianFlag } from "@/app/_components/icon"
+import { IndianFlag } from "@/_components/icon"
 import { Divider } from "@nextui-org/react";
 import { Permanent_Marker } from 'next/font/google'
 import VIDEOS from '@/public/video'

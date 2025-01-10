@@ -1,6 +1,6 @@
 import { Button, Avatar } from "@nextui-org/react";
 import { Home, BarChart, Copy, Bookmark, Users, Settings } from 'lucide-react'
-import { CompanyDashLogo } from "@/app/_components/icon";
+import { CompanyDashLogo } from "@/_components/icon";
 
 
 const CompanySideBar = () => {

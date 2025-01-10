@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { auth } from '@/app/config';
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import PasswordInput from '@/app/_components/ui/PasswordInput';
+import PasswordInput from '@/_components/ui/PasswordInput';
 import bcrypt from 'bcryptjs';
 import Swal from 'sweetalert2'
 import { SessionProvider, useSession, getSession, signIn, signOut } from 'next-auth/react'
-import { EyeSlashFilledIcon, EyeFilledIcon } from '@/app/_components/icon'
+import { EyeSlashFilledIcon, EyeFilledIcon } from '@/_components/icon'
 
 
 const LoginFunc = ({ loginFlag, loginFlagBookingsPage, onResultFlag, rFlag }) => {

@@ -2,8 +2,8 @@
 import React from "react";
 import {Divider, Link} from "@nextui-org/react";
 import { Undo2 } from "lucide-react"
-import Steps from "@/app/_components/layout/company/onboardingform/Steps";
-import StepForm from "@/app/_components/layout/company/onboardingform/StepForm";
+import Steps from "@/_components/layout/company/onboardingform/Steps";
+import StepForm from "@/_components/layout/company/onboardingform/StepForm";
 
     const steps = [
       {

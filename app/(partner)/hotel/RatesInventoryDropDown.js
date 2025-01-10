@@ -10,7 +10,7 @@ import { FaHandsWash } from "react-icons/fa";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip } from "@nextui-org/react";
 import { button as buttonStyles } from "@nextui-org/theme";
 import Link from 'next/link'
-import { ListChecks, ArrowsClockwise } from "@/app/_components/icon"
+import { ListChecks, ArrowsClockwise } from "@/_components/icon"
 import { useSearchParams } from 'next/navigation'
 
 

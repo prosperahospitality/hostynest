@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Tabs, Tab, Card, CardBody, CardHeader, Checkbox, Button } from "@nextui-org/react";
-import { AirConditioner } from '@/app/_components/aminationsicons'
+import { AirConditioner } from '@/_components/aminationsicons'
 import RoomSelectionTab from "@/app/(partner)/hotel/propertymaster/roomamenities/RoomSelectionTab"
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'

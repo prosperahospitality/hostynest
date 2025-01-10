@@ -2,7 +2,7 @@
 import LoginFunc from "@/app/(auth)/login/LoginFunc";
 import Image from 'next/image';
 import { IMAGES } from '@/public/index';
-import SiteHeader from '@/app/_components/layout/booking/SiteHeader';
+import SiteHeader from '@/_components/layout/booking/SiteHeader';
 import siteConfig from '@/config/site';
 
 

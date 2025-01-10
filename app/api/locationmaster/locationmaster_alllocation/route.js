@@ -1,10 +1,10 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Locationmaster_Alllocation } from "@/app/_lib/model/locationmaster/locationmaster_alllocation/locationmaster_alllocation";
-import { Locationmaster_Region } from "@/app/_lib/model/locationmaster/locationmaster_region/locationmaster_region";
-import { Locationmaster_Country } from "@/app/_lib/model/locationmaster/locationmaster_country/locationmaster_country";
-import { Locationmaster_State } from "@/app/_lib/model/locationmaster/locationmaster_state/locationmaster_state";
-import { Locationmaster_District } from "@/app/_lib/model/locationmaster/locationmaster_district/locationmaster_district";
-import { Locationmaster_City } from "@/app/_lib/model/locationmaster/locationmaster_city/locationmaster_city";
+import  db  from "@/_lib/mongoDB";
+import { Locationmaster_Alllocation } from "@/_lib/model/locationmaster/locationmaster_alllocation/locationmaster_alllocation";
+import { Locationmaster_Region } from "@/_lib/model/locationmaster/locationmaster_region/locationmaster_region";
+import { Locationmaster_Country } from "@/_lib/model/locationmaster/locationmaster_country/locationmaster_country";
+import { Locationmaster_State } from "@/_lib/model/locationmaster/locationmaster_state/locationmaster_state";
+import { Locationmaster_District } from "@/_lib/model/locationmaster/locationmaster_district/locationmaster_district";
+import { Locationmaster_City } from "@/_lib/model/locationmaster/locationmaster_city/locationmaster_city";
 import { NextResponse } from "next/server";
 
 export async function GET(){

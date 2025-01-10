@@ -1,8 +1,8 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Property_Amenities } from "@/app/_lib/model/property/property_amenities/property_amenities";
-import { Property_Area } from "@/app/_lib/model/property/property_area/property_area";
-import { Amenities } from "@/app/_lib/model/property/amenities/amenities";
-import { Pms_Propertymaster_Roomamenities } from "@/app/_lib/model/pms/property_master/room_amenities/room_amenities";
+import  db  from "@/_lib/mongoDB";
+import { Property_Amenities } from "@/_lib/model/property/property_amenities/property_amenities";
+import { Property_Area } from "@/_lib/model/property/property_area/property_area";
+import { Amenities } from "@/_lib/model/property/amenities/amenities";
+import { Pms_Propertymaster_Roomamenities } from "@/_lib/model/pms/property_master/room_amenities/room_amenities";
 import { NextResponse } from "next/server";
 
 export async function GET(request){

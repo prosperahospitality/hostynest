@@ -2,8 +2,8 @@
 import React, {useState,useEffect} from 'react'
 import { Menu, X, ChevronDown, ChevronRight, Search, KeyRound, Settings, Power, Mail, MessageCircleMore, MessageCircleQuestion } from 'lucide-react'
 import {Input, Avatar, Badge, Popover, PopoverTrigger, PopoverContent, Button, User, Tooltip} from "@nextui-org/react";
-import { ThemeSwitch } from "@/app/_components/ui/ThemeSwitch";
-import { CompanyDashLogo, NotificationIcon } from "@/app/_components/icon";
+import { ThemeSwitch } from "@/_components/ui/ThemeSwitch";
+import { CompanyDashLogo, NotificationIcon } from "@/_components/icon";
 import Link from 'next/link';
 import { button as buttonStyles } from "@nextui-org/theme";
 import { RxExternalLink } from "react-icons/rx";

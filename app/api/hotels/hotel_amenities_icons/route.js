@@ -1,5 +1,5 @@
-import  db  from "@/app/_lib/mongoDB";
-import { Hotel_Amenities_Icons } from "@/app/_lib/model/hotels/hotel_amenities_icons/hotel_amenities_icons";
+import  db  from "@/_lib/mongoDB";
+import { Hotel_Amenities_Icons } from "@/_lib/model/hotels/hotel_amenities_icons/hotel_amenities_icons";
 import { NextResponse } from "next/server";
 
 export async function GET(){
