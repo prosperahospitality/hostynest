@@ -9,6 +9,44 @@ import "./styles.css"
 
 const staggerMenuItems = stagger(0.1, { startDelay: 0.15 });
 
+const states = [
+  {"state": "Andhra Pradesh"},
+  {"state": "Arunachal Pradesh"},
+  {"state": "Assam"},
+  {"state": "Bihar"},
+  {"state": "Chhattisgarh"},
+  {"state": "Goa"},
+  {"state": "Gujarat"},
+  {"state": "Haryana"},
+  {"state": "Himachal Pradesh"},
+  {"state": "Jharkhand"},
+  {"state": "Karnataka"},
+  {"state": "Kerala"},
+  {"state": "Madhya Pradesh"},
+  {"state": "Maharashtra"},
+  {"state": "Manipur"},
+  {"state": "Meghalaya"},
+  {"state": "Mizoram"},
+  {"state": "Nagaland"},
+  {"state": "Odisha"},
+  {"state": "Punjab"},
+  {"state": "Rajasthan"},
+  {"state": "Sikkim"},
+  {"state": "Tamil Nadu"},
+  {"state": "Telangana"},
+  {"state": "Tripura"},
+  {"state": "Uttar Pradesh"},
+  {"state": "Uttarakhand"},
+  {"state": "West Bengal"},
+  {"state": "Andaman and Nicobar Islands"},
+  {"state": "Chandigarh"},
+  {"state": "Dadra and Nagar Haveli and Daman and Diu"},
+  {"state": "Delhi"},
+  {"state": "Lakshadweep"},
+  {"state": "Puducherry"}
+]
+
+
 interface City {
   geonameId: number;
   name: string;
@@ -121,55 +159,48 @@ const Cityselector: React.FC<ChildProps> = ({ onCitySelect, searchCity, nearMeFl
 
       setFilteredLocations(
         combinedResults.map((city: any) => ({
-          name: city.properties.city || city.properties.address_line1,
+          name: city.properties.name || city.properties.city || city.properties.address_line1,
           adminName1: city.properties.state,
           countryName: city.properties.country,
           geonameId: city.properties.place_id,
         }))
       );
   
-      // Handle no results scenario
+
       if (combinedResults.length === 0) {
         console.log("No matching results, fetching broader location data...");
   
         // Fetch broader location data if no results match
-        const [indiaBroadResults, globalBroadResults] = await Promise.all([
-          fetch(
-            `https://api.geoapify.com/v1/geocode/reverse?lat=20.5937&lon=78.9629&type=city&filter=countrycode:in&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
-          ).then((res) => res.json()),
-          fetch(
-            `https://api.geoapify.com/v1/geocode/reverse?lat=20.5937&lon=78.9629&type=city&apiKey=2bfd6266e4fa4d51b50a97a7419d807d`
-          ).then((res) => res.json()),
-        ]);
+        const [indiaBroadResults, globalBroadResults] = [states, states]
   
-        // Extract features array from both broader responses
-        const indianBroadCities = indiaBroadResults.features || [];
-        const globalBroadCities = globalBroadResults.features || [];
+        // // Extract features array from both broader responses
+        // const indianBroadCities = indiaBroadResults.state || [];
+        // const globalBroadCities = globalBroadResults.state || [];
   
-        // Filter global broader cities
-        const globalBroadCitiesFiltered = globalBroadCities.filter(
-          (city: any) =>
-            !indianBroadCities.some(
-              (indianCity: any) =>
-                indianCity.properties.place_id === city.properties.place_id
-            )
-        );
+        // // Filter global broader cities
+        // const globalBroadCitiesFiltered = globalBroadCities.filter(
+        //   (city: any) =>
+        //     !indianBroadCities.some(
+        //       (indianCity: any) =>
+        //         indianCity.properties.place_id === city.properties.place_id
+        //     )
+        // );
   
-        // Combine broader Indian cities first, followed by global cities
-        const broaderResults = [
-          ...indianBroadCities,
-          ...globalBroadCitiesFiltered,
-        ];
+        // // Combine broader Indian cities first, followed by global cities
+        // const broaderResults = [
+        //   ...indianBroadCities,
+        //   ...globalBroadCitiesFiltered,
+        // ];
   
-        console.log("Broader Combined Results:", broaderResults);
+        // console.log("Broader Combined Results:", broaderResults);
   
         // Update the filtered locations with broader results
         setFilteredLocations(
-          broaderResults.map((city: any) => ({
-            name: city.properties.city || city.properties.address_line1,
-            adminName1: city.properties.state,
-            countryName: city.properties.country,
-            geonameId: city.properties.place_id,
+          indiaBroadResults.map((city: any) => ({
+            name: city.state,
+            adminName1: city.state,
+            countryName: "India",
+            geonameId: "",
           }))
         );
       }

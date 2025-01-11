@@ -31,7 +31,8 @@ export async function middleware(request) {
   }
 
   if (request.nextUrl.pathname.startsWith('/hotel')) {
-    const authToken = cookies.get("next-auth.session-token")?.value;
+    // const authToken = cookies.get("next-auth.session-token")?.value;
+    const authToken = cookies.get("__Secure-next-auth.session-token")?.value;
 
     if (!authToken) {
       return NextResponse.redirect(new URL('/partnerlogin', request.url));
