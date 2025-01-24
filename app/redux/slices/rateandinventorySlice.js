@@ -3,7 +3,9 @@ const { createSlice } = require("@reduxjs/toolkit");
 const initialState = {
     formattedDateRange: [],
     selectedRoom: '',
-    quickSold: [],
+    selectedRoomKey: '',
+    selectedRoomDetails: {},
+    quickSold: false,
     quickSoldFormattedDate: [],
     quickSoldSelectedRadio: '',
     quickSoldFormattedDateCopy: [],
@@ -30,6 +32,24 @@ const initialState = {
     updateRateArray: [],
 
     checkPricePerGuest: '',
+    inventoryTable: [],
+    quickSoldRoomKey: '',
+
+
+
+    /////////////////////Bulk Update/////////////////////
+
+    updateBulkProperty: '',
+    formattedDateUpdateProperty: [],
+    selectedBulkRadio: '',
+    selectedRoomUpdatePropertyKey: '',
+    selectedChecksUpdateProp: [],
+    selectedBulkUpdateTab: '',
+
+
+    formattedDateUpdateRate: [],
+    selectedRoomUpdateRateKey: '',
+    enteredBulkUpdateRate: {},
 };
 
 const rateandinventorySlice = createSlice({
@@ -47,35 +67,26 @@ const rateandinventorySlice = createSlice({
             state.selectedRoom = action.payload
         },
 
-        handleQuickSold :  (state, action) => {
+        handleSelectedRoomKey :  (state, action) => {
             console.log("Action: ",action);
-            state.quickSold = action.payload
+            state.selectedRoomKey = action.payload
         },
 
-        handleQuickSoldFormattedDate :  (state, action) => {
-            console.log("Action: ",action);
-            state.quickSoldFormattedDate = action.payload
-        },
+
 
         handleQuickSoldFormattedDateCopy : (state, action) => {
             console.log("Action: ",action);
             state.quickSoldFormattedDateCopy = action.payload
         },
 
-        handleQuickSoldSelectedRadio :  (state, action) => {
-            console.log("Action: ",action);
-            state.quickSoldSelectedRadio = action.payload
-        },
+
 
         removeQuickSoldFormattedDate : (state, action) => {
             console.log("Action: ",action);
             state.quickSoldFormattedDate = action.payload
         },
 
-        handleUpdateBulkProperty: (state, action) => {
-            console.log("Action: ",action);
-            state.updateBulkProperty = action.payload
-        },
+
 
         handleFormattedDateUpdateProp: (state, action) => {
             console.log("Action: ",action);
@@ -179,16 +190,90 @@ const rateandinventorySlice = createSlice({
                     state.checkPricePerGuest = action.payload
                 },
 
+                handleSelectedRoomDetails: (state, action) => {
+                    console.log("Action: ",action);
+                    state.selectedRoomDetails = action.payload
+                },
+
+                handleInventoryTable: (state, action) => {
+                    console.log("Action: ",action);
+                    state.inventoryTable = action.payload
+                },
+
+                /////////////////////Quick Sold Out/////////////////////
+
+                handleQuickSoldFormattedDate :  (state, action) => {
+                    state.quickSoldFormattedDate = action.payload
+                },
+
+                handleQuickSoldSelectedRadio :  (state, action) => {
+                    state.quickSoldSelectedRadio = action.payload
+                },
+
+                handleQuickSold :  (state, action) => {
+                    state.quickSold = action.payload
+                },
+
+                handleQuickSoldRoomKey :  (state, action) => {
+                    state.quickSoldRoomKey = action.payload
+                },
+
+                /////////////////////Bulk Update/////////////////////
+
+                handleUpdateBulkProperty: (state, action) => {
+                    state.updateBulkProperty = action.payload
+                },
+
+                handleFormattedDateUpdateProperty: (state, action) => {
+                    state.formattedDateUpdateProperty = action.payload
+                },
+
+                handleSelectedBulkRadio: (state, action) => {
+                    state.selectedBulkRadio = action.payload
+                },
+
+                handleSelectedRoomUpdatePropertyKey: (state, action) => {
+                    state.selectedRoomUpdatePropertyKey = action.payload
+                },
+
+                handleSelectedChecksUpdateProp: (state, action) => {
+                    state.selectedChecksUpdateProp = action.payload
+                },
+
+                handleSelectedBulkUpdateTab: (state, action) => {
+                    state.selectedBulkUpdateTab = action.payload
+                },
+
+
+
+
+
+                handleFormattedDateUpdateRate: (state, action) => {
+                    state.formattedDateUpdateRate = action.payload
+                },
+
+                handleSelectedRoomUpdateRateKey: (state, action) => {
+                    state.selectedRoomUpdateRateKey = action.payload
+                },
+
+                handleEnteredBulkUpdateRate: (state, action) => {
+                    state.enteredBulkUpdateRate = action.payload
+                },
+                
+
+
+
 
     },
 });
 
-export const {handleFormattedDateRange, handleSelectedRoom, handleQuickSold, handleQuickSoldFormattedDate ,handleQuickSoldSelectedRadio, removeQuickSoldFormattedDate, handleQuickSoldFormattedDateCopy, handleUpdateBulkProperty, handleFormattedDateUpdateProp, handleFormattedDateUpdatePropCopy, handleSelectedRoomUpdateProperty, handleSelectedRadioUpdateProp, handleQuickSoldFlag, handleUpdatePropArray, handleUpdateRoomArray, handleFormattedDateUpdateRoom,
+export const { handleFormattedDateUpdateRate, 
+    handleSelectedRoomUpdateRateKey, 
+    handleEnteredBulkUpdateRate, handleSelectedBulkUpdateTab, handleSelectedChecksUpdateProp, handleFormattedDateUpdateProperty, handleSelectedBulkRadio, handleSelectedRoomUpdatePropertyKey, handleQuickSoldRoomKey, handleFormattedDateRange, handleSelectedRoom, handleSelectedRoomKey, handleSelectedRoomDetails, handleQuickSold, handleQuickSoldFormattedDate ,handleQuickSoldSelectedRadio, removeQuickSoldFormattedDate, handleQuickSoldFormattedDateCopy, handleUpdateBulkProperty, handleFormattedDateUpdateProp, handleFormattedDateUpdatePropCopy, handleSelectedRoomUpdateProperty, handleSelectedRadioUpdateProp, handleQuickSoldFlag, handleUpdatePropArray, handleUpdateRoomArray, handleFormattedDateUpdateRoom,
     handleSelectedRoomUpdateRoom,
     handleValueUpdateRoom,
     
-    handleFormattedDateUpdateRate,
-    handleSelectedRoomUpdateRate,
+
     handleValue3HourRate,
     handleValue6HourRate,
     handleValue12HourRate,
@@ -197,5 +282,5 @@ export const {handleFormattedDateRange, handleSelectedRoom, handleQuickSold, han
     handleValueExtraPersonRate,
     handleUpdateRateArray,
 
-    handleCheckPricePerGuest} = rateandinventorySlice.actions;
+    handleCheckPricePerGuest, handleInventoryTable} = rateandinventorySlice.actions;
 export default rateandinventorySlice.reducer

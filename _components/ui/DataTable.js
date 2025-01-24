@@ -18,23 +18,23 @@ import {
   Pagination,
   Tooltip,
   Textarea,
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    useDisclosure,
-    Autocomplete,
-    AutocompleteItem,
-    select,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  Autocomplete,
+  AutocompleteItem,
+  select,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-import {PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon, VerticalDotsIcon } from "@/_components/icon";
+import { PlusIcon, SearchIcon, ChevronDownIcon, DeleteIcon, EditIcon, VerticalDotsIcon } from "@/_components/icon";
 import { handleSelectedChecks } from "@/app/redux/slices/selectedChecksSlice";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {Spinner} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 
 
 // export function capitalize(str) {
@@ -45,20 +45,20 @@ import {Spinner} from "@nextui-org/react";
 
 
 
-export default function DataTable ({ data, columns, statusOptions, columnSort, statusColorMap, columnName, actionsContent, operation, handleOpen, handleClick, handleDelete, handleSubmit}) {
+export default function DataTable({ data, columns, statusOptions, columnSort, statusColorMap, columnName, actionsContent, operation, handleOpen, handleClick, handleDelete, handleSubmit }) {
   let INITIAL_VISIBLE_COLUMNS;
 
-if(operation === "pms_roomtype") {
-  INITIAL_VISIBLE_COLUMNS = ["id",
-  "room_name",
-  "room_type",
-  "room_rate",
-  "status",
-  "actions"];
-}else if(operation === "propManagement"){
-  // INITIAL_VISIBLE_COLUMNS = ["Hotel_Id", "Hotel_name", "status"];
-  INITIAL_VISIBLE_COLUMNS = ["Hotel_Id", "Hotel_name", "status", "actions", "Contact_Name", "Phone_Number", "Address", "Location", "State"];
-}
+  if (operation === "pms_roomtype") {
+    INITIAL_VISIBLE_COLUMNS = ["id",
+      "room_name",
+      "room_type",
+      "room_rate",
+      "status",
+      "actions"];
+  } else if (operation === "propManagement") {
+    // INITIAL_VISIBLE_COLUMNS = ["Hotel_Id", "Hotel_name", "status"];
+    INITIAL_VISIBLE_COLUMNS = ["Hotel_Id", "Hotel_name", "status", "actions", "Contact_Name", "Phone_Number", "Address", "Location", "State"];
+  }
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = React.useState(true);
   const [filterValue, setFilterValue] = React.useState("");
@@ -84,9 +84,9 @@ if(operation === "pms_roomtype") {
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false); 
-    }, 2000); 
-    return () => clearTimeout(timer); 
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const headerColumns = React.useMemo(() => {
@@ -100,7 +100,7 @@ if(operation === "pms_roomtype") {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((result) =>
-      
+
         result[columnName].toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
@@ -137,10 +137,10 @@ if(operation === "pms_roomtype") {
       case columnName:
         return (
 
-           <div className="flex flex-col">
-           <p className="text-bold text-small capitalize">{cellValue}</p>
-           {/* <p className="text-bold text-tiny capitalize text-default-500">{result.Hotel_name}</p> */}
-         </div>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+            {/* <p className="text-bold text-tiny capitalize text-default-500">{result.Hotel_name}</p> */}
+          </div>
         );
       case columnSort:
         return (
@@ -151,17 +151,17 @@ if(operation === "pms_roomtype") {
         );
       case "status":
         return (
-            operation === "propManagement" ? <Chip
-                className="capitalize border-none gap-1 text-default-600"
-                color={statusColorMap[result.status]}
-                size="sm"
-                variant="dot"
+          operation === "propManagement" ? <Chip
+            className="capitalize border-none gap-1 text-default-600"
+            color={statusColorMap[result.status]}
+            size="sm"
+            variant="dot"
           >
             {cellValue}
-          </Chip> 
-          :  <Chip className="capitalize" color={statusColorMap[result.status]} size="sm" variant="flat">
-          {cellValue}
-                </Chip>
+          </Chip>
+            : <Chip className="capitalize" color={statusColorMap[result.status]} size="sm" variant="flat">
+              {cellValue}
+            </Chip>
         );
       case "actions":
         return (
@@ -252,6 +252,10 @@ if(operation === "pms_roomtype") {
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
+                className='custom-scrollbar'
+                style={{
+                  height: "15rem"
+                }}
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
@@ -261,39 +265,39 @@ if(operation === "pms_roomtype") {
                 ))}
               </DropdownMenu>
             </Dropdown> : " "}
-            {operation === "listHotel" ? "" 
-            : <><Button
+            {operation === "listHotel" ? ""
+              : <><Button
                 className="text-white"
                 variant='shadow'
                 //onClick={(e) => {operation === "propManagement" ? " " : handleOpen("editmany")}}
-                onClick={(e) => {handleOpen("editmany")}}
+                onClick={(e) => { handleOpen("editmany") }}
                 startContent={<EditIcon className="size-4" />}
                 size="sm"
                 color="success"
               >
                 Edit
               </Button>
-              <Button
-                className="text-white"
-                variant='shadow'
-                onClick={(e) => {operation === "propManagement" ? " " : handleDelete('',"deleteSelected",checksRef.current)}}
-                startContent={<DeleteIcon className="size-4" />}
-                size="sm"
-                color="danger"
-              >
-                Delete
-              </Button>
-              <Button
-                className="text-white"
-                variant='shadow'
-                onPress={(e) => operation === "propManagement" ? router.push('/admin/onboarding') : handleOpen("add")}
-                onClick={(e) => operation === "propManagement" ? "" : handleClick()}
-                startContent={<PlusIcon />}
-                size="sm"
-                color="primary"
-              >
-                Add New
-              </Button></>
+                <Button
+                  className="text-white"
+                  variant='shadow'
+                  onClick={(e) => { operation === "propManagement" ? " " : handleDelete('', "deleteSelected", checksRef.current) }}
+                  startContent={<DeleteIcon className="size-4" />}
+                  size="sm"
+                  color="danger"
+                >
+                  Delete
+                </Button>
+                <Button
+                  className="text-white"
+                  variant='shadow'
+                  onPress={(e) => operation === "propManagement" ? router.push('/admin/onboarding') : handleOpen("add")}
+                  onClick={(e) => operation === "propManagement" ? "" : handleClick()}
+                  startContent={<PlusIcon />}
+                  size="sm"
+                  color="primary"
+                >
+                  Add New
+                </Button></>
             }
           </div>
         </div>
@@ -364,106 +368,128 @@ if(operation === "pms_roomtype") {
     [],
   );
 
-    React.useEffect(() => {
-        setResult(data)
-    }, [data])
+  React.useEffect(() => {
+    setResult(data)
+  }, [data])
 
-//   React.useEffect(() => {
-//     initialFxn()
-// }, [])
+  //   React.useEffect(() => {
+  //     initialFxn()
+  // }, [])
 
-// const initialFxn = async () => {
-//     try {
-//         const response = await fetch("/api/hotels/hotel_info", {
-//             method: "GET",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         });
-//         const result = await response.json();
-//         console.log("Data:", result.data);
-//         setResult(result.data);
-//     } catch (error) {
-//         console.error("Error fetching data:", error);
-//     }
-// }
+  // const initialFxn = async () => {
+  //     try {
+  //         const response = await fetch("/api/hotels/hotel_info", {
+  //             method: "GET",
+  //             headers: {
+  //                 "Content-Type": "application/json",
+  //             },
+  //         });
+  //         const result = await response.json();
+  //         console.log("Data:", result.data);
+  //         setResult(result.data);
+  //     } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //     }
+  // }
 
-// React.useEffect(() => {
-//   // console.log("Selected Keys: ",selectedKeys?.forEach((item) => console.log(item)),selectedKeys.size)
+  // React.useEffect(() => {
+  //   // console.log("Selected Keys: ",selectedKeys?.forEach((item) => console.log(item)),selectedKeys.size)
 
-//   console.log("Selected Keys: ",selectedKeys.size, selectedKeys, selectedKeys.entries())
-// }, [selectedKeys])
+  //   console.log("Selected Keys: ",selectedKeys.size, selectedKeys, selectedKeys.entries())
+  // }, [selectedKeys])
 
-React.useEffect(() => {
-  dispatch(handleSelectedChecks([...selectedKeys]))
-}, [dispatch, selectedKeys]);
+  React.useEffect(() => {
+    dispatch(handleSelectedChecks([...selectedKeys]))
+  }, [dispatch, selectedKeys]);
 
   return (
-   <>
+    <>
       <Table
-          isCompact
-          isHeaderSticky
-          // removeWrapper
-          aria-label="Example table with custom cells, pagination and sorting"
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          checkboxesProps={{
-            classNames: {
-              wrapper: "after:bg-background after:text-foreground text-foreground",
-            },
-          }}
-          selectedKeys={selectedKeys}
-          selectionMode="multiple"
-          sortDescriptor={sortDescriptor}
-          topContent={topContent}
-          topContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
-          onSortChange={setSortDescriptor}
+        // isCompact
+        // isHeaderSticky
+        // // removeWrapper
+        // aria-label="Example table with custom cells, pagination and sorting"
+        // bottomContent={bottomContent}
+        // bottomContentPlacement="outside"
+        // checkboxesProps={{
+        //   classNames: {
+        //     wrapper: "max-h-[69vh] after:bg-background after:text-foreground text-foreground custom-scrollbar",
+        //   },
+        // }}
+        // selectedKeys={selectedKeys}
+        // selectionMode="multiple"
+        // sortDescriptor={sortDescriptor}
+        // topContent={topContent}
+        // topContentPlacement="outside"
+        // onSelectionChange={setSelectedKeys}
+        // onSortChange={setSortDescriptor}
+
+        aria-label="Example table with custom cells, pagination and sorting"
+        isCompact
+        isHeaderSticky
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={{
+          wrapper: "max-h-[69vh] custom-scrollbar",
+          th: [],
+        }}
+        checkboxesProps={{
+          classNames: {
+            wrapper: "after:bg-background after:text-foreground text-foreground",
+          },
+        }}
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
       >
-              <TableHeader columns={operation === "propManagement" || operation === "pms_roomtype"  ? headerColumns : columns}>
-                  {(column) => (
-                      <TableColumn
-                          key={column.uid}
-                          align={column.uid === "actions" ? "center" : "start"}
-                          allowsSorting={column.sortable}
-                      >
-                          {column.name}
-                      </TableColumn>
-                  )}
-              </TableHeader>
-              <TableBody className='w-[10px]' emptyContent={isLoading &&  sortedItems.length === 0
-              ? <Spinner />
-            : "No data found"} items={sortedItems}>
-  {(item) => (
-    <TableRow key={operation === "propManagement" ? item.Hotel_Id : item.id} className= {operation === "pms_roomtype" ? "text-foreground" : ""}>
-      {(columnKey) => {
-        if (columnKey === 'actions') {
-          // Customize rendering for the actions column
-          return (
-            <TableCell>
-              {actionsContent(
-                item,
-                (rowData) => {
-                  // Callback function to handle edit click
-                  console.log("Edit clicked:", rowData);
-                  // Handle the edit click event here
-                },
-                (rowData) => {
-                  // Callback function to handle delete click
-                  console.log("Delete clicked:", rowData);
-                  // Handle the delete click event here
+        <TableHeader columns={operation === "propManagement" || operation === "pms_roomtype" ? headerColumns : columns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody className='w-[10px]' emptyContent={isLoading && sortedItems.length === 0
+          ? <Spinner />
+          : "No data found"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={operation === "propManagement" ? item.Hotel_Id : item.id} className={operation === "pms_roomtype" ? "text-foreground" : ""}>
+              {(columnKey) => {
+                if (columnKey === 'actions') {
+                  // Customize rendering for the actions column
+                  return (
+                    <TableCell>
+                      {actionsContent(
+                        item,
+                        (rowData) => {
+                          // Callback function to handle edit click
+                          console.log("Edit clicked:", rowData);
+                          // Handle the edit click event here
+                        },
+                        (rowData) => {
+                          // Callback function to handle delete click
+                          console.log("Delete clicked:", rowData);
+                          // Handle the delete click event here
+                        }
+                      )}
+                    </TableCell>
+                  );
+                } else {
+                  // Render other columns normally
+                  return <TableCell>{renderCell(item, columnKey)}</TableCell>;
                 }
-              )}
-            </TableCell>
-          );
-        } else {
-          // Render other columns normally
-          return <TableCell>{renderCell(item, columnKey)}</TableCell>;
-        }
-      }}
-    </TableRow>
-  )}
-</TableBody>
-          </Table></>
+              }}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table></>
   );
 }

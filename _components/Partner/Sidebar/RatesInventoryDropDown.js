@@ -10,7 +10,7 @@ import { FaHandsWash } from "react-icons/fa";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip } from "@nextui-org/react";
 import { button as buttonStyles } from "@nextui-org/theme";
 import Link from 'next/link'
-import { ListChecks, ArrowsClockwise } from "@/_components/icon"
+import { ListChecks, ArrowsClockwise } from "@/app/_components/icon"
 import { useSearchParams } from 'next/navigation'
 
 
@@ -57,10 +57,10 @@ export default function RatesInventoryDropDown ({ isOpen }) {
         color="primary"
         variant="flat"
       >
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ListChecks  />} key="new"><Link href={`/hotel/rateandinventory/managerateandinventory?hotel_id=${hotel_id}&hotel_name=${hotel_name}`}>Manage Rate & Inventory</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ArrowsClockwise  />} key="new"><Link href={`/admin/propertymaster/propertyarea?hotel_id=${hotel_id}&hotel_name=${hotel_name}`}>Sync Property Calender</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarCheck2 />} key="new"><Link href={`/admin/propertymaster/floor?hotel_id=${hotel_id}&hotel_name=${hotel_name}`}>Default Rates & Inventory</Link></DropdownItem>
-        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarClock  />} key="new"><Link href={`/admin/propertymaster/floor?hotel_id=${hotel_id}&hotel_name=${hotel_name}`}>Low Inventory Dates</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ListChecks  />} key="new"><Link href={`/hotel/rateandinventory/managerateandinventory`}>Manage Rate & Inventory</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<ArrowsClockwise  />} key="new"><Link href={`/admin/propertymaster/propertyarea`}>Sync Property Calender</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarCheck2 />} key="new"><Link href={`/admin/propertymaster/floor`}>Default Rates & Inventory</Link></DropdownItem>
+        <DropdownItem className='text-foreground-600 hover:text-primary' startContent={<CalendarClock  />} key="new"><Link href={`/admin/propertymaster/floor`}>Low Inventory Dates</Link></DropdownItem>
         </DropdownMenu>
     </Dropdown>
     )

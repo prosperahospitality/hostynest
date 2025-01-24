@@ -36,4 +36,33 @@ html,body{
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #f1f5f9;
-  }  
+  } 
+
+
+
+
+  /* Example: Override for a specific container */
+.custom-scrollbar {
+  overflow-x: auto;
+}
+
+/* Show scrollbar for the specific container */
+.custom-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e2e8f0; /* Adjust as needed */
+  border-radius: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #94a3b8; /* Adjust as needed */
+  border-radius: 50px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b; /* Adjust as needed */
+}

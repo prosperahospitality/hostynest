@@ -8,6 +8,9 @@ const pms_propertymaster_roomdetailsModel= new mongoose.Schema({
     room_name: String,
     room_type: String,
     room_rate: String,
+    room_rate3hrs: String,
+    room_rate6hrs: String,
+    room_rate12hrs: String,
     cgst: String,
     sgst: String,
     igst: String,
@@ -25,6 +28,8 @@ const pms_propertymaster_roomdetailsModel= new mongoose.Schema({
     bed_type: Array,
     number_of_beds: Array,
     bed_size: Array,
+    room_photos: Array,
+    property_photos: Array,
     creation_date: String,
     last_update_on: String,    
 });

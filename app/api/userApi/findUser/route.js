@@ -15,7 +15,7 @@ export async function POST(request){
 
     } if(credentials.userID && credentials.user_role === "partner") {
 
-      const result = await User.findOne({ user_id : credentials.userID, delete_flag : 0, user_role: "partner"});
+      const result = await User.findOne({ user_id : credentials.userID, delete_flag : 0, user_role: "partner", Hotel_Id: parseInt(credentials.hotelid)});
 
       return NextResponse.json({result,success:true})
 

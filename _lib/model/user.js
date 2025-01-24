@@ -11,6 +11,7 @@ const userModel= new mongoose.Schema({
         favourites: Array,
         delete_flag: Number,
         user_role: String,
+        Hotel_Id: Number,
 });
 
 export const User = mongoose.models.user || mongoose.model("user",userModel);

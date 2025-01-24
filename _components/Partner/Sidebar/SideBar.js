@@ -2,19 +2,19 @@
 import React, { useState } from 'react';
 import Image from 'next/image'
 import { IMAGES } from '@/public/index'
-import Dropdown from '@/_components/ui/Dropdown';
+import Dropdown from '@/app/_components/ui/Dropdown';
 import Link from 'next/link'
 import { button as buttonStyles } from "@nextui-org/theme";
 import {Tooltip} from "@nextui-org/react";
 import { LayoutDashboard, Building2, CalendarCheck, User, LogIn, PanelLeftClose, PanelLeftOpen, FilePieChart } from 'lucide-react'
-import BookingsDropDown from "@/app/(partner)/hotel/BookingsDropDown"
-import RatesInventoryDropDown from "@/app/(partner)/hotel/RatesInventoryDropDown"
-import GrowYourBusinessDropDown from "@/app/(partner)/hotel/GrowYourBusinessDropDown"
-import ReviewsDropDown from "@/app/(partner)/hotel/ReviewsDropDown"
-import GuestChatDropDown from "@/app/(partner)/hotel/GuestChatDropDown"
-import MoreDropDown from "@/app/(partner)/hotel/MoreDropDown"
-import { Logo } from "@/_components/icon";
-import PropertyMasterDropDown from "@/app/(partner)/hotel/PropertyMasterDropDown"
+import BookingsDropDown from "@/_components/Partner/Sidebar/BookingsDropDown"
+import RatesInventoryDropDown from "@/_components/Partner/Sidebar/RatesInventoryDropDown"
+import GrowYourBusinessDropDown from "@/_components/Partner/Sidebar/GrowYourBusinessDropDown"
+import ReviewsDropDown from "@/_components/Partner/Sidebar/ReviewsDropDown"
+import GuestChatDropDown from "@/_components/Partner/Sidebar/GuestChatDropDown"
+import MoreDropDown from "@/_components/Partner/Sidebar/MoreDropDown"
+import { Logo } from "@/app/_components/icon";
+import PropertyMasterDropDown from "@/_components/Partner/Sidebar/PropertyMasterDropDown"
 import ReportsDropDown from './ReportsDropDown';
 
 

@@ -10,6 +10,7 @@ const pms_propertymaster_roomamenitiesModel= new mongoose.Schema({
     availability: Array,
     creation_date: String,
     last_update_on: String,
+    unique_id: String,
 });
 
 export const Pms_Propertymaster_Roomamenities = mongoose.models.pms_propertymaster_roomamenities || mongoose.model("pms_propertymaster_roomamenities",pms_propertymaster_roomamenitiesModel)

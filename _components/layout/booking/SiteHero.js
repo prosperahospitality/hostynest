@@ -1,3 +1,5 @@
+'use client'
+import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { Button } from '@nextui-org/react';
 import HeroCarousel from '@/_components/layout/booking/heroimagcarousel/heroimgcarousel'
@@ -7,6 +9,32 @@ import Bookingselctor from "@/_components/ui/BookingSelctor"
 
 
 export default function Hero() {
+
+    useEffect(() => {
+        try {
+            const deleteolddates = async () => {
+                let payload = {
+                    action: "deleteOldDates"
+                };
+    
+                const response = await fetch(
+                    `/api/pms/rates_and_inventory/managerateandinventory`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    }
+                );
+                const result = await response.json();
+
+            }
+            deleteolddates()
+        } catch (error) {
+    
+        }
+    }, [])
 
     return (
         <div className='pt-[50px] h-screen w-screen bg-white/40'>

@@ -6,8 +6,6 @@ import { cookies } from "next/headers";
 
 const BASE_URL = process.env.BASE_URL;
 
-console.log("Base Url: ",BASE_URL)
-
 export const options = {
   session : {
     strategy : "jwt",
@@ -194,7 +192,7 @@ export const options = {
 
               const res = await fetch(BASE_URL + "api/userApi/findUser", {
                 method: 'POST',
-                body: JSON.stringify({"userID" : credentials.userID, "user_role" : "partner"}),
+                body: JSON.stringify({"userID" : credentials.userID, "user_role" : "partner", hotelid: credentials.propCode}),
                 headers: { "Content-Type": "application/json" }
               })
               const use = await res.json()

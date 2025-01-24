@@ -1600,7 +1600,7 @@ function HotelPagee() {
 
                             
                             {item.room_size && item.room_size_type ? <div className="inline-flex text-[13px]">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-m"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 16V8l4 4 4-4v8"/></svg>&nbsp;{item.room_size} {item.room_size_type}
+                                <svg xmlns="http://www.w3.org/2000/svg" className="" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-square-m"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 16V8l4 4 4-4v8"/></svg>&nbsp;{item.room_size} {item.room_size_type}
                             </div> : ""}
 
                             
@@ -1614,7 +1614,7 @@ function HotelPagee() {
 
                             {roomview && roomview.trim() === "Mountain View" || roomview && roomview.trim() === "Hill View"
                                 ? (<div className="ml-4 inline-flex text-[13px]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mountain"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>&nbsp; {roomview}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-mountain"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>&nbsp; {roomview}
                                 </div>)
                                 : ""
                             }
@@ -1628,7 +1628,7 @@ function HotelPagee() {
                             
                             {roomview && roomview.trim() === "Beach View"
                                 ? (<div className="ml-4 inline-flex text-[13px]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 13.48H13a2 2 0 0 1-2-2a2 2 0 0 1-4 0a2 2 0 0 1-4 0a2 2 0 0 1-2 2H.5m9.5-4a5.49 5.49 0 0 0-8.48 0"/><path d="M6.5 7.53c.06-2.26.75-4.32 2.25-5.06M5.76.57a2.58 2.58 0 0 1 3 1.9"/><path d="M12.41 2.84a2.78 2.78 0 0 0-3.66-.37"/><path d="M5.08 3.54a3 3 0 0 1 3.67-1.07a2.55 2.55 0 0 1 1.89 3"/></g></svg>&nbsp;{roomview}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" strokeLinecap="round" stroke-linejoin="round"><path d="M13.5 13.48H13a2 2 0 0 1-2-2a2 2 0 0 1-4 0a2 2 0 0 1-4 0a2 2 0 0 1-2 2H.5m9.5-4a5.49 5.49 0 0 0-8.48 0"/><path d="M6.5 7.53c.06-2.26.75-4.32 2.25-5.06M5.76.57a2.58 2.58 0 0 1 3 1.9"/><path d="M12.41 2.84a2.78 2.78 0 0 0-3.66-.37"/><path d="M5.08 3.54a3 3 0 0 1 3.67-1.07a2.55 2.55 0 0 1 1.89 3"/></g></svg>&nbsp;{roomview}
                                 </div>)
                                 : ""
                             }
@@ -1657,7 +1657,7 @@ function HotelPagee() {
                                               if(item.amenity === "Flat-screen TV") {
                                                 return (<>
                                                   <li>
-                                                      <div className="inline-flex text-[13px]">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" className="icon-style" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal"><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg>&nbsp;{item.amenity}</div>
+                                                      <div className="inline-flex text-[13px]">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" className="icon-style" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal"><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg>&nbsp;{item.amenity}</div>
                                                   </li>
                                                 </>)
                                               }

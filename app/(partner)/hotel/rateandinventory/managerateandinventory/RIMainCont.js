@@ -1,531 +1,95 @@
-'use client'
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import RIMainContTopBar from '@/app/(partner)/hotel/rateandinventory/managerateandinventory/RIMainContTopBar'
-import { Chip, Button } from "@nextui-org/react";
-import EditModal from '@/app/(partner)/hotel/rateandinventory/managerateandinventory/EditModal';
+'use client';
+
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useSearchParams } from 'next/navigation'
-import { removeQuickSoldFormattedDate } from "@/app/redux/slices/rateandinventorySlice";
-import { handleQuickSoldFormattedDate } from "@/app/redux/slices/rateandinventorySlice";
+import { useSession } from 'next-auth/react'
 
-import { handleFormattedDateUpdateProp } from "@/app/redux/slices/rateandinventorySlice";
-import { handleUpdatePropArray } from "@/app/redux/slices/rateandinventorySlice";
-import { useSession, getSession, signIn, signOut } from 'next-auth/react'
+import {
+    handleInventoryTable, handleQuickSold
+} from "@/app/redux/slices/rateandinventorySlice";
 
 
-const arrs = [1, 2, 3, 4, 5, 6, 7]
+import RIMainContTopBar from './RIMainContTopBar';
+import EditModal from './EditModal';
+
+import { Chip, Button } from "@nextui-org/react";
+
+import { Pencil } from "lucide-react"
 
 const RIMainCont = () => {
-    const searchParams = useSearchParams();
-    const hotel_id = searchParams.get('hotel_id');
-    const hotel_name = searchParams.get('hotel_name');
-    const [result, setResult] = useState([])
-    const [allResult, setAllResult] = useState([])
-    const [lastID, setLastID] = useState(0);
+
     const dispatch = useDispatch();
-    const [previousDateRange, setPreviousDateRange] = useState([])
+    const { data: sessionValue } = useSession()
+    const [hotel_id, setHotel_id] = useState(sessionValue !== undefined ? sessionValue?.user?.Hotel_Id : 0);
+    const [hotelDetails, setHotelDetails] = useState({});
+    const [result, setResult] = useState([]);
 
+    ////////////////Top Bar Date///////////////
     let selectedDateRange = useSelector((state) => state.rateandinventory.formattedDateRange);
-    let selectedRoom = useSelector((state) => state.rateandinventory.selectedRoom);
 
+    ////////////////Top Bar Room Select///////////////
+    let selectedRoom = useSelector((state) => state.rateandinventory.selectedRoom);
+    let selectedRoomKey = useSelector((state) => state.rateandinventory.selectedRoomKey);
+    let selectedRoomDetails = useSelector((state) => state.rateandinventory.selectedRoomDetails);
+
+    ////////////////Top Bar Check Box///////////////
+    let checkPricePerGuest = useSelector((state) => state.rateandinventory.checkPricePerGuest);
+
+    ////////////////Top Bar Quick Sold Out///////////////
     let quickSold = useSelector((state) => state.rateandinventory.quickSold);
     let quickSoldFormattedDate = useSelector((state) => state.rateandinventory.quickSoldFormattedDate);
-    let quickSoldFormattedDateCopy = useSelector((state) => state.rateandinventory.quickSoldFormattedDateCopy);
+    let quickSoldRoomKey = useSelector((state) => state.rateandinventory.quickSoldRoomKey);
     let quickSoldSelectedRadio = useSelector((state) => state.rateandinventory.quickSoldSelectedRadio);
 
+
+    //////////////////////////////////////Top Bar Bulk Update//////////////////////////////////////////
+
     let updateBulkProperty = useSelector((state) => state.rateandinventory.updateBulkProperty);
-    let formattedDateUpdateProp = useSelector((state) => state.rateandinventory.formattedDateUpdateProp);
-    let formattedDateUpdatePropCopy = useSelector((state) => state.rateandinventory.formattedDateUpdatePropCopy);
-    let selectedRoomUpdateProperty = useSelector((state) => state.rateandinventory.selectedRoomUpdateProperty);
-    let selectedRadioUpdateProp = useSelector((state) => state.rateandinventory.selectedRadioUpdateProp);
+    let formattedDateUpdateProperty = useSelector((state) => state.rateandinventory.formattedDateUpdateProperty);
+    let selectedBulkRadio = useSelector((state) => state.rateandinventory.selectedBulkRadio);
+    let selectedRoomUpdatePropertyKey = useSelector((state) => state.rateandinventory.selectedRoomUpdatePropertyKey);
+    let selectedChecksUpdateProp = useSelector((state) => state.rateandinventory.selectedChecksUpdateProp);
+    let selectedBulkUpdateTab = useSelector((state) => state.rateandinventory.selectedBulkUpdateTab);
 
-    let updatePropArray = useSelector((state) => state.rateandinventory.updatePropArray);
-    let updateRoomArray = useSelector((state) => state.rateandinventory.updateRoomArray);
-    let updateRateArray = useSelector((state) => state.rateandinventory.updateRateArray);
-    
-    let formattedDateUpdateRoom = useSelector((state) => state.rateandinventory.formattedDateUpdateRoom);
-    let selectedRoomUpdateRooms = useSelector((state) => state.rateandinventory.selectedRoomUpdateRooms);
-    let valueTotalRoom = useSelector((state) => state.rateandinventory.valueTotalRoom);
+    let formattedDateUpdateRate = useSelector((state) => state.rateandinventory.formattedDateUpdateRate);
+    let selectedRoomUpdateRateKey = useSelector((state) => state.rateandinventory.selectedRoomUpdateRateKey);
+    let enteredBulkUpdateRate = useSelector((state) => state.rateandinventory.enteredBulkUpdateRate);
 
-    let checkPricePerGuest = useSelector((state) => state.rateandinventory.checkPricePerGuest);
-    
-
-    const [editableSelectedRoom, setEditableSelectedRoom] = useState([]);
-    const [editableSelectedRoomCopy, setEditableSelectedRoomCopy] = useState([]);
-
-    const [editableUpdateProp, setEditableUpdateProp] = useState([]);
-    const [editableUpdatePropCopy, setEditableUpdatePropCopy] = useState([]);
+    console.log("ASDFWQERQWE:::::>", {updateBulkProperty: updateBulkProperty,
+        selectedBulkUpdateTab: selectedBulkUpdateTab,
+        formattedDateUpdateRate: formattedDateUpdateRate,
+        selectedRoomUpdateRateKey: selectedRoomUpdateRateKey,
+        enteredBulkUpdateRate: enteredBulkUpdateRate})
 
 
-    let selectedRoomUpdateRate= useSelector((state) => state.rateandinventory.selectedRoomUpdateRate);
-    let formattedDateUpdateRate= useSelector((state) => state.rateandinventory.formattedDateUpdateRate);
-    let value3HourRate= useSelector((state) => state.rateandinventory.value3HourRate);
-    let value6HourRate= useSelector((state) => state.rateandinventory.value6HourRate);
-    let value12HourRate= useSelector((state) => state.rateandinventory.value12HourRate);
-    let valueBaseRate= useSelector((state) => state.rateandinventory.valueBaseRate);
-    let valueChildRate= useSelector((state) => state.rateandinventory.valueChildRate);
-    let valueExtraPersonRate= useSelector((state) => state.rateandinventory.valueExtraPersonRate);
-
-    const [session, setSession] = React.useState({});
-
-    React.useEffect(() => {
-    
-        const getSessionInfo = async () => {
-          const session = await getSession();
-          setSession(session);
-        };
-        getSessionInfo();
-    }, [])
-
-    React.useEffect(() => {
-    
-console.log("Sessionnnnn: ",session)
-    }, [session])
+    const inventoryTable = useSelector((state) => state.rateandinventory.inventoryTable);
 
     useEffect(() => {
-
-        if(selectedDateRange.length !== 0) {
-            setPreviousDateRange(prevDateRange => [...prevDateRange, selectedDateRange]);
+        if (sessionValue !== undefined) {
+            setHotel_id(sessionValue?.user?.Hotel_Id)
         }
-        
+    }, [sessionValue])
 
+    const fxnOne = async () => {
 
-        if(selectedDateRange || selectedRoom) {
-            dataFxn(selectedDateRange, selectedRoom, quickSoldFormattedDate, editableSelectedRoom)
-        }
-
-    }, [selectedDateRange, selectedRoom, editableSelectedRoom])
-
-    useEffect(() => {
-
-        console.log("Previous Date Range: ",previousDateRange)
-
-    }, [previousDateRange])
-
-
-    const generateUniqueID = () => {
-
-        const newID = `MRI${String(lastID + 1).padStart(5, '0')}`;
-        setLastID(lastID + 1);
-        return newID;
-        };
-
-    function getCurrentDateTime() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        const hours = String(today.getHours()).padStart(2, '0');
-        const minutes = String(today.getMinutes()).padStart(2, '0');
-        const seconds = String(today.getSeconds()).padStart(2, '0');
-        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-    }    
-
-
-    const handleEditResult = (res, selectedDateRange, selectedRowID, selectedRowDate, selectedRoomtype, selectedRowStatus) => {
-
-        if(selectedRoom === selectedRoomtype) {
-
-            if(quickSoldSelectedRadio === "soldout") {
-                if(selectedRowStatus === "bookable") {
-
-                    let updatedDates = quickSoldFormattedDate.filter((item) => item !== selectedRowDate)
-    
-                    editableSelectedRoom.forEach((item) => {
-             
-                        if(item.roomtype === selectedRoom) {
-              
-                            item.updatedDates = updatedDates
-                        }
-                    })
-    
-                    setEditableSelectedRoomCopy(editableSelectedRoom)
-    
-                    dispatch(removeQuickSoldFormattedDate(updatedDates));
-    
-    
-                }else{
-                    editableSelectedRoom.forEach((item) => {
-                    
-                        if (item.roomtype === selectedRoom) {
-                        
-                            item.updatedDates = [...(item.updatedDates || []), selectedRowDate];
-    
-                            dispatch(handleQuickSoldFormattedDate(item.updatedDates));
-    
-                        }
-                    });
-    
-                    setEditableSelectedRoomCopy(editableSelectedRoom)
-    
-                }
-            }
-
-            
-
-        }else{
-            
-        }
-        
-        res = res?.filter((item) => {
-            return selectedDateRange.includes(item.booking_date);
-        });
-
-        const sortedData = res?.sort((a, b) => a.id - b.id);
-        setResult(sortedData)
-        
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const dataFxn = useCallback(async (selectedDateRange, selectedRoom, quickSoldFormattedDate, editableSelectedRoom) => {
-        
         try {
-            const response0 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const result0 = await response0.json();
-            const resultData = result0.data.sort((a, b) => a.id - b.id);
-            setAllResult(result0.data)
-            let lstID;
-            if (resultData && resultData.length > 0) {
-                const lastElement = resultData[resultData.length - 1]; 
-                const lastElementId = lastElement.id; 
-                const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/); 
-                const lastNumericId = numericPart ? parseInt(numericPart[1]) : null;
-               
-                lstID = lastNumericId;
-            } else {
-              
-                lstID = 0;
+
+            const payload = {
+                hotelId: hotel_id
             }
 
-            const response = await fetch(`/api/pms/property_master/room_details?hotelId=${hotel_id.toString()}`, {
-                method: "GET",
+            const response = await fetch(`/api/hotels_copy/hotel_info/hotel_by_id`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(payload)
             });
             const result = await response.json();
-            let activeResults = result.dataActive;
-            let filteredResults = activeResults.find((item) => item.Hotel_Id === parseInt(hotel_id) && item.room_name === selectedRoom);
-           
-            console.log("Rooms Selection::::::>", selectedDateRange,selectedRoom)
-            await Promise.all(selectedDateRange?.map(async (item) => {
-                lstID = lstID + 1;
-               
-                if(selectedRoom !== " " || selectedRoom !== undefined) {
-                    let payload;
-                    payload = {
-                        id: `MRI${String(lstID).padStart(5, '0')}`,
-                        Hotel_Id: hotel_id,
-                        Hotel_name: hotel_name,
-                        user_id: "01",
-                        user_name: "test",
-                        booking_date: item.toString(),
-                        room_type: selectedRoom,
-                        price_per_guest_flag: false,
-                        room_occupancy: filteredResults?.base_adult,
-                        rate_3hr: 0,
-                        rate_6hr: 0,
-                        rate_12hr: 0,
-                        rate_24hr: filteredResults?.room_rate,
-                        total_rooms_count: 0,
-                        booked_rooms_count: 0,
-                        first_checkin_last_checkout_3hr: "12 AM - 11 PM",
-                        first_checkin_last_checkout_6hr: "12 AM - 11 PM",
-                        first_checkin_last_checkout_12hr: "12 AM - 11 PM",
-                        first_checkin_last_checkout_24hr: "12 AM - 11 PM",
-                        first_checkin_last_checkout_status_3hr: "Active",
-                        first_checkin_last_checkout_status_6hr: "Active",
-                        first_checkin_last_checkout_status_12hr: "Active",
-                        first_checkin_last_checkout_status_24hr: "Active",
-                        status:"bookable",
-                        creation_date: getCurrentDateTime(),
-                        last_update_on: getCurrentDateTime(),
-                    }
-        
-                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(payload),
-                    });
-                    const result = await response.json();
-                }
 
+            setHotelDetails(result.data)
 
-            //     let payload;
-            //     payload = {
-            //         id: `MRI${String(lstID).padStart(5, '0')}`,
-            //         Hotel_Id: hotel_id,
-            //         Hotel_name: hotel_name,
-            //         user_id: session ? session?.user?.user_id : "",
-            //         user_name: "",
-            //         booking_date: item.toString(),
-            //         room_type: selectedRoom,
-            //         price_per_guest_flag: false,
-            //         room_occupancy: filteredResults?.base_adult,
-            //         rate_3hr: 0,
-            //         rate_6hr: 0,
-            //         rate_12hr: 0,
-            //         rate_24hr: filteredResults?.room_rate,
-            //         total_rooms_count: 0,
-            //         booked_rooms_count: 0,
-            //         first_checkin_last_checkout_3hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_6hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_12hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_24hr: "12 AM - 11 PM",
-            //         first_checkin_last_checkout_status_3hr: "Active",
-            //         first_checkin_last_checkout_status_6hr: "Active",
-            //         first_checkin_last_checkout_status_12hr: "Active",
-            //         first_checkin_last_checkout_status_24hr: "Active",
-            //         status:"bookable",
-            //         creation_date: getCurrentDateTime(),
-            //         last_update_on: getCurrentDateTime(),
-            //     }
-    
-            //     const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //         },
-            //         body: JSON.stringify(payload),
-            //     });
-            //     const result = await response.json();
-               
-             }));
-
-            if(quickSoldSelectedRadio === "soldout") {
-                editableSelectedRoom?.map(async (item) => {
-                    
-                    if(item.roomtype === selectedRoom) {
-                        if(item.updatedDates.length === 0) {
-                            
-                            if(quickSoldFormattedDateCopy) {
-                                
-                          
-                                    let payload = {
-                                        Hotel_Id: hotel_id,
-                                        formattedDates: quickSoldFormattedDateCopy,
-                                        status: quickSoldSelectedRadio,
-                                        selectedRoom: selectedRoom,
-                                        operation: "bulkEdit",
-                                    }
-                                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify(payload),
-                                    });
-                                    const result = await response.json();
-                                    getData();
-                           
-                            }
-                            
-                        }else{
-                            
-                            if(quickSoldFormattedDate) {
-                        
-                                let datessss = item.updatedDates;
-                                const filteredQuickSoldFormattedDateCopy = quickSoldFormattedDateCopy.filter(
-                                    item => !datessss.includes(item)
-                                );
-                                
-                                    let payload = {
-                                        Hotel_Id: hotel_id,
-                                        formattedDates: quickSoldFormattedDate,
-                                        status: quickSoldSelectedRadio,
-                                        selectedRoom: selectedRoom,
-                                        operation: "bulkEdit",
-                                    }
-                                    const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify(payload),
-                                    });
-                                    const result = await response.json();
-                                   
-    
-                                    if(filteredQuickSoldFormattedDateCopy.length !== 0){
-                                        let payload1 = {
-                                            Hotel_Id: hotel_id,
-                                            formattedDates: filteredQuickSoldFormattedDateCopy,
-                                            status: "bookable",
-                                            selectedRoom: selectedRoom,
-                                            operation: "bulkEdit",
-                                        }
-                                        const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                            },
-                                            body: JSON.stringify(payload1),
-                                        });
-                                        const result1 = await response1.json();
-                                        getData();
-                                    }
-                                    
-                           
-                            }
-                        }
-                    }else{
-                        console.log("Room Not Found")
-                    }
-                })
-    
-                setEditableSelectedRoomCopy(editableSelectedRoom)
-
-                const updatedArray = updatePropArray?.map(item => ({
-                    ...item,
-                    updatedDates: []
-                }));
-                dispatch(handleUpdatePropArray(updatedArray));
-
-            }else {
-                
-            }
-
-            
-
-            if(selectedRadioUpdateProp === "soldout") {
-                if(selectedRoomUpdateProperty === selectedRoom) {
-                    
-                    updatePropArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-                           
-                            let filteredUpdateProp = selectedDateRange.filter(date => item.updatedDates.includes(date))
-                           
-                            let payload = {
-                                Hotel_Id: hotel_id,
-                                formattedDates: filteredUpdateProp,
-                                status: selectedRadioUpdateProp,
-                                selectedRoom: selectedRoomUpdateProperty,
-                                operation: "bulkEdit",
-                            }
-                            const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(payload),
-                            });
-                            const result = await response.json();
-                        }
-                    })
-                }
-            }else {
-                if(selectedRoomUpdateProperty === selectedRoom) {
-                   
-                    updatePropArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-                            
-                            // let filteredUpdateProp = selectedDateRange.filter(date => item.updatedDates.includes(date))
-                            // console.log("Bulk Updateeeeee 2: ",filteredUpdateProp)
-                            let payload = {
-                                Hotel_Id: hotel_id,
-                                formattedDates: item.updatedDates,
-                                status: selectedRadioUpdateProp,
-                                selectedRoom: selectedRoomUpdateProperty,
-                                operation: "bulkEdit",
-                            }
-                            const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(payload),
-                            });
-                            const result = await response.json();
-                        }
-                    })
-                }
-            }
-
-
-            if(updateRoomArray) {
-       
-                    
-                    updateRoomArray?.map(async (item) => {
-                        if(item.roomtype === selectedRoom) {
-
-                            let previousDateRangeNew = previousDateRange[previousDateRange.length - 2]
-
-                            console.log("previousDateRangeNew: ", previousDateRangeNew)
-
-                            let filteredUpdateRoom = selectedDateRange.filter(date => !previousDateRangeNew?.includes(date))
-                            let filteredUpdateRoomnew = filteredUpdateRoom.filter(date => item.updatedDates?.includes(date))
-                            console.log("Filtered Data: ",selectedDateRange, filteredUpdateRoom,filteredUpdateRoomnew, item.updatedDates)
-
-
-
-                            let payload = {
-                                Hotel_Id: hotel_id,
-                                formattedDates: filteredUpdateRoomnew,
-                                selectedRoom: selectedRoom,
-                                totalRooms: parseInt(item.value),
-                                operation: "bulkUpdateRoom",
-                            }
-                            const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(payload),
-                            });
-                            const result = await response.json();
-                            getData()
-                        }})
-                 
-            }
-
-            if(updateRateArray) {
-
-                console.log("updateRateArray: ",updateRateArray)
-                updateRateArray?.map(async (item) => {
-                    if(item.roomtype === selectedRoom) {
-
-                        let previousDateRangeNew = previousDateRange[previousDateRange.length - 2]
-
-                        console.log("previousDateRangeNew: ", previousDateRangeNew)
-
-                        let filteredUpdateRoom = selectedDateRange.filter(date => !previousDateRangeNew?.includes(date))
-                        let filteredUpdateRoomnew = filteredUpdateRoom.filter(date => item.updatedDates?.includes(date))
-
-                        let payload = {
-                            Hotel_Id: hotel_id,
-                            formattedDates: filteredUpdateRoomnew,
-                            selectedRoom: selectedRoom,
-                            rate_3hr: value3HourRate,
-                            rate_6hr: value6HourRate,
-                            rate_12hr: value12HourRate,
-                            rate_24hr: valueBaseRate,
-                            rate_child: valueChildRate,
-                            rate_extraperson: valueExtraPersonRate,
-                            operation: "bulkUpdateRate",
-                        }
-                        const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(payload),
-                        });
-                        const result = await response.json();
-                        getData()
-                    }})
-            }
-            
-
-
-
-            const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`, {
+            const response1 = await fetch(`/api/pms/property_master/room_details?hotelId=${hotel_id.toString()}&type=room`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -533,344 +97,433 @@ console.log("Sessionnnnn: ",session)
             });
             const result1 = await response1.json();
 
-            let databyid = result1?.databyid;
+            const impData = result1.data;
 
-            databyid = databyid?.filter((item) => {
-                return selectedDateRange.includes(item.booking_date);
-            });
+            const arrRoomKey = impData?.map((item) => { return item._id })
 
-            const sortedData = databyid?.sort((a, b) => a.id - b.id);
+            fxnTwo(result.data, arrRoomKey, impData);
 
-            
-
-            setResult(sortedData);
         } catch (error) {
-            console.error("Error fetching data:", error);
+
         }
-    });
 
-    const getData = async () => {
-        
-        const response1 = await fetch(`/api/pms/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoom=${selectedRoom}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const result1 = await response1.json();
-
-        let databyid = result1?.databyid;
-
-        databyid = databyid?.filter((item) => {
-            return selectedDateRange.includes(item.booking_date);
-        });
-
-        const sortedData = databyid?.sort((a, b) => a.id - b.id);
-
-        setResult(sortedData);
     }
 
-    useEffect(() => {
-        if (allResult && allResult.length > 0) {
-            const lastElement = allResult[allResult.length - 1]; 
-            const lastElementId = lastElement.id; 
-            const numericPart = lastElementId.match(/(?<=MRI)0*(\d+)/); 
-            const lastNumericId = numericPart ? parseInt(numericPart[1]) : null;
-        
-            setLastID(lastNumericId);
-        } else {
-          
-            setLastID(0);
-        }
-    }, [allResult,dataFxn])
+    const fxnTwo = async (hotelDetails, arrRoomKey, impData) => {
 
+        try {
 
-
-    useEffect(() => {
-
-   
-
-        if(quickSold) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            quickSold = quickSold?.filter((item) => {
-                return selectedDateRange.includes(item.booking_date);
+            const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory?hotelId=${hotel_id.toString()}&&selectedRoomid=${selectedRoomDetails?._id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
-    
-            const sortedData = quickSold?.sort((a, b) => a.id - b.id);
-            setResult(sortedData)
-        }
+            const result = await response.json();
 
-        if(editableSelectedRoom) {
-            editableSelectedRoom?.map((item) => {
-                item.updatedDates = []
-            })
+            const dbData = result.data;
 
-            setEditableSelectedRoomCopy(editableSelectedRoom)
-        }
-
-    }, [quickSold])
-
-
-    useEffect(() => {
-
-        if (selectedRoom && quickSoldFormattedDateCopy && !editableSelectedRoom.some(item => item.roomtype === selectedRoom)) {
-
-            
-            let payload = {
-                roomtype: selectedRoom,
-                updatedDates: [],
+            const generateUniqueId = () => {
+                return `MRI${Date.now()}${Math.floor(Math.random() * 1000)}`;
             };
-            setEditableSelectedRoom(prevState => [...prevState, payload]);
-            setEditableSelectedRoomCopy(prevState => [...prevState, payload]);
-            dispatch(handleQuickSoldFormattedDate(quickSoldFormattedDateCopy));
 
-        }
-        
-        if(editableSelectedRoom) {
-            editableSelectedRoom?.map((item) => {
-                if(item.roomtype === selectedRoom) {
-                    if(item.updatedDates.length === 0) {
-                        dispatch(handleQuickSoldFormattedDate(quickSoldFormattedDateCopy));
-                    }else{
-                        dispatch(handleQuickSoldFormattedDate(item.updatedDates));
+            const payload = selectedDateRange.dateTwo.map((date, index) => ({
+                id: generateUniqueId(),
+                Hotel_Id: hotel_id,
+                Hotel_name: hotelDetails?.Hotel_name,
+                user_id: "01",
+                user_name: "test",
+                booking_date: selectedDateRange.dateOne[index],
+                booking_dateF: date,
+                room_type: selectedRoomDetails?.room_type,
+                room_id: selectedRoomDetails?._id,
+                room_name: selectedRoomDetails?.room_name,
+                price_per_guest_flag: false,
+                room_occupancy: 5,
+                rate_3hr: parseInt(selectedRoomDetails?.room_rate3hrs),
+                rate_6hr: parseInt(selectedRoomDetails?.room_rate6hrs),
+                rate_12hr: parseInt(selectedRoomDetails?.room_rate12hrs),
+                rate_24hr: parseInt(selectedRoomDetails?.room_rate),
+                total_rooms_count: 0,
+                booked_rooms_count: 0,
+                first_checkin_last_checkout_3hr: "12 AM - 11 PM",
+                first_checkin_last_checkout_6hr: "12 AM - 11 PM",
+                first_checkin_last_checkout_12hr: "12 AM - 11 PM",
+                first_checkin_last_checkout_24hr: "12 AM - 11 PM",
+                first_checkin_last_checkout_status_3hr: "Active",
+                first_checkin_last_checkout_status_6hr: "Active",
+                first_checkin_last_checkout_status_12hr: "Active",
+                first_checkin_last_checkout_status_24hr: "Active",
+                status: "bookable",
+                action: "",
+                quick_action: "",
+                bulk_action: "",
+            }));
+
+            const quickFunction = (updatedTable) => {
+
+                if (quickSoldSelectedRadio === undefined) {
+
+                } else {
+
+                    if (quickSoldRoomKey === "all") {
+
+                        const resultQuick = updatedTable?.map((item) => {
+                            if (quickSoldFormattedDate.dateTwo.includes(item.booking_dateF) && arrRoomKey.includes(item.room_id)) {
+                                return {
+                                    ...item,
+                                    status: quickSoldSelectedRadio,
+                                    quick_action: quickSoldSelectedRadio === "bookable" ? "updated to bookable" : "updated to soldout"
+                                }
+                            } else {
+                                return { ...item }
+                            }
+                        })
+
+                        dispatch(handleInventoryTable(resultQuick))
+
+                        setSelectedRadio()
+                        handleRoom()
+
+                    } else {
+
+                        const resultQuick = updatedTable?.map((item) => {
+                            if (quickSoldFormattedDate.dateTwo.includes(item.booking_dateF) && item.room_id === quickSoldRoomKey) {
+                                return {
+                                    ...item,
+                                    status: quickSoldSelectedRadio,
+                                    quick_action: quickSoldSelectedRadio === "bookable" ? "updated to bookable" : "updated to soldout"
+                                }
+                            } else {
+                                return { ...item }
+                            }
+                        })
+
+                        dispatch(handleInventoryTable(resultQuick))
+
+                        setSelectedRadio()
+                        handleRoom()
                     }
                 }
-            })
-        }
+            }
 
+            const bulkFunction = (updatedTable) => {
 
-        // if (selectedRoom && formattedDateUpdatePropCopy && !editableUpdateProp.some(item => item.roomtype === selectedRoom)) {
+                console.log("updatedTable::::::>", updatedTable)
 
-        //     console.log("False Room");
-        //     let payload = {
-        //         roomtype: selectedRoom,
-        //         updatedDates: [],
-        //     };
-        //     setEditableUpdateProp(prevState => [...prevState, payload]);
-        //     setEditableUpdatePropCopy(prevState => [...prevState, payload]);
-        //     dispatch(handleFormattedDateUpdateProp(formattedDateUpdatePropCopy));
+                if (selectedBulkUpdateTab === "updateStatus") {
 
-        // }
-        
-        // if(editableUpdateProp) {
-        //     editableUpdateProp?.map((item) => {
-        //         if(item.roomtype === selectedRoom) {
-        //             if(item.updatedDates.length === 0) {
-        //                 dispatch(handleFormattedDateUpdateProp(formattedDateUpdatePropCopy));
-        //             }else{
-        //                 dispatch(handleFormattedDateUpdateProp(item.updatedDates));
-        //             }
-        //         }
-        //     })
-        // }
+                    if (selectedBulkRadio === undefined) {
 
-        
+                    } else {
 
-    }, [selectedRoom])
+                        if (selectedRoomUpdatePropertyKey === "all") {
 
+                            const resultQuick = updatedTable?.map((item) => {
 
-    useEffect(() => {
+                                const bookingDay = item.booking_date.split(' ')[0].toLowerCase();
 
-        if(editableSelectedRoomCopy) {
-          
-           editableSelectedRoomCopy?.map(async (item) => {
-                if(item.roomtype === selectedRoom) {
-                    if(item.updatedDates.length !== 0) {
-                        let payload = {
-                            Hotel_Id: hotel_id,
-                            formattedDates: item.updatedDates,
-                            status: "soldout",
-                            selectedRoom: selectedRoom,
-                            operation: "bulkEdit",
+                                if (formattedDateUpdateProperty.dateTwo.includes(item.booking_dateF) && arrRoomKey.includes(item.room_id) && selectedChecksUpdateProp.includes(bookingDay)) {
+                                    return {
+                                        ...item,
+                                        status: selectedBulkRadio,
+                                        bulk_action: selectedBulkRadio === "bookable" ? "updated to bookable" : "updated to soldout"
+                                    }
+                                } else {
+                                    return { ...item }
+                                }
+                            })
+
+                            console.log("resultQuick123:::::::::::>", resultQuick)
+
+                            dispatch(handleInventoryTable(resultQuick))
+
+                        } else {
+
+                            const resultQuick = updatedTable?.filter((item) => item !== undefined)?.map((item) => {
+
+                                const bookingDay = item.booking_date.split(' ')[0].toLowerCase();
+
+                                if (formattedDateUpdateProperty.dateTwo.includes(item.booking_dateF) && item.room_id === selectedRoomUpdatePropertyKey && selectedChecksUpdateProp.includes(bookingDay)) {
+                                    return {
+                                        ...item,
+                                        status: selectedBulkRadio,
+                                        bulk_action: selectedBulkRadio === "bookable" ? "updated to bookable" : "updated to soldout"
+                                    }
+                                } else {
+                                    return { ...item }
+                                }
+                            })
+
+                            console.log("resultQuick:::::::::::>", resultQuick)
+
+                            dispatch(handleInventoryTable(resultQuick))
+
                         }
-                        const response = await fetch(`/api/pms/rates_and_inventory/managerateandinventory`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(payload),
-                        });
-                        const result = await response.json();
-                        getData()
+
                     }
+
                 }
-           })
-           
-        }
 
-    }, [editableSelectedRoomCopy, selectedRoom])
+                if (selectedBulkUpdateTab === "updateRate") {
 
-   
+                    if(selectedRoomUpdateRateKey === "all") {
 
-    ///////////////////////////////////////////////////Bulk Bupdate Prop///////////////////////////////////////
+                        const resultQuick = updatedTable?.filter((item) => item !== undefined)?.map((item) => {
 
-    useEffect(() => {
-
-   
-
-        if(updateBulkProperty) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            updateBulkProperty = updateBulkProperty?.filter((item) => {
-                return selectedDateRange.includes(item.booking_date);
-            });
+                            if (formattedDateUpdateRate.dateTwo.includes(item.booking_dateF) && arrRoomKey.includes(item.room_id)) {
+                                return {
+                                    ...item,
+                                    rate_3hr: enteredBulkUpdateRate.value3HourRate === "" ? item.rate_3hr : enteredBulkUpdateRate.value3HourRate,
+                                    rate_6hr: enteredBulkUpdateRate.value6HourRate === "" ? item.rate_6hr : enteredBulkUpdateRate.value6HourRate,
+                                    rate_12hr: enteredBulkUpdateRate.value12HourRate === "" ? item.rate_12hr : enteredBulkUpdateRate.value12HourRate,
+                                    rate_24hr: enteredBulkUpdateRate.value24HourRate === "" ? item.rate_24hr : enteredBulkUpdateRate.value24HourRate,
+                                    bulk_action: "updated rate"
+                                }
+                            } else {
+                                return { ...item }
+                            }
+                        })
     
-            const sortedData = updateBulkProperty?.sort((a, b) => a.id - b.id);
-            setResult(sortedData)
+                        dispatch(handleInventoryTable(resultQuick))
 
-        }
+                    }else {
 
-    }, [updateBulkProperty])
+                        const resultQuick = updatedTable?.filter((item) => item !== undefined)?.map((item) => {
 
-    useEffect(() => {
-
-      
-
-    }, [editableUpdatePropCopy])
-
-
-    useEffect(() => {
-
-        
-
-    }, [updateRoomArray])
-
+                            if (formattedDateUpdateRate.dateTwo.includes(item.booking_dateF) && item.room_id === selectedRoomUpdateRateKey) {
+                                return {
+                                    ...item,
+                                    rate_3hr: enteredBulkUpdateRate.value3HourRate === "" ? item.rate_3hr : enteredBulkUpdateRate.value3HourRate,
+                                    rate_6hr: enteredBulkUpdateRate.value6HourRate === "" ? item.rate_6hr : enteredBulkUpdateRate.value6HourRate,
+                                    rate_12hr: enteredBulkUpdateRate.value12HourRate === "" ? item.rate_12hr : enteredBulkUpdateRate.value12HourRate,
+                                    rate_24hr: enteredBulkUpdateRate.value24HourRate === "" ? item.rate_24hr : enteredBulkUpdateRate.value24HourRate,
+                                    bulk_action: "updated rate"
+                                }
+                            } else {
+                                return { ...item }
+                            }
+                        })
     
+                        dispatch(handleInventoryTable(resultQuick))
+
+                    }
+
+                }
+            }
+
+            if (dbData.length > 0) {
+
+                const updatedTable = payload.map((item) => {
+
+                    const match = dbData.find(
+                        (item1) =>
+                            item1.Hotel_Id === item.Hotel_Id &&
+                            item1.booking_dateF === item.booking_dateF &&
+                            item1.room_id === item.room_id
+                    );
+
+                    return match ? match : item;
+                });
+
+                dispatch(handleInventoryTable(updatedTable))
+
+                if (quickSold) {
+                    quickFunction(updatedTable)
+                }
+
+                if (updateBulkProperty) {
+                    bulkFunction(updatedTable)
+                }
+
+
+            } else {
+
+                if (quickSold || updateBulkProperty) {
+
+                    if (quickSold) {
+                        quickFunction(payload)
+                    }
+
+                    if (updateBulkProperty) {
+                        bulkFunction(payload)
+                    }
+
+                } else {
+                    dispatch(handleInventoryTable(payload))
+                }
+
+            }
+
+        } catch (error) {
+            console.error("Error in fxnTwo:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        console.log("Selected Ro0om:::::>", selectedRoomDetails)
+        if (hotel_id !== 0 && selectedRoomDetails) {
+            fxnOne();
+        }
+    }, [hotel_id, selectedRoomDetails, selectedDateRange])
+
+
+    const ConvertToTitleCase = ({ word }) => {
+        const titleCaseWord = word.charAt(0).toUpperCase() + word.slice(1);
+
+        return <h1>{titleCaseWord}</h1>;
+    };
+
+
+    useEffect(() => {
+
+        console.log("inventoryTable:::::::>", inventoryTable)
+        setResult(inventoryTable)
+
+    }, [inventoryTable])
+
+
+    const handleUpdateTable = (val) => {
+        dispatch(handleInventoryTable(val))
+    }
+
     return (
         <>
-            <RIMainContTopBar />
 
-            {result?.map((item) => {
-                const [day, date, month] = item?.booking_date ? item.booking_date.split(" ") : ["", "", ""];
-                const isSoldOut = item?.status === "soldout";
 
-                return (
-                    <div className='mt-1 pl-2 pr-2 w-screen' key="">
-                <div className='grid grid-cols-12'>
-                    <div className='col-span-1 text-center flex flex-row'>
-                        <div className={`w-[70%] h-14 ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <h5 className='text-sm font-semibold text-foreground-400'>{day}</h5>
-                            <h5 className='text-xs font-semibold text-foreground-400'>{date}</h5>
-                            <h5 className='text-sm font-semibold text-foreground-400'>{month}</h5>
-                        </div>
-                        <div className={`w-[30%] flex flex-col gap-2 items-center justify-center' ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <div className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy}</div>
-                            {checkPricePerGuest 
-                                ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                    <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                ))
-                                : ""
-                            }
-                          
-                        </div>
-                    </div>
-                    <div className={`col-span-3 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                        <div className='grid grid-cols-12 h-16 place-items-center'>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_3hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_3hr}</div>
-                                    ))
-                                    : ""
-                                }
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_6hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_6hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_12hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index}  className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_12hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                            <div className='col-span-3 flex flex-col gap-1 p-px'>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item.rate_24hr}</div>
-                                {checkPricePerGuest 
-                                    ?   [...Array(item?.room_occupancy - 1)].map((_, index) => (
-                                        // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
-                                        <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item.rate_24hr}</div>
-                                    ))
-                                    : ""
-                                }
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div className={`col-span-2 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                        <div className='grid grid-cols-12 h-16'>
-                            <div className='col-span-6 flex justify-center items-center'>
-                                <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.total_rooms_count}</div>
-                            </div>
-                            <div className='col-span-6 flex justify-center items-center'>
-                                <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs'>{item?.booked_rooms_count}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='col-span-6 text-center'>
-                        <div className='grid grid-cols-12 h-16 place-items-center items-center justify-center'>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_3hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_3hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_3hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_3hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_6hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_6hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_6hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_6hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_12hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_12hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_12hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_12hr}</Chip></div>
-                            </div>
-                            <div className={`col-span-2 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
-                                <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_24hr}</div>
-                                <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_24hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_24hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_24hr}</Chip></div>
-                            </div>
-                            <div className='col-span-4 flex gap-4'>
-                                <EditModal rowDataID={item?.id} onEditResult={handleEditResult} selectedDateRange={selectedDateRange} isSoldOut={isSoldOut}/>
-                                <Button color='primary' variant='shadow' size='sm' startContent={<ViewIcon size={15} />}>View</Button>
-                            </div>
-                        </div>
-                    </div>
+            <div className="h-[35rem] custom-scrollbar">
+                <div className="sticky top-0 z-50 w-screen bg-white">
+                    <RIMainContTopBar />
                 </div>
+                {Array.isArray(result) && result.map((item) => {
+                    const [day, date, month] = item?.booking_date ? item.booking_date.split(" ") : ["", "", ""];
+                    const isSoldOut = item?.status === "soldout";
+
+                    return (
+                        <div className='mt-1 pl-2 pr-2 w-screen z-0' key={item.id}>
+                            <div className='grid grid-cols-12 gap-2 border-b h-24 justify-center items-center'>
+                                <div className='col-span-1 text-center flex flex-row justify-center items-center'>
+                                    <div className={`w-[70%] h-14 ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <h5 className='text-sm font-semibold text-foreground-400'>{day}</h5>
+                                        <h5 className='text-xs font-semibold text-foreground-400'>{date}</h5>
+                                        <h5 className='text-sm font-semibold text-foreground-400'>{month}</h5>
+                                        <h5 className='text-sm font-semibold text-foreground-400'>{item.booking_dateF}</h5>
+                                    </div>
+                                    <div className={`w-[30%] flex flex-col gap-2 items-center justify-center' ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                        <div className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy}</div>
+                                        {checkPricePerGuest
+                                            ? [...Array(item?.room_occupancy - 1)].map((_, index) => (
+                                                <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
+                                            ))
+                                            : ""
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className={`col-span-4 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <div className='grid grid-cols-12 h-16 place-items-center'>
+                                        <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs inline-flex cursor-pointer'>₹ {item?.rate_3hr}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                            {checkPricePerGuest
+                                                ? [...Array(item?.room_occupancy - 1)].map((_, index) => (
+                                                    // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
+                                                    <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_3hr}</div>
+                                                ))
+                                                : ""
+                                            }
+                                        </div>
+                                        <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs inline-flex cursor-pointer'>₹ {item?.rate_6hr}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                            {checkPricePerGuest
+                                                ? [...Array(item?.room_occupancy - 1)].map((_, index) => (
+                                                    // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
+                                                    <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_6hr}</div>
+                                                ))
+                                                : ""
+                                            }
+
+                                        </div>
+                                        <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs inline-flex cursor-pointer'>₹ {item?.rate_12hr}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                            {checkPricePerGuest
+                                                ? [...Array(item?.room_occupancy - 1)].map((_, index) => (
+                                                    // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
+                                                    <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item?.rate_12hr}</div>
+                                                ))
+                                                : ""
+                                            }
+
+                                        </div>
+                                        <div className='col-span-3 flex flex-col gap-1 p-px'>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs inline-flex cursor-pointer'>₹ {item.rate_24hr}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                            {checkPricePerGuest
+                                                ? [...Array(item?.room_occupancy - 1)].map((_, index) => (
+                                                    // <div key={index} className='border border-foreground-300 px-3 rounded-lg text-xs'>{item?.room_occupancy - index - 1}</div>
+                                                    <div key={index} className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>₹ {item.rate_24hr}</div>
+                                                ))
+                                                : ""
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={`col-span-2 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <div className='grid grid-cols-12 h-16'>
+                                        <div className='col-span-6 flex justify-center items-center'>
+                                            <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs inline-flex cursor-pointer'>{item?.total_rooms_count}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                        </div>
+                                        <div className='col-span-6 flex justify-center items-center'>
+                                            <div className='border-1 border-foreground-300 px-5 py-1 rounded-lg text-xs inline-flex cursor-pointer'>{item?.booked_rooms_count}<Pencil className="ml-2 size-4 text-gray-700" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-span-3 text-center'>
+                                    <div className='grid grid-cols-12 h-16 place-items-center items-center justify-center'>
+                                        <div className={`col-span-3 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_3hr}</div>
+                                            <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_3hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_3hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_3hr}</Chip></div>
+                                        </div>
+                                        <div className={`col-span-3 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_6hr}</div>
+                                            <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_6hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_6hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_6hr}</Chip></div>
+                                        </div>
+                                        <div className={`col-span-3 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_12hr}</div>
+                                            <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_12hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_12hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_12hr}</Chip></div>
+                                        </div>
+                                        <div className={`col-span-3 flex flex-col gap-1 p-px ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                            <div className='border-1 border-foreground-300 px-4 py-px rounded-lg text-xs'>{item?.first_checkin_last_checkout_24hr}</div>
+                                            <div className='text-center'><Chip color={item?.first_checkin_last_checkout_status_24hr === "Active" ? "success" : "danger"} variant="flat" size='sm' className={item?.first_checkin_last_checkout_status_24hr === "Active" ? 'text-success bg-success-50 border-none text-[10px]' : 'text-success bg-danger-50 border-none text-[10px]'}>{item?.first_checkin_last_checkout_status_24hr}</Chip></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={`col-span-1 text-center ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <div className='col-span-2 flex flex-col gap-2 px-4'>
+                                        <Button variant="flat" className={item.status === "bookable" ? "text-gray-800 bg-green-200" : "text-gray-800 bg-red-200"}>
+                                            <ConvertToTitleCase word={item.status} />
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div className='col-span-1 text-center'>
+                                    <div className='col-span-2 flex flex-col gap-2 px-4'>
+                                        <EditModal result={result} rowDataID={item?.id} isSoldOut={isSoldOut} onUpdateTable={handleUpdateTable} />
+                                        <Button color='primary' variant='shadow' size='sm' startContent={<ViewIcon size={15} />}>View</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
-                )
-            })}
-           
+
+
         </>
     )
 }
 
 export default RIMainCont
 
-
-const EditIcon = ({ size, height, width, fill, ...props }) => {
-    return (
-        <svg
-            fill="currentColor"
-            height={size || height}
-            viewBox="0 0 256 256"
-            width={size || width}
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}
-        >
-            <path d="M225.91,74.79,181.22,30.1a14,14,0,0,0-19.8,0L38.1,153.41a13.94,13.94,0,0,0-4.1,9.9V208a14,14,0,0,0,14,14H216a6,6,0,0,0,0-12H110.49L225.91,94.59A14,14,0,0,0,225.91,74.79ZM93.52,210H48a2,2,0,0,1-2-2V163.31a2,2,0,0,1,.59-1.41L136,72.49,183.52,120ZM217.42,86.1,192,111.52,144.49,64,169.9,38.59a2,2,0,0,1,2.83,0l44.69,44.68A2,2,0,0,1,217.42,86.1Z">
-            </path>
-        </svg>
-    );
-};
 
 const ViewIcon = ({ size, height, width, fill, ...props }) => {
     return (

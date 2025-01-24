@@ -9,7 +9,8 @@ import { NextResponse } from "next/server";
 export async function GET(request){
 
   let hotelId = request.nextUrl.searchParams.get('hotelId');
-  // console.log("hotelIdhotelId",hotelId)
+  let type = request.nextUrl.searchParams.get('type');
+
   let data = [];
   let dataAll = [];
   let dataAllActive = [];
@@ -21,22 +22,33 @@ export async function GET(request){
   let success=true;
   try {
     db.connect()
-    // console.log("Hotttttttt: ",hotelId)
-    hotel_info = await Hotel_Infos.findOne({"Hotel_Id": hotelId}).select("id Hotel_Type -_id");
-    dataAll = await Pms_Propertymaster_Roomdetails.find();
-    dataAllActive = await Pms_Propertymaster_Roomdetails.find({"status" : "Active"});
-    data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": parseInt(hotelId)});
-    dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
-    floor = await Property_Floor.find().select("property_floor -_id");
-    roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
-    bedtype = await Property_Bedtype.find({"status" : "Active"})
-    // console.log("rEs::::>",data);
+
+    if(type === "room") {
+
+      data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": parseInt(hotelId)});
+      return NextResponse.json({ data, success })
+
+    }else {
+
+      data = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": parseInt(hotelId)});
+      hotel_info = await Hotel_Infos.findOne({"Hotel_Id": hotelId}).select("id Hotel_Type -_id");
+      dataAll = await Pms_Propertymaster_Roomdetails.find();
+      dataAllActive = await Pms_Propertymaster_Roomdetails.find({"status" : "Active"});
+      dataActive = await Pms_Propertymaster_Roomdetails.find({"Hotel_Id": hotelId, "status" : "Active"});
+      floor = await Property_Floor.find().select("property_floor -_id");
+      // roomtype = await Property_Roomtype.find({property_type: {$regex: new RegExp(hotel_info.Hotel_Type, 'i')}}).select("property_name property_roomview -_id");
+      roomtype = await Property_Roomtype.find().select("-_id");
+      bedtype = await Property_Bedtype.find({"status" : "Active"})
+      return NextResponse.json({data, dataAll,floor,
+        roomtype, hotel_info, dataActive, bedtype, dataAllActive, success})
+        
+    }
+
   } catch (error) {
-    data={result:"error"}
-    success=false;
+    data = { result:"error" }
+    success = false;
   }
-  return NextResponse.json({data,dataAll,floor,
-    roomtype, hotel_info, dataActive, bedtype, dataAllActive, success})
+  
 }
 
 export async function POST(req){
@@ -219,7 +231,37 @@ if((payload.ids).join('') === 'all') {
 
 
 
-  }else {
+  } else if ( payload.action === "updatePhotos") {
+
+    if(payload.selectedRoomId === "propertymain") {
+
+      const pms_propertymaster_roomdetails = await Pms_Propertymaster_Roomdetails.updateMany({ Hotel_Id: payload.Hotel_Id }, { property_photos : payload.imageUrls });
+      return NextResponse.json({ pms_propertymaster_roomdetails });
+
+    }else {
+
+      const pms_propertymaster_roomdetails = await Pms_Propertymaster_Roomdetails.updateOne({ _id: payload.selectedRoomId }, { room_photos : payload.imageUrls });
+      return NextResponse.json({ pms_propertymaster_roomdetails });
+
+    }
+
+    
+  }else if ( payload.action === "deletePhotos") {
+
+    if(payload.selectedRoomId === "propertymain") {
+
+      const pms_propertymaster_roomdetails = await Pms_Propertymaster_Roomdetails.updateMany({ Hotel_Id: payload.Hotel_Id }, { property_photos : payload.imageUrls });
+      return NextResponse.json({ pms_propertymaster_roomdetails });
+
+    }else {
+
+      const pms_propertymaster_roomdetails = await Pms_Propertymaster_Roomdetails.updateOne({ _id: payload.selectedRoomId }, { room_photos : payload.imageUrls });
+      return NextResponse.json({ pms_propertymaster_roomdetails });
+      
+    }
+
+    
+  } else {
 
       console.log("Add")
       try {

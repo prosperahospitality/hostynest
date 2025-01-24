@@ -1,507 +1,387 @@
-'use client'
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
-import { GetServerSideProps, NextPage } from "next";
-import Image from 'next/image'
+"use client";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { useSearchParams } from 'next/navigation'
-import HotelName, { IMAGES } from '@/public/index'
-import PhotoManageGrid from '@/app/(partner)/hotel/propertymaster/photomanage/PhotoManageGrid'
-import { Trash } from 'lucide-react';
+import { useSession } from 'next-auth/react'
 
+export default function Home() {
 
-const PhotoManage = () => {
-  const searchParams = useSearchParams();
-  const hotel_id = searchParams.get('hotel_id');
-  const hotel_name = searchParams.get('hotel_name');
-
-
-
+  const [files, setFiles] = useState([]);
+  const [folder, setFolder] = useState('');
+  const [subfolder, setSubfolder] = useState('');
+  const { data: sessionValue } = useSession();
+  const [selectedImageUrls, setSelectedImageUrls] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [hotel_id, setHotel_id] = useState(sessionValue !== undefined ? sessionValue?.user?.Hotel_Id : 0);
+  const [hotel_name, setHotel_name] = useState('');
+  const [hotelDetails, setHotelDetails] = useState({});
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  let hotelName = capitalize_each_word(hotel_name) + "-" + hotel_id.toString();
-
   const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedFile, setSelectedFile] = useState([]);
-
-  //const [imgRes, setImgRes] = useState();
   const [fileExtension, setFileExtension] = useState();
-
   const [hotelImgs, setHotelImgs] = useState();
-
-  const [selectedRoom, setSelectedRoom] = useState();
-  const [selectedRoomId, setSelectedRoomId] = useState();
-
+  const [selectedRoom, setSelectedRoom] = useState("Property Main");
+  const [selectedRoomId, setSelectedRoomId] = useState("propertymain");
   const [roomResult, setRoomResult] = useState();
-
   const [isLoading, setIsLoading] = useState(true);
-
   const [roomName, setRoomName] = useState();
-
-
   const [currentRoomImage, setCurrentRoomImage] = useState();
 
-  const getImages = async (hotelName, roomName) => {
-    const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${roomName}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const [hotelName, setHotelName] = useState('');
+  // let hotelName = capitalize_each_word(hotel_name) + "-" + hotel_id.toString();
 
+  useEffect(() => {
+    if (sessionValue !== undefined) {
+      setHotel_id(sessionValue?.user?.Hotel_Id)
+    }
+  }, [sessionValue])
 
-    let resultt = await response.json();
-    console.log("Responseeeeeee:::::>", resultt)
-    setCurrentRoomImage(resultt.imgNames)
-  }
-
-  const initialFxn = async () => {
+  const fxnOne = async () => {
     try {
-      const response = await fetch(`/api/pms/property_master/room_details?hotelId=${hotel_id.toString()}`, {
+
+      const payload = {
+        hotelId: hotel_id
+      }
+
+      const response = await fetch(`/api/hotels_copy/hotel_info/hotel_by_id`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+
+      setHotelDetails(result.data);
+
+      setHotel_name(result.data.Hotel_name);
+
+      setHotelName(capitalize_each_word(result.data.Hotel_name) + "-" + hotel_id.toString())
+
+      setFolder(capitalize_each_word(result.data.Hotel_name) + "-" + hotel_id.toString())
+
+      const response1 = await fetch(`/api/pms/property_master/room_details?hotelId=${hotel_id.toString()}&type=room`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const result = await response.json();
+      const result1 = await response1.json();
 
-      console.log("Property Rooms: ", result.dataActive)
+      const impData = result1.data;
 
-      setRoomResult(result.dataActive)
+      setRoomResult(impData)
 
-      if (result && result.dataActive.length > 0 && !selectedRoom) {
-        const newElement = {
-          id: "PM00001",
-          room_name: "Property Main"
-        };
-        result.dataActive.unshift(newElement);
-        setSelectedRoomId(result.dataActive[0].id);
-        setSelectedRoom(result.dataActive[0].room_name);
-      }
 
     } catch (error) {
-      console.error("Error fetching data:", error);
+
     } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    initialFxn()
-  }, [])
-
-  const handleUpload = async () => {
-
-    if (selectedFile === '' || selectedFile.length === 0) {
-      alert("No files selected")
-    } else {
-
-
-      setCurrentRoomImage('')
-
-      let formData = new FormData();
-      const arrayFromObject = Object.values(selectedFile);
-      console.log(arrayFromObject, selectedFile);
-      arrayFromObject.forEach(file => {
-        formData.append('file', file);
-      });
-      formData.append('hotel_id', hotel_id);
-      formData.append('hotel_name', hotel_name);
-      formData.append('room_result', JSON.stringify(roomResult));
-      formData.append('selectedRoom', JSON.stringify(selectedRoom));
-      formData.append('selectedRoomId', JSON.stringify(selectedRoomId));
-
-      const response = await fetch('/api/pms/property_master/room_photomanage', {
-        method: "POST",
-        body: formData,
-      });
-
-      //console.log("Response:::::>",response)
-
-      let result = response.json()
-
-      result.then(result => {
-        console.log("Result:::::>", result);
-
-        if (result) {
-          //setImgRes(result?.imgNumbers)
-          setCurrentRoomImage(result?.imgNames)
-          setFileExtension(result?.fileExtensions)
-        }
-
-      }).catch(error => {
-        console.error('Error:', error);
-      });
-
-      //console.log("Result:::::>",result)
-
-      if (response.ok) {
-        console.log('File uploaded successfully!');
-        alert('File uploaded successfully!')
-        //getImages(hotelName, roomName)
-        //setCurrentRoomImage('')
-        setSelectedImage('')
-        setSelectedFile('')
-      } else {
-        console.error('Error uploading file:', response.statusText);
-      }
-
+      setIsLoading(false)
     }
   };
 
   useEffect(() => {
-    console.log("Selected File:::::::>", selectedFile)
-  }, [selectedFile])
+    try {
+
+      if (hotel_id !== 0) {
+        fxnOne();
+      }
+
+    } catch (error) {
+
+    } finally {
+
+    }
+  }, [hotel_id])
+
+  const handleUpload = async () => {
+
+    console.log("File and folder: ", files, folder, hotelName, subfolder)
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
+    formData.append('folder', folder);
+    formData.append('subfolder', subfolder);
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log("Date:::::::>0,", data)
+    if (data.success) {
+      fetchImagesFromFolderUpload(folder, subfolder)
+      setFiles([])
+      setSelectedImage("")
+      setSelectedFile([])
+      window.alert("Uploaded Successfully!")
+    } else {
+      console.error('Upload failed:', data.error);
+    }
+  };
+
+  const fetchImagesFromFolder = async (folder, subfolder) => {
+    try {
+      console.log("Data:::::>", folder, subfolder)
+      const response = await fetch(`/api/upload?folder=${encodeURIComponent(folder)}&subfolder=${encodeURIComponent(subfolder)}`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      console.log("Data:::::>", data.results)
+      if (data.success) {
+        setImageUrls(data.results);
+      } else {
+        console.error('Fetch failed:', data.error);
+      }
+    } catch (error) {
+      console.log("Err: ", error)
+    }
+
+  };
+
+  const fetchImagesFromFolderUpload = async (folder, subfolder) => {
+    try {
+      console.log("Data:::::>", folder, subfolder)
+      const response = await fetch(`/api/upload?folder=${encodeURIComponent(folder)}&subfolder=${encodeURIComponent(subfolder)}`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      console.log("Data:::::>", data.results)
+      if (data.success) {
+        setImageUrls(data.results);
+
+        const response = await fetch('/api/pms/property_master/room_details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ Hotel_Id: hotel_id, selectedRoomId: selectedRoomId, imageUrls: data.results, action: "updatePhotos" }),
+        });
+
+      } else {
+        console.error('Fetch failed:', data.error);
+      }
+    } catch (error) {
+      console.log("Err: ", error)
+    }
+
+  };
+
 
   useEffect(() => {
 
-    console.log("Change in room: ", selectedRoom, selectedRoomId, roomName)
-
-
+    console.log("Response:::::>", selectedRoom, selectedRoomId, hotelName);
 
     if (selectedRoom && selectedRoomId) {
       setCurrentRoomImage('')
       setRoomName(selectedRoom.replace(/"/g, '') + "-" + selectedRoomId.replace(/"/g, ''))
       let room_name = selectedRoom.replace(/"/g, '') + "-" + selectedRoomId.replace(/"/g, '');
 
-      async function roomPhoto() {
-        const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${room_name}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+      console.log("roomname: ", folder, room_name)
 
+      setSubfolder(room_name)
 
-        let resultt = await response.json();
-        console.log("Response:::::>", resultt)
-
-
-        setCurrentRoomImage(resultt.imgNames)
-      }
-
-      roomPhoto()
+      fetchImagesFromFolder(folder, room_name)
 
     }
 
-  }, [selectedRoom])
-
-  // useEffect(() => {
-  //     console.log("ImgRes:::::::>", imgRes, fileExtension, hotelName)
-
-
-  //   if(roomName) {
-  //     let img = imgRes?.map((images) => {
-  //       return '/img/' + hotelName + '/' + roomName + '/' + images.toString() + fileExtension.toString()
-  //   })
-
-  //   console.log("RESSSS::::::>",img)
-  //   }
-
-
-  // }, [imgRes, fileExtension, roomName])
-
-  useEffect(() => {
-    console.log("hotelImgs:::::::>", hotelImgs)
-  }, [hotelImgs])
-
-  const handleHotelsImgs = (Imgs) => {
-    setHotelImgs(Imgs);
-  }
+  }, [selectedRoom, selectedRoomId, folder])
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const handleSelectedCheckboxes = (val) => {
 
-    setSelectedCheckboxes(val)
-
-  }
-
-  const getTagsImage = async () => {
-
-    const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${roomName}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const handleImageSelect = (url) => {
+    setSelectedImageUrls((prev) =>
+      prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]
+    );
+  };
 
 
-    let resultt = await response.json();
-    console.log("Resssssss:::::::::>", resultt)
-    let imgtagg = resultt.imageeeTag;
-    //setImageeeTag(resultt.imageeeTag)
-    return imgtagg;
-  }
 
-  const handleMultipleDelete = async () => {
-
-    console.log("Selected Delete Multiple: ", selectedCheckboxes, hotelName,
-      roomName)
-
-    const [name, hotelid] = hotelName.split("-");
-
-    const [roomname, roomid] = roomName.split("-");
-
-    const getImagesss = async (hotelName, roomName) => {
-      const response = await fetch(`/api/pms/property_master/room_photomanage?hotelName=${hotelName}&roomName=${roomName}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+  const handleDelete = async () => {
+    try {
+      const publicIds = selectedImageUrls.map(url => {
+        // Extract the public ID from the image URL
+        const urlParts = url.split('/');
+        const publicId = urlParts[urlParts.length - 1].split('.')[0];
+        return publicId;
       });
 
+      console.log("Delete Data:L>:::>", publicIds, selectedRoomId, roomResult)
 
-      let resultt = await response.json();
-      console.log("Responseeeeeee:::::>", resultt)
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ publicIds: publicIds, action: "delete", folder: folder, subfolder: subfolder }),
+      });
 
-      if (resultt) {
-        let imgnam = resultt.imgNames;
+      const result = await response.json();
+      if (result.success) {
+        // Remove deleted images from the state
+        setImageUrls((prev) =>
+          prev.filter((url) => !selectedImageUrls.includes(url))
+        );
+        setSelectedImageUrls([]);
 
-        const formattedFiles = imgnam?.map((fileName, index) => {
-          const id = parseInt(fileName.match(/\d+/)[0], 10);
-          return { id: id, title: fileName };
-        });
-
-        formattedFiles.sort((a, b) => a.id - b.id);
-
-
-        //onSingleDelResult(formattedFiles)
-        window.location.reload()
-      }
-
-
-    }
-
-    let firstOperation = selectedCheckboxes.map((item) => {
-      const [imgID, text] = item.split(".")
-      let id = parseInt(imgID)
-      console.log("Image Id::::>", id)
-
-
-      getTagsImage().then(result => {
-
-
-        let ressssult = result.sort((a, b) => (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0);
-        console.log("Tmage Tag::::", ressssult)
-
-        if (ressssult) {
-
-          let abc = ressssult.find((item) => item.Hotel_Id === parseInt(hotelid) &&
-            item.selected_room === roomid &&
-            item.img_id === parseInt(id))
-
-          let k = abc && abc.img_checks;
-
-          let i = abc && abc.img_tags;
-
-          let g = abc && abc.include_in_main;
-
-          console.log("Single Delete k", id, item, k, i, abc, g)
-
-
-
-          const singledelete = async () => {
-            let formData = new FormData();
-
-            formData.append('hotel_Name', hotelName);
-            formData.append('room_Name', roomName);
-            formData.append('imgDelId', id);
-            formData.append('imgDelTitle', item);
-            formData.append('operation', "multiple_delete_img");
-            formData.append('selectedCheckboxesfordelete', JSON.stringify(selectedCheckboxes));
-
-            if (abc) {
-              formData.append('img_checks_del', JSON.stringify(k));
-              formData.append('img_tags_del', JSON.stringify(i));
-              formData.append('img_include_in_main', g);
-            } else {
-              formData.append('sub_operation', "deleteWithoutRoom");
+        if(selectedRoomId === "propertymain") {
+          const abc = roomResult.map((item) => {
+            const arr = item.property_photos.filter((item1) => selectedImageUrls.includes(item1))
+            return {
+              ...item,
+              property_photos: arr
             }
-
-
-            const response = await fetch('/api/pms/property_master/room_photomanage', {
-              method: "POST",
-              body: formData,
-            });
-
-            let result = response.json()
-
-            result.then(result => {
-              //alert("File deleted successfully!")
-              console.log("result: ", result)
-
-              if (item === selectedCheckboxes[selectedCheckboxes.length - 1]) {
-                console.log("Rename after Delete");
-
-                const renameDelete = async () => {
-                  let formData = new FormData();
-
-                  formData.append('hotel_Name', hotelName);
-                  formData.append('room_Name', roomName);
-                  formData.append('imgDelId', id);
-                  formData.append('imgDelTitle', item);
-                  formData.append('operation', "renameAfterMultipleDelete");
-                  formData.append('selectedCheckboxesfordelete', JSON.stringify(selectedCheckboxes));
-
-                  if (abc) {
-                    formData.append('img_checks_del', JSON.stringify(k));
-                    formData.append('img_tags_del', JSON.stringify(i));
-                    formData.append('img_include_in_main', g);
-                  } else {
-                    formData.append('sub_operation', "deleteWithoutRoom");
-                  }
-
-
-                  const response = await fetch('/api/pms/property_master/room_photomanage', {
-                    method: "POST",
-                    body: formData,
-                  });
-
-                  let result = response.json()
-
-                  result.then(result => {
-                    alert(`${selectedCheckboxes.length} files deleted successfully!`)
-                    console.log("result: ", result)
-
-
-
-                    getImagesss(hotelName, roomName)
-                  })
-                }
-
-                renameDelete()
-
-
-              }
-
-              //getImagesss(hotelName, roomName)
-            })
-          }
-
-          singledelete()
-
-
-
-
-
-
-        } else {
-          console.log("No elements in the array.");
+          })
+  
+          console.log("ASDFQWE:::::>", abc)
+        }else {
+  
         }
 
-      });
+        // const response = await fetch('/api/pms/property_master/room_details', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify({ Hotel_Id: hotel_id, selectedRoomId: selectedRoomId, publicIds: publicIds, action: "deletePhotos" }),
+        // });
 
-    })
+        window.alert("Images deleted successfully!");
+      } else {
+        console.error('Delete failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Error deleting images:', error);
+    }
+  };
 
-
-
-
-  }
 
   return (
-    <>
-      <HotelName hotel_Name={hotel_name} onHotelName={handleHotelsImgs} />
-      <div className="flex text-start" style={{
-        position: "relative",
-        left: "34px",
-        top: "24px",
-      }}>
 
-        <Autocomplete
-          size='sm'
-          variant='bordered'
-          defaultSelectedKey={selectedRoomId}
-          className='w-44'
-          labelPlacement='outside-left'
-          value={selectedRoom}
-          allowsCustomValue={true}
-          onInputChange={(value) => setSelectedRoom(value)}
-          onSelectionChange={(key) => setSelectedRoomId(key)}
-        >
-          {roomResult?.map((Room) => (
-            <AutocompleteItem key={Room.id} value={Room.room_name}>
-              {Room.room_name}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
+    <><div className="flex text-start" style={{
+      position: "relative",
+      left: "34px",
+      top: "24px",
+    }}>
 
-
-      </div>
-      <div className=" " style={{
-        position: "relative",
-        top: "50px",
-        left: "34px",
-        width: "177px",
-        height: "200px",
-      }}>
-
-        <div>
-          <label>
-            <input
-              type="file"
-              hidden
-              onChange={({ target }) => {
-                if (target.files) {
-                  const file = target.files;
-                  const file1 = target.files[0];
-
-                  if (file && file1) {
-                    console.log("Initial FXN:::::>", file, file1)
-
-                    setSelectedImage(URL.createObjectURL(file1 && file1));
-
-                    setSelectedFile(file);
-                  } else {
-                    alert("No files selected")
-                  }
+      <Autocomplete
+        key={selectedRoomId}
+        size='sm'
+        variant='bordered'
+        defaultSelectedKey={selectedRoomId}
+        className="w-full"
+        inputProps={{
+          classNames: {
+            inputWrapper: "w-[400px]",
+          },
+        }}
+        labelPlacement='outside-left'
+        value={selectedRoom}
+        allowsCustomValue={true}
+        onInputChange={(value) => setSelectedRoom(value)}
+        onSelectionChange={(key) => {
+          if (key !== "propertymain") {
+            const selectedRoomName = roomResult.find((Room) => Room._id === key)?.room_name || "";
+            setSelectedRoomId(key);
+            setSelectedRoom(selectedRoomName);
+          } else {
+            setSelectedRoomId(key);
+            setSelectedRoom("Property Main");
+          }
+        }}
+      >
+        <AutocompleteItem key={"propertymain"} value={"Property Main"}>
+          {"Property Main"}
+        </AutocompleteItem>
+        {roomResult?.map((Room) => (
+          <AutocompleteItem key={Room._id} value={Room.room_name}>
+            {Room.room_name + " (" + Room.room_no + ")"}
+          </AutocompleteItem>
+        ))}
+      </Autocomplete>
 
 
-                  //onChange={(e) => images.push(e.target.files[0])}
-                }
-              }}
-              multiple />
-            <div className="w-40 aspect-video rounded flex items-center justify-center border-2 border-dashed cursor-pointer"
-              style={{
-                width: "200%",
-                height: "200px"
-              }}
-            >
+    </div>
 
-
-
-              {selectedImage ? (
-                <img src={selectedImage} alt="" />
-              ) : (
-                <span>Select Image</span>
-              )}
-            </div>
-          </label>
-        </div>
-        <div style={{
+      <div
+        className=""
+        style={{
           position: "relative",
-          top: "23px",
-        }}>
+          top: "50px",
+          left: "34px",
+          width: "177px",
+          height: "200px",
+        }}
+      >
+        <div>
+          {/* Triggering the input click using a div */}
+          <div
+            onClick={() => document.getElementById('fileInput').click()}
+            className="w-40 aspect-video rounded flex items-center justify-center border-2 border-dashed cursor-pointer"
+            style={{
+              width: "200%",
+              height: "200px",
+            }}
+          >
+            {selectedImage ? (
+              <img src={selectedImage} alt="Selected" />
+            ) : (
+              <span>Select Image</span>
+            )}
+          </div>
+
+          {/* Hidden file input */}
+          <input
+            id="fileInput"
+            type="file"
+            hidden
+            onChange={({ target }) => {
+              if (target.files) {
+                const file = target.files;
+                const file1 = target.files[0];
+
+                if (file && file1) {
+                  console.log("Initial FXN:::::>", file, file1);
+
+                  setSelectedImage(URL.createObjectURL(file1 && file1));
+
+                  setSelectedFile(file);
+
+                  setFiles(Array.from(file));
+                } else {
+                  alert("No files selected");
+                }
+              }
+            }}
+            multiple
+          />
+        </div>
+
+        <div
+          style={{
+            position: "relative",
+            top: "23px",
+          }}
+        >
           <p>{selectedFile ? `${selectedFile.length} files selected` : ""}</p>
           <button
             onClick={handleUpload}
             disabled={uploading}
-            style={{ opacity: uploading ? ".5" : "1" }}
-            className="bg-red-600 p-3 w-32 text-center rounded text-white"
+            style={{
+              opacity: uploading ? ".5" : "1",
+              background: "red",
+            }}
+            className="p-3 w-32 text-center rounded text-white"
           >
             {uploading ? "Uploading.." : "Upload"}
           </button>
         </div>
       </div>
-
-      {/* {imgRes && roomName
-        ? imgRes?.map((images) => {
-            return <img src={'/img/' + hotelName + '/' + roomName + '/' + images.toString() + fileExtension.toString()} key={" "}/>
-        }) 
-        : " "
-    } */}
 
       <div style={{
         display: "flex",
@@ -511,25 +391,51 @@ const PhotoManage = () => {
         position: "relative",
         top: "24%",
       }}>
-        <Button onClick={handleMultipleDelete}><Trash style={{ height: "20px" }} />Delete</Button>
+        <div className="p-2">
+          <Button onClick={handleDelete}>Delete</Button>
+        </div>
+
       </div>
 
-      <div>
+      <div className="" style={{
+        display: "grid",
+        gridGap: "8px",
+        gridTemplateColumns: "auto auto auto auto",
+        position: "relative",
+        top: "155px",
+        left: "35px",
+        width: "95%",
+      }}>
 
 
-
-        <PhotoManageGrid currentRoomImage={currentRoomImage} hotelName={hotelName} roomName={roomName} roomResult={roomResult} onSelectedCheckboxes={handleSelectedCheckboxes} />
-      </div></>
-  )
+        {imageUrls.map((url, index) => (
+          <div key={index} className="relative">
+            <img
+              src={url}
+              alt={`Uploaded ${index}`}
+              className={`w-full h-auto object-cover ${selectedImageUrls.includes(url) ? 'border-2 border-blue-600' : ''}`}
+              onClick={() => handleImageSelect(url)}
+            />
+            {selectedImageUrls.includes(url) && (
+              <button
+                onClick={() => handleImageSelect(url)}
+                className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded"
+              >
+                X
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
 
-export default PhotoManage;
 
 
 function capitalize_each_word(val) {
-
   if (val === undefined || val === null) {
-    return '';
+    return "";
   }
 
   const words = val.toString().split(" ");
@@ -539,11 +445,11 @@ function capitalize_each_word(val) {
   }
 
   var str = words.join("");
-  var replacedStr = '';
+  var replacedStr = "";
 
   for (var i = 0; i < str.length; i++) {
-    if (str[i] === ',') {
-      replacedStr += '';
+    if (str[i] === ",") {
+      replacedStr += "";
     } else {
       replacedStr += str[i];
     }
@@ -551,3 +457,6 @@ function capitalize_each_word(val) {
 
   return replacedStr;
 }
+
+
+

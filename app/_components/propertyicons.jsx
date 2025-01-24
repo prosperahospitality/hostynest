@@ -24,11 +24,11 @@ export const House = ({ size, width, height, ...props }) => (
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-	<path d="M2 22H22" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M2.9502 22.0003L3.0002 9.97023C3.0002 9.36023 3.2902 8.78029 3.7702 8.40029L10.7702 2.95027C11.4902 2.39027 12.5002 2.39027 13.2302 2.95027L20.2302 8.39028C20.7202 8.77028 21.0002 9.35023 21.0002 9.97023V22.0003" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linejoin="round"/>
-<path opacity="0.4" d="M15.5 11H8.5C7.67 11 7 11.67 7 12.5V22H17V12.5C17 11.67 16.33 11 15.5 11Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M10 16.25V17.75" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-<path opacity="0.4" d="M10.5 7.5H13.5" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+	<path d="M2 22H22" stroke="#292D32" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" stroke-linejoin="round"/>
+<path d="M2.9502 22.0003L3.0002 9.97023C3.0002 9.36023 3.2902 8.78029 3.7702 8.40029L10.7702 2.95027C11.4902 2.39027 12.5002 2.39027 13.2302 2.95027L20.2302 8.39028C20.7202 8.77028 21.0002 9.35023 21.0002 9.97023V22.0003" stroke="#292D32" strokeWidth="1.5" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path opacity="0.4" d="M15.5 11H8.5C7.67 11 7 11.67 7 12.5V22H17V12.5C17 11.67 16.33 11 15.5 11Z" stroke="#292D32" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" stroke-linejoin="round"/>
+<path d="M10 16.25V17.75" stroke="#292D32" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" stroke-linejoin="round"/>
+<path opacity="0.4" d="M10.5 7.5H13.5" stroke="#292D32" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" stroke-linejoin="round"/>
 </svg>
 );
 
@@ -123,10 +123,10 @@ export const Barns = ({ size, width, height, ...props }) => (
   >
 <path d="M34.993 17.884C34.98 17.769 34.946 17.656 34.894 17.552L32.27 12.304L32.174 12.128C31.803 11.494 31.21 11.016 30.507 10.789L23.143 8.416L23.022 8.367C22.362 8.128 21.638 8.128 20.978 8.367L20.856 8.416L13.493 10.789L13.304 10.858C12.622 11.13 12.06 11.643 11.73 12.304L9.106 17.552L9.06 17.658C9.02 17.767 9 17.884 9 18V35L9.005 35.149C9.082 36.184 9.946 37 11 37H33L33.149 36.994C34.184 36.917 35 36.054 35 35V18L34.993 17.884ZM33 35H11V25H33V35ZM33 23H11V18.235L13.519 13.199L13.586 13.082C13.711 12.899 13.893 12.763 14.106 12.694L21.495 10.313L21.707 10.233C21.936 10.162 22.185 10.175 22.406 10.274L22.505 10.313L29.894 12.694L30.018 12.742C30.217 12.838 30.381 12.998 30.481 13.199L33 18.237V23Z" fill="#3C3C3C"/>
 <path d="M25 13.999H19L18.883 14.006C18.386 14.063 18 14.486 18 14.999V19.999L18.007 20.116C18.065 20.613 18.487 20.999 19 20.999H25L25.117 20.992C25.614 20.934 26 20.512 26 19.999V14.999L25.993 14.882C25.935 14.385 25.513 13.999 25 13.999ZM24 18.999H20V15.999H24V18.999Z" fill="#3C3C3C"/>
-<path d="M16 24.125V35" stroke="#3C3C3C" stroke-width="2"/>
-<path d="M28.004 35.996H27.269H15.998V24.016H28.004V34.63V35.996Z" stroke="#3C3C3C" stroke-width="1.998" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M15.998 24.017L28.004 35.997" stroke="#3C3C3C" stroke-width="1.998" stroke-miterlimit="10"/>
-<path d="M28.004 24.017L15.998 35.997" stroke="#3C3C3C" stroke-width="1.998" stroke-miterlimit="10"/>
+<path d="M16 24.125V35" stroke="#3C3C3C" strokeWidth="2"/>
+<path d="M28.004 35.996H27.269H15.998V24.016H28.004V34.63V35.996Z" stroke="#3C3C3C" strokeWidth="1.998" strokeLinecap="round" stroke-linejoin="round"/>
+<path d="M15.998 24.017L28.004 35.997" stroke="#3C3C3C" strokeWidth="1.998" stroke-miterlimit="10"/>
+<path d="M28.004 24.017L15.998 35.997" stroke="#3C3C3C" strokeWidth="1.998" stroke-miterlimit="10"/>
 </svg>
 );
 
@@ -252,8 +252,8 @@ export const Castle = ({ size, width, height, ...props }) => (
     {...props}
   >
 <path d="M23 15.5H24C24.513 15.5 24.936 15.886 24.993 16.383L25 16.5V18.5H26V16.5C26 16.027 26.329 15.63 26.771 15.526L26.883 15.507L27 15.5H31C31.513 15.5 31.936 15.886 31.993 16.383L32 16.5V21.5C32 21.658 31.963 21.813 31.892 21.953L31.832 22.055L30 24.802V36.5C30 36.973 29.671 37.37 29.229 37.474L29.117 37.493L29 37.5H15C14.487 37.5 14.064 37.114 14.007 36.617L14 36.5V24.804L12.168 22.055C12.102 21.956 12.055 21.847 12.028 21.733L12.007 21.618L12 21.5V16.5C12 15.987 12.386 15.564 12.883 15.507L13 15.5H17C17.513 15.5 17.936 15.886 17.993 16.383L18 16.5V18.5H19V16.5C19 16.027 19.329 15.63 19.771 15.526L19.883 15.507L20 15.5H21H23ZM16 17.5H14V21.197L15.832 23.945C15.898 24.044 15.945 24.153 15.972 24.267L15.993 24.382L16 24.5V35.5H18V31.5C18 29.358 19.684 27.609 21.8 27.505L22 27.5C24.142 27.5 25.891 29.184 25.995 31.3L26 31.5V35.5H28V27.5H26V25.5H28V24.5C28 24.382 28.021 24.265 28.062 24.155L28.108 24.047L28.168 23.945L30 21.196V17.5H28V19.5C28 19.973 27.671 20.37 27.229 20.474L27.117 20.493L27 20.5H24C23.487 20.5 23.064 20.114 23.007 19.617L23 19.5V17.5H21V19.5C21 19.973 20.671 20.37 20.229 20.474L20.117 20.493L20 20.5H17C16.487 20.5 16.064 20.114 16.007 19.617L16 19.5V17.5ZM22 29.5C20.946 29.5 20.082 30.316 20.005 31.351L20 31.5V35.5H24V31.5C24 30.498 23.264 29.669 22.303 29.523L22.149 29.505L22 29.5ZM26 24.5H23V22.5H26V24.5Z" fill="#3C3C3C"/>
-<path d="M22.25 16.25V8.562" stroke="#3C3C3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M27.385 12.504H22.375V8.498H27.385V12.504Z" stroke="#3C3C3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.25 16.25V8.562" stroke="#3C3C3C" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round"/>
+<path d="M27.385 12.504H22.375V8.498H27.385V12.504Z" stroke="#3C3C3C" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round"/>
 </svg>
 );
 

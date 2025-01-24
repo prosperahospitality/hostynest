@@ -7,6 +7,7 @@ const pms_ratesandinventory_managerateandinventoryModel= new mongoose.Schema({
     user_id: String,
     user_name: String,
     booking_date: String,
+    booking_dateF: String,
     room_type: String,
     price_per_guest_flag: Boolean,
     room_occupancy: Number,
@@ -29,6 +30,7 @@ const pms_ratesandinventory_managerateandinventoryModel= new mongoose.Schema({
     status: String,
     creation_date: String,
     last_update_on: String,
+    action: String,
 });
 
 export const Pms_Ratesandinventory_Managerateandinventory = mongoose.models.pms_ratesandinventory_managerateandinventory || mongoose.model("pms_ratesandinventory_managerateandinventory",pms_ratesandinventory_managerateandinventoryModel)

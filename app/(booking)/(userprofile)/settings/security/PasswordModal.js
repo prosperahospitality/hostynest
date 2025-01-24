@@ -10,7 +10,6 @@ import Swal from 'sweetalert2'
 
 const BASE_URL = process.env.BASE_URL;
 
-console.log("Base Url: ",BASE_URL)
 
 export default function PasswordModal({session}) {
     const { isOpen, onOpen, onClose } = useDisclosure();

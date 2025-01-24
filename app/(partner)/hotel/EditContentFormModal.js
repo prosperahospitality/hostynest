@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { EditIcon } from "@/_components/icon"
+import { EditIcon } from "@/app/_components/icon"
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tooltip, Input } from "@nextui-org/react";
 import Swal from 'sweetalert2'
 import toast, { Toaster } from 'react-hot-toast';

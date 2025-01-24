@@ -248,19 +248,19 @@ const ChipIcon = ({
       viewBox="0 0 800 618"
       {...props}
     >
-      <rect x="5" y="5" width="790" height="608" rx="95" stroke="black" stroke-width="10" />
-      <path d="M0 163H234C245.046 163 254 171.954 254 183V435C254 446.046 245.046 455 234 455H0" stroke="black" stroke-width="10" />
-      <path d="M800 163H566C554.954 163 546 171.954 546 183V435C546 446.046 554.954 455 566 455H800" stroke="black" stroke-width="10" />
-      <path d="M0 309L250 309" stroke="black" stroke-width="10" />
-      <path d="M800 309L546 309" stroke="black" stroke-width="10" />
-      <path d="M20 49H254V5H542V49H780" stroke="black" stroke-width="10" />
-      <path d="M18.5 570H250.539V613H540.434V570H780" stroke="black" stroke-width="10" />
-      <path d="M252.5 572L397 473L544 572" stroke="black" stroke-width="10" />
-      <path d="M251.5 49L399 136L546 49" stroke="black" stroke-width="10" />
-      <path d="M257 427H543" stroke="black" stroke-width="10" />
-      <path d="M400 179H544" stroke="black" stroke-width="10" />
-      <path d="M398 476V428" stroke="black" stroke-width="10" />
-      <path d="M400 184V136" stroke="black" stroke-width="10" />
+      <rect x="5" y="5" width="790" height="608" rx="95" stroke="black" strokeWidth="10" />
+      <path d="M0 163H234C245.046 163 254 171.954 254 183V435C254 446.046 245.046 455 234 455H0" stroke="black" strokeWidth="10" />
+      <path d="M800 163H566C554.954 163 546 171.954 546 183V435C546 446.046 554.954 455 566 455H800" stroke="black" strokeWidth="10" />
+      <path d="M0 309L250 309" stroke="black" strokeWidth="10" />
+      <path d="M800 309L546 309" stroke="black" strokeWidth="10" />
+      <path d="M20 49H254V5H542V49H780" stroke="black" strokeWidth="10" />
+      <path d="M18.5 570H250.539V613H540.434V570H780" stroke="black" strokeWidth="10" />
+      <path d="M252.5 572L397 473L544 572" stroke="black" strokeWidth="10" />
+      <path d="M251.5 49L399 136L546 49" stroke="black" strokeWidth="10" />
+      <path d="M257 427H543" stroke="black" strokeWidth="10" />
+      <path d="M400 179H544" stroke="black" strokeWidth="10" />
+      <path d="M398 476V428" stroke="black" strokeWidth="10" />
+      <path d="M400 184V136" stroke="black" strokeWidth="10" />
     </svg>
   );
 };
